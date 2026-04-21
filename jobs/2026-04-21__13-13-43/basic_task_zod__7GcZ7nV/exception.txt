@@ -1,0 +1,54 @@
+Traceback (most recent call last):
+  File "/mnt/E/Icy/data/run-harbor/.venv/lib/python3.12/site-packages/harbor/trial/trial.py", line 547, in run
+    await self._execute_agent()
+  File "/mnt/E/Icy/data/run-harbor/.venv/lib/python3.12/site-packages/harbor/trial/trial.py", line 285, in _execute_agent
+    await asyncio.wait_for(
+  File "/home/icy/snap/code/234/.local/share/uv/python/cpython-3.12.10-linux-x86_64-gnu/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/mnt/E/Icy/data/run-harbor/.venv/lib/python3.12/site-packages/harbor/agents/installed/base.py", line 41, in wrapper
+    return await fn(self, instruction, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/E/Icy/data/run-harbor/agents/pochi.py", line 241, in run
+    await self.exec_as_agent(
+  File "/mnt/E/Icy/data/run-harbor/.venv/lib/python3.12/site-packages/harbor/agents/installed/base.py", line 379, in exec_as_agent
+    return await self._exec(
+           ^^^^^^^^^^^^^^^^^
+  File "/mnt/E/Icy/data/run-harbor/.venv/lib/python3.12/site-packages/harbor/agents/installed/base.py", line 342, in _exec
+    raise NonZeroAgentExitCodeError(
+harbor.agents.installed.base.NonZeroAgentExitCodeError: Command failed (exit 143): export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Basic Trigger.dev Task with Zod Validation
+
+## Background
+Trigger.dev allows you to define tasks with schema validation using Zod. This ensures that the data passed to the task is valid before execution.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/trigger-app`.
+- Define a task using `schemaTask` with the following ID: `basic-zod-task-${trial_id}`.
+- The task should accept a payload with a `name` (string) and `age` (number).
+- The task should return a message: `"Hello ${name}, you are ${age} years old!"`.
+- Configure the task with a retry strategy: `maxAttempts: 3`.
+
+## Implementation Guide
+1. Initialize a Trigger.dev project in `/home/user/trigger-app` using `npx trigger.dev@latest init -p $TRIGGER_PROJECT_REF`.
+2. Read the `trial_id` from `/logs/trial_id`.
+3. Create a file `trigger/basic-task.ts` (or similar) and export the task.
+4. Use `zod` for the schema.
+5. Ensure the task ID is correctly suffixed with `trial_id`.
+
+## Constraints
+- Project path: /home/user/trigger-app
+- Use Zod for schema validation.
+- Task ID must include `${trial_id}` suffix.
+
+## Integrations
+- Trigger.dev
+
+EOF
+stdout: [37m2026-04-21 05:22:28.225[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:1[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	pochi v0.6.8
+[37m2026-04-21 05:22:28.358[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:519633[39m[0m[0m[1m[37m	loadAgents[39m[22m[0m[0m	Loaded 6 custom agents (6 valid, 0 invalid)
+[37m2026-04-21 05:22:28.358[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:519634[39m[0m[0m[1m[37m	loadSkills[39m[22m[0m[0m	Loaded 2 skills (2 valid, 0 invalid)
+[37m2026-04-21 05:22:28.384[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:444677[39m[0m[0m[1m[37m	PochiVendor[39m[22m[0m[0m	JWT is expiring or missing, fetching a new one
+[37m2026-04-21 05:22:30.545[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:416517[39m[0m[0m[1m[37m	MCPHub[39m[22m[0m[0m	MCP servers configuration changed via signal:
+[37m2026-04-21 05:22:30.546[39m[0m[0m	[32m[1mDEBUG ... [truncated]
+stderr: None

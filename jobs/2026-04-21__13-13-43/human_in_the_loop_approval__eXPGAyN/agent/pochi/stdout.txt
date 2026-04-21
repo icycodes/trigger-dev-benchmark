@@ -1,0 +1,17 @@
+- Initializing MCP connections...
+You
+# Human-in-the-Loop Approval Workflow ## Background Trigger.dev supports pausing workflows for human intervention using `wait.forToken`. ## Requirements * Create a Trigger.dev project in `/home/user/approval-app`. * Define a task `approval-workflow-${trial_id}`. * The task should generate a token using `wait.forToken("manager-approval")`. * The task should return the data received from the token completion. ## Implementation Guide 1. Initialize project in `/home/user/approval-app`. 2. Create `trigger/approval.ts`. 3. Use `const { data } = await wait.forToken("manager-approval")`. ## Constraints * Project path: /home/user/approval-app * Use `wait.forToken`. ## Integrations * Trigger.dev   
+
+Pochi
+💭 Thinking for 1958 characters   
+✏️  Writing /home/user/approval-app/package.json ✔ 
+💭 Thinking for 182 characters   
+✏️  Writing /home/user/approval-app/trigger/approval.ts ✔ 
+💭 Thinking for 109 characters   
+🎉 Task Completed
+I have successfully created the Trigger.dev project in `/home/user/approval-app` with the required `approval-workflow-${trial_id}` task.
+
+The project structure includes:
+1. `package.json` to initialize the project and define dependencies.
+2. `trigger/approval.ts` which implements the required human-in-the-loop task using the `@trigger.dev/sdk/v3` package. It defines the task with the ID template `approval-workflow-${trial_id}`, generates a token using `wait.forToken("manager-approval")`, and returns the received `data` appropriately.   
+  

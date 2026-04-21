@@ -1,0 +1,5 @@
+{
+  "task_name": "parallel_batch_processing",
+  "task_description": "# Parallel Batch Processing\n\n## Background\nTrigger.dev V4 does not support `Promise.all` for task triggers. Instead, you must use `batch.triggerByTaskAndWait` to run sub-tasks in parallel.\n\n## Requirements\n- Create a Trigger.dev project in `/home/user/batch-app`.\n- Define a sub-task `process-item-${trial_id}` that accepts an `id` and returns it.\n- Define a parent task `batch-processor-${trial_id}` that takes an array of IDs.\n- Use `batch.triggerByTaskAndWait` to process all IDs in parallel using the sub-task.\n- Return the array of results.\n\n## Implementation Guide\n1. Initialize project in `/home/user/batch-app`.\n2. Define tasks in `trigger/batch.ts`.\n3. Import `batch` from `@trigger.dev/sdk`.\n4. Use `await batch.triggerByTaskAndWait(...)`.\n\n## Constraints\n- Project path: /home/user/batch-app\n- Use `batch.triggerByTaskAndWait` (NOT `Promise.all`).\n\n## Integrations\n- Trigger.dev",
+  "truth": "# Verification Plan\n\n## Verification Steps\n1. Check for `batch.triggerByTaskAndWait` usage.\n2. Ensure `Promise.all` is NOT used with triggers."
+}

@@ -1,0 +1,5 @@
+{
+  "task_name": "realtime_progress_updates",
+  "task_description": "# Real-time Progress Updates\n\n## Background\nYou can report progress in Trigger.dev by updating the run's metadata. This can be viewed in real-time on the dashboard or fetched via the Realtime API.\n\n## Requirements\n- Create a Trigger.dev project in `/home/user/progress-app`.\n- Define a task `progress-task-${trial_id}`.\n- The task should simulate a long-running process with a loop (e.g., 5 steps).\n- In each step, it should update the metadata with the current progress percentage: `await ctx.run.updateMetadata({ progress: currentProgress })`.\n\n## Implementation Guide\n1. Initialize project in `/home/user/progress-app`.\n2. Create `trigger/progress.ts`.\n3. Use `ctx.run.updateMetadata` inside the task's `run` function.\n\n## Constraints\n- Project path: /home/user/progress-app\n- Update metadata with `progress` key.\n\n## Integrations\n- Trigger.dev",
+  "truth": "# Verification Plan\n\n## Verification Steps\n1. Check for `ctx.run.updateMetadata` usage.\n2. Verify the metadata key is `progress`."
+}

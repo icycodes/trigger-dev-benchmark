@@ -1,0 +1,50 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 3,
+            "passed": 2,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776749162.043109,
+            "stop": 1776749162.0567703
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_task_file_exists",
+                "status": "passed",
+                "duration": 0.0002616079982544761,
+                "start": 1776749162.0493755,
+                "stop": 1776749162.0497613,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_task_content",
+                "status": "passed",
+                "duration": 0.00021306500093487557,
+                "start": 1776749162.0498729,
+                "stop": 1776749162.0501614,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_package_json_dependencies",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0003227519991924055,
+                "start": 1776749162.0502517,
+                "stop": 1776749162.0566754,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_package_json_dependencies():\n        package_json_path = os.path.join(PROJECT_DIR, \"package.json\")\n        assert os.path.isfile(package_json_path), \"package.json not found.\"\n    \n        with open(package_json_path, \"r\") as f:\n            data = json.load(f)\n            deps = data.get(\"dependencies\", {})\n            dev_deps = data.get(\"devDependencies\", {})\n    \n>           assert \"@trigger.dev/sdk\" in deps or \"@trigger.dev/sdk\" in dev_deps, \"@trigger.dev/sdk not installed.\"\nE           AssertionError: @trigger.dev/sdk not installed.\nE           assert ('@trigger.dev/sdk' in {'trigger.dev': '^4.4.4', 'zod': '^3.25.76'} or '@trigger.dev/sdk' in {})\n\ntests/test_final_state.py:55: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

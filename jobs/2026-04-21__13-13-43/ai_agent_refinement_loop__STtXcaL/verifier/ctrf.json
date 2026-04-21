@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776749412.860723,
+            "stop": 1776749412.87189
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_ai_tool_exists",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.00035182000283384696,
+                "start": 1776749412.8650649,
+                "stop": 1776749412.8717594,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_ai_tool_exists():\n        trigger_dir = os.path.join(PROJECT_DIR, \"trigger\")\n        found_ai_tool = False\n    \n>       for filename in os.listdir(trigger_dir):\n                        ^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/home/user/ai_agent_refinement_loop-app/trigger'\n\ntests/test_final_state.py:10: FileNotFoundError",
+                "message": "The test failed in the call phase"
+            }
+        ]
+    }
+}

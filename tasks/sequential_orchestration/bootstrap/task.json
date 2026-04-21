@@ -1,0 +1,5 @@
+{
+  "task_name": "sequential_orchestration",
+  "task_description": "# Sequential Task Orchestration\n\n## Background\nIn Trigger.dev V4, you can trigger sub-tasks and wait for their completion using `triggerAndWait`. This returns a `Result` object that must be unwrapped.\n\n## Requirements\n- Create a Trigger.dev project in `/home/user/orch-app`.\n- Define two tasks: `sub-task-1-${trial_id}` and `parent-task-${trial_id}`.\n- `sub-task-1` should just return `{ success: true }`.\n- `parent-task` should trigger `sub-task-1` using `triggerAndWait()`, unwrap the result, and then return `{ subTaskResult: result }`.\n\n## Implementation Guide\n1. Initialize project in `/home/user/orch-app`.\n2. Define both tasks in `trigger/orchestration.ts`.\n3. Use `await subTask.triggerAndWait()`.\n4. Call `.unwrap()` on the result.\n\n## Constraints\n- Project path: /home/user/orch-app\n- Use `triggerAndWait` and `.unwrap()`.\n\n## Integrations\n- Trigger.dev",
+  "truth": "# Verification Plan\n\n## Verification Steps\n1. Check for `triggerAndWait` usage.\n2. Check for `.unwrap()` call.\n3. Verify task IDs."
+}

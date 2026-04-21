@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776750327.4598026,
+            "stop": 1776750327.4690363
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_queue_concurrency_exists",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.00027996499920845963,
+                "start": 1776750327.4634464,
+                "stop": 1776750327.468937,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_queue_concurrency_exists():\n        trigger_dir = os.path.join(PROJECT_DIR, \"trigger\")\n        found_queue = False\n        found_concurrency_key = False\n    \n>       for filename in os.listdir(trigger_dir):\n                        ^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/home/user/concurrency_controlled_queue-app/trigger'\n\ntests/test_final_state.py:11: FileNotFoundError",
+                "message": "The test failed in the call phase"
+            }
+        ]
+    }
+}

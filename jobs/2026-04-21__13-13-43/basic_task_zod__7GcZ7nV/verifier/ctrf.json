@@ -1,0 +1,56 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 3,
+            "passed": 0,
+            "failed": 3,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776749026.7542822,
+            "stop": 1776749026.7685964
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_task_file_exists",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0003319589977763826,
+                "start": 1776749026.7597172,
+                "stop": 1776749026.765782,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_task_file_exists():\n        # The user might name it basic-task.ts as suggested or something else,\n        # but we should check the trigger directory.\n        trigger_dir = os.path.join(PROJECT_DIR, \"trigger\")\n>       assert os.path.isdir(trigger_dir), f\"Trigger directory {trigger_dir} not found.\"\nE       AssertionError: Trigger directory /home/user/trigger-app/trigger not found.\nE       assert False\nE        +  where False = <function isdir at 0x7f7cd75a82c0>('/home/user/trigger-app/trigger')\nE        +    where <function isdir at 0x7f7cd75a82c0> = <module 'posixpath' (frozen)>.isdir\nE        +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:17: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_task_content",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0002362750001339009,
+                "start": 1776749026.765904,
+                "stop": 1776749026.7671201,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_task_content():\n        trial_id = get_trial_id()\n        expected_id = f\"basic-zod-task-{trial_id}\"\n    \n        trigger_dir = os.path.join(PROJECT_DIR, \"trigger\")\n        found_id = False\n        found_zod = False\n        found_retry = False\n    \n>       for filename in os.listdir(trigger_dir):\n                        ^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/home/user/trigger-app/trigger'\n\ntests/test_final_state.py:31: FileNotFoundError",
+                "message": "The test failed in the call phase"
+            },
+            {
+                "name": "test_final_state.py::test_package_json_dependencies",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.00026760000037029386,
+                "start": 1776749026.7672212,
+                "stop": 1776749026.7685099,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_package_json_dependencies():\n        package_json_path = os.path.join(PROJECT_DIR, \"package.json\")\n        assert os.path.isfile(package_json_path), \"package.json not found.\"\n    \n        with open(package_json_path, \"r\") as f:\n            data = json.load(f)\n            deps = data.get(\"dependencies\", {})\n            dev_deps = data.get(\"devDependencies\", {})\n    \n>           assert \"@trigger.dev/sdk\" in deps or \"@trigger.dev/sdk\" in dev_deps, \"@trigger.dev/sdk not installed.\"\nE           AssertionError: @trigger.dev/sdk not installed.\nE           assert ('@trigger.dev/sdk' in {} or '@trigger.dev/sdk' in {})\n\ntests/test_final_state.py:55: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

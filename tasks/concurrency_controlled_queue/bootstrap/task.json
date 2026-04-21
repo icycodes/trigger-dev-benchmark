@@ -1,0 +1,5 @@
+{
+  "task_name": "concurrency_controlled_queue",
+  "task_description": "# Concurrency Control with Queues\n\n## Background\nTrigger.dev V4 requires queues to be explicitly defined. You can use queues to limit concurrency globally or per key.\n\n## Requirements\n- Create a Trigger.dev project in `/home/user/queue-app`.\n- Define a queue named `critical-queue-${trial_id}` with `concurrencyLimit: 1`.\n- Define a task `exclusive-task-${trial_id}` that uses this queue.\n- The task should also use a `concurrencyKey` based on the payload's `resourceId` to ensure only one run per resource ID.\n\n## Implementation Guide\n1. Initialize project in `/home/user/queue-app`.\n2. Create `trigger/queue.ts`.\n3. Use `queue({ name: ..., concurrencyLimit: 1 })`.\n4. Set `queue` and `concurrencyKey` in the task definition.\n\n## Constraints\n- Project path: /home/user/queue-app\n- Queue concurrency limit: 1.\n- Use `concurrencyKey`.\n\n## Integrations\n- Trigger.dev",
+  "truth": "# Verification Plan\n\n## Verification Steps\n1. Check for `queue` definition with `concurrencyLimit: 1`.\n2. Check for `concurrencyKey` usage in the task."
+}

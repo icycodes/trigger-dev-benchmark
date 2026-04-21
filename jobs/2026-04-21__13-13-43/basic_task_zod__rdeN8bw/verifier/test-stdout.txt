@@ -1,0 +1,61 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 7 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: json-ctrf-0.3.5
+collected 3 items
+
+tests/test_final_state.py .FF                                            [100%]
+
+=================================== FAILURES ===================================
+______________________________ test_task_content _______________________________
+
+    def test_task_content():
+        trial_id = get_trial_id()
+        expected_id = f"basic-zod-task-{trial_id}"
+    
+        trigger_dir = os.path.join(PROJECT_DIR, "trigger")
+        found_id = False
+        found_zod = False
+        found_retry = False
+    
+        for filename in os.listdir(trigger_dir):
+            if filename.endswith(".ts") or filename.endswith(".js"):
+                with open(os.path.join(trigger_dir, filename), "r") as f:
+                    content = f.read()
+                    if expected_id in content:
+                        found_id = True
+                    if "z.object" in content or "zod" in content:
+                        found_zod = True
+                    if "maxAttempts: 3" in content or "maxAttempts:3" in content:
+                        found_retry = True
+    
+>       assert found_id, f"Task ID {expected_id} not found in any trigger file."
+E       AssertionError: Task ID basic-zod-task-basic_task_zod__rdeN8bw not found in any trigger file.
+E       assert False
+
+tests/test_final_state.py:42: AssertionError
+________________________ test_package_json_dependencies ________________________
+
+    def test_package_json_dependencies():
+        package_json_path = os.path.join(PROJECT_DIR, "package.json")
+        assert os.path.isfile(package_json_path), "package.json not found."
+    
+        with open(package_json_path, "r") as f:
+            data = json.load(f)
+            deps = data.get("dependencies", {})
+            dev_deps = data.get("devDependencies", {})
+    
+>           assert "@trigger.dev/sdk" in deps or "@trigger.dev/sdk" in dev_deps, "@trigger.dev/sdk not installed."
+E           AssertionError: @trigger.dev/sdk not installed.
+E           assert ('@trigger.dev/sdk' in {} or '@trigger.dev/sdk' in {})
+
+tests/test_final_state.py:55: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_task_file_exists
+FAILED tests/test_final_state.py::test_task_content - AssertionError: Task ID...
+FAILED tests/test_final_state.py::test_package_json_dependencies - AssertionE...
+========================= 2 failed, 1 passed in 0.02s ==========================

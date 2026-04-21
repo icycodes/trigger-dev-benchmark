@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776748807.919063,
+            "stop": 1776748807.928681
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_trigger_and_wait_exists",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0002819780002027983,
+                "start": 1776748807.9230118,
+                "stop": 1776748807.9285853,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_trigger_and_wait_exists():\n        trial_id = get_trial_id()\n        expected_parent_id = f\"parent-task-{trial_id}\"\n        expected_sub_id = f\"sub-task-1-{trial_id}\"\n        trigger_dir = os.path.join(PROJECT_DIR, \"trigger\")\n    \n        found_parent_id = False\n        found_sub_id = False\n        found_trigger = False\n        found_unwrap = False\n    \n>       for filename in os.listdir(trigger_dir):\n                        ^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/home/user/sequential_orchestration-app/trigger'\n\ntests/test_final_state.py:21: FileNotFoundError",
+                "message": "The test failed in the call phase"
+            }
+        ]
+    }
+}

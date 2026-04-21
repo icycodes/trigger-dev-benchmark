@@ -1,0 +1,156 @@
+{
+    "id": "7526a285-1809-4e4a-bd9b-e9cdbdc7d571",
+    "started_at": "2026-04-21T13:13:43.587349",
+    "finished_at": "2026-04-21T13:45:39.082064",
+    "n_total_trials": 50,
+    "stats": {
+        "n_trials": 50,
+        "n_errors": 2,
+        "evals": {
+            "pochi__gemini-3.1-pro__tasks": {
+                "n_trials": 10,
+                "n_errors": 2,
+                "metrics": [
+                    {
+                        "mean": 0.0
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "complex_media_pipeline__aZHTAyi",
+                            "sequential_orchestration__iAxvBUX",
+                            "scheduled_cleanup__G5edgfL",
+                            "parallel_batch_processing__VJCd7uX",
+                            "basic_task_zod__7GcZ7nV",
+                            "delayed_notification__JnhtKtt",
+                            "ai_agent_refinement_loop__KoQa4sF",
+                            "realtime_progress_updates__DPsCseA",
+                            "human_in_the_loop_approval__eXPGAyN",
+                            "concurrency_controlled_queue__7DhZj6r"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "NonZeroAgentExitCodeError": [
+                        "basic_task_zod__7GcZ7nV"
+                    ],
+                    "AgentTimeoutError": [
+                        "concurrency_controlled_queue__7DhZj6r"
+                    ]
+                }
+            },
+            "pochi__gemini-3-flash__tasks": {
+                "n_trials": 10,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.1
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "complex_media_pipeline__Wj8Ekts",
+                            "sequential_orchestration__Tj4pmoJ",
+                            "scheduled_cleanup__SqZMPUh",
+                            "parallel_batch_processing__8x5b2X3",
+                            "delayed_notification__SignGvZ",
+                            "ai_agent_refinement_loop__STtXcaL",
+                            "realtime_progress_updates__wXaKyWt",
+                            "human_in_the_loop_approval__Gycyh8r",
+                            "concurrency_controlled_queue__kXTFmQv"
+                        ],
+                        "1.0": [
+                            "basic_task_zod__8DZY382"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            },
+            "pochi__gpt-5.2-codex__tasks": {
+                "n_trials": 10,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.0
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "complex_media_pipeline__xFBrSpm",
+                            "sequential_orchestration__u4BFNZu",
+                            "scheduled_cleanup__eRoEti4",
+                            "parallel_batch_processing__Q5DucTU",
+                            "basic_task_zod__rdeN8bw",
+                            "delayed_notification__8Fgz47t",
+                            "ai_agent_refinement_loop__FHeUCbB",
+                            "realtime_progress_updates__VG2nMYs",
+                            "human_in_the_loop_approval__TGBXzeg",
+                            "concurrency_controlled_queue__2c7goie"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            },
+            "pochi__claude-4-6-sonnet__tasks": {
+                "n_trials": 10,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.0
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "complex_media_pipeline__f3ZQxDD",
+                            "sequential_orchestration__P3kyEhH",
+                            "scheduled_cleanup__wWDFXNA",
+                            "parallel_batch_processing__neQfLXB",
+                            "basic_task_zod__mMLUiZN",
+                            "delayed_notification__DxZPet7",
+                            "ai_agent_refinement_loop__kyPp8Z9",
+                            "realtime_progress_updates__fKaEiYA",
+                            "human_in_the_loop_approval__mLy6pxA",
+                            "concurrency_controlled_queue__bL3DSUk"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            },
+            "pochi__glm-4.7__tasks": {
+                "n_trials": 10,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.0
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "complex_media_pipeline__wEoRWfd",
+                            "sequential_orchestration__ZDcb8u4",
+                            "scheduled_cleanup__Kv3ZRPz",
+                            "parallel_batch_processing__CoF4G8w",
+                            "basic_task_zod__Weg8NDa",
+                            "delayed_notification__UkFVkZx",
+                            "ai_agent_refinement_loop__vGc5RNc",
+                            "realtime_progress_updates__awFppLk",
+                            "human_in_the_loop_approval__PhyuSvg",
+                            "concurrency_controlled_queue__edfqxXQ"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            }
+        }
+    }
+}

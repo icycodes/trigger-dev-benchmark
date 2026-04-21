@@ -1,0 +1,4042 @@
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo complex_media_pipeline__aZHTAyi > /logs/trial_id
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Complex Media Processing Pipeline
+
+## Background
+Building robust pipelines requires orchestrating multiple steps with error handling and resource cleanup.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/media-app`.
+- Define a pipeline task `media-pipeline-${trial_id}` that performs three steps:
+    1. Trigger `download-task` and wait for result.
+    2. Trigger `process-task` with the download result and wait.
+    3. Trigger `upload-task` with the process result and wait.
+- Implement a `try-catch` block around the orchestration to log errors and return a failure status if any step fails.
+- Use `batch.triggerByTaskAndWait` if any step can be parallelized (e.g., uploading to multiple destinations).
+
+## Implementation Guide
+1. Initialize project in `/home/user/media-app`.
+2. Create `trigger/media.ts`.
+3. Implement the sequential triggers with error handling.
+
+## Constraints
+- Project path: /home/user/media-app
+- Implement 3 discrete steps.
+- Use robust error handling.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo complex_media_pipeline__Wj8Ekts > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3-flash --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Complex Media Processing Pipeline
+
+## Background
+Building robust pipelines requires orchestrating multiple steps with error handling and resource cleanup.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/media-app`.
+- Define a pipeline task `media-pipeline-${trial_id}` that performs three steps:
+    1. Trigger `download-task` and wait for result.
+    2. Trigger `process-task` with the download result and wait.
+    3. Trigger `upload-task` with the process result and wait.
+- Implement a `try-catch` block around the orchestration to log errors and return a failure status if any step fails.
+- Use `batch.triggerByTaskAndWait` if any step can be parallelized (e.g., uploading to multiple destinations).
+
+## Implementation Guide
+1. Initialize project in `/home/user/media-app`.
+2. Create `trigger/media.ts`.
+3. Implement the sequential triggers with error handling.
+
+## Constraints
+- Project path: /home/user/media-app
+- Implement 3 discrete steps.
+- Use robust error handling.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo complex_media_pipeline__xFBrSpm > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model openai/gpt-5.2-codex --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Complex Media Processing Pipeline
+
+## Background
+Building robust pipelines requires orchestrating multiple steps with error handling and resource cleanup.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/media-app`.
+- Define a pipeline task `media-pipeline-${trial_id}` that performs three steps:
+    1. Trigger `download-task` and wait for result.
+    2. Trigger `process-task` with the download result and wait.
+    3. Trigger `upload-task` with the process result and wait.
+- Implement a `try-catch` block around the orchestration to log errors and return a failure status if any step fails.
+- Use `batch.triggerByTaskAndWait` if any step can be parallelized (e.g., uploading to multiple destinations).
+
+## Implementation Guide
+1. Initialize project in `/home/user/media-app`.
+2. Create `trigger/media.ts`.
+3. Implement the sequential triggers with error handling.
+
+## Constraints
+- Project path: /home/user/media-app
+- Implement 3 discrete steps.
+- Use robust error handling.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo complex_media_pipeline__f3ZQxDD > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model anthropic/claude-4-6-sonnet --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Complex Media Processing Pipeline
+
+## Background
+Building robust pipelines requires orchestrating multiple steps with error handling and resource cleanup.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/media-app`.
+- Define a pipeline task `media-pipeline-${trial_id}` that performs three steps:
+    1. Trigger `download-task` and wait for result.
+    2. Trigger `process-task` with the download result and wait.
+    3. Trigger `upload-task` with the process result and wait.
+- Implement a `try-catch` block around the orchestration to log errors and return a failure status if any step fails.
+- Use `batch.triggerByTaskAndWait` if any step can be parallelized (e.g., uploading to multiple destinations).
+
+## Implementation Guide
+1. Initialize project in `/home/user/media-app`.
+2. Create `trigger/media.ts`.
+3. Implement the sequential triggers with error handling.
+
+## Constraints
+- Project path: /home/user/media-app
+- Implement 3 discrete steps.
+- Use robust error handling.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: echo complex_media_pipeline__wEoRWfd > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model zai/glm-4.7 --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Complex Media Processing Pipeline
+
+## Background
+Building robust pipelines requires orchestrating multiple steps with error handling and resource cleanup.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/media-app`.
+- Define a pipeline task `media-pipeline-${trial_id}` that performs three steps:
+    1. Trigger `download-task` and wait for result.
+    2. Trigger `process-task` with the download result and wait.
+    3. Trigger `upload-task` with the process result and wait.
+- Implement a `try-catch` block around the orchestration to log errors and return a failure status if any step fails.
+- Use `batch.triggerByTaskAndWait` if any step can be parallelized (e.g., uploading to multiple destinations).
+
+## Implementation Guide
+1. Initialize project in `/home/user/media-app`.
+2. Create `trigger/media.ts`.
+3. Implement the sequential triggers with error handling.
+
+## Constraints
+- Project path: /home/user/media-app
+- Implement 3 discrete steps.
+- Use robust error handling.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo sequential_orchestration__iAxvBUX > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Sequential Task Orchestration
+
+## Background
+In Trigger.dev V4, you can trigger sub-tasks and wait for their completion using `triggerAndWait`. This returns a `Result` object that must be unwrapped.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/orch-app`.
+- Define two tasks: `sub-task-1-${trial_id}` and `parent-task-${trial_id}`.
+- `sub-task-1` should just return `{ success: true }`.
+- `parent-task` should trigger `sub-task-1` using `triggerAndWait()`, unwrap the result, and then return `{ subTaskResult: result }`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/orch-app`.
+2. Define both tasks in `trigger/orchestration.ts`.
+3. Use `await subTask.triggerAndWait()`.
+4. Call `.unwrap()` on the result.
+
+## Constraints
+- Project path: /home/user/orch-app
+- Use `triggerAndWait` and `.unwrap()`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo sequential_orchestration__Tj4pmoJ > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3-flash --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Sequential Task Orchestration
+
+## Background
+In Trigger.dev V4, you can trigger sub-tasks and wait for their completion using `triggerAndWait`. This returns a `Result` object that must be unwrapped.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/orch-app`.
+- Define two tasks: `sub-task-1-${trial_id}` and `parent-task-${trial_id}`.
+- `sub-task-1` should just return `{ success: true }`.
+- `parent-task` should trigger `sub-task-1` using `triggerAndWait()`, unwrap the result, and then return `{ subTaskResult: result }`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/orch-app`.
+2. Define both tasks in `trigger/orchestration.ts`.
+3. Use `await subTask.triggerAndWait()`.
+4. Call `.unwrap()` on the result.
+
+## Constraints
+- Project path: /home/user/orch-app
+- Use `triggerAndWait` and `.unwrap()`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo sequential_orchestration__u4BFNZu > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model openai/gpt-5.2-codex --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Sequential Task Orchestration
+
+## Background
+In Trigger.dev V4, you can trigger sub-tasks and wait for their completion using `triggerAndWait`. This returns a `Result` object that must be unwrapped.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/orch-app`.
+- Define two tasks: `sub-task-1-${trial_id}` and `parent-task-${trial_id}`.
+- `sub-task-1` should just return `{ success: true }`.
+- `parent-task` should trigger `sub-task-1` using `triggerAndWait()`, unwrap the result, and then return `{ subTaskResult: result }`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/orch-app`.
+2. Define both tasks in `trigger/orchestration.ts`.
+3. Use `await subTask.triggerAndWait()`.
+4. Call `.unwrap()` on the result.
+
+## Constraints
+- Project path: /home/user/orch-app
+- Use `triggerAndWait` and `.unwrap()`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo sequential_orchestration__P3kyEhH > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model anthropic/claude-4-6-sonnet --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Sequential Task Orchestration
+
+## Background
+In Trigger.dev V4, you can trigger sub-tasks and wait for their completion using `triggerAndWait`. This returns a `Result` object that must be unwrapped.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/orch-app`.
+- Define two tasks: `sub-task-1-${trial_id}` and `parent-task-${trial_id}`.
+- `sub-task-1` should just return `{ success: true }`.
+- `parent-task` should trigger `sub-task-1` using `triggerAndWait()`, unwrap the result, and then return `{ subTaskResult: result }`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/orch-app`.
+2. Define both tasks in `trigger/orchestration.ts`.
+3. Use `await subTask.triggerAndWait()`.
+4. Call `.unwrap()` on the result.
+
+## Constraints
+- Project path: /home/user/orch-app
+- Use `triggerAndWait` and `.unwrap()`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo sequential_orchestration__ZDcb8u4 > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model zai/glm-4.7 --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Sequential Task Orchestration
+
+## Background
+In Trigger.dev V4, you can trigger sub-tasks and wait for their completion using `triggerAndWait`. This returns a `Result` object that must be unwrapped.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/orch-app`.
+- Define two tasks: `sub-task-1-${trial_id}` and `parent-task-${trial_id}`.
+- `sub-task-1` should just return `{ success: true }`.
+- `parent-task` should trigger `sub-task-1` using `triggerAndWait()`, unwrap the result, and then return `{ subTaskResult: result }`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/orch-app`.
+2. Define both tasks in `trigger/orchestration.ts`.
+3. Use `await subTask.triggerAndWait()`.
+4. Call `.unwrap()` on the result.
+
+## Constraints
+- Project path: /home/user/orch-app
+- Use `triggerAndWait` and `.unwrap()`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo scheduled_cleanup__G5edgfL > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Scheduled Cleanup Task
+
+## Background
+Trigger.dev supports scheduled tasks (cron) for recurring jobs like database cleanup or cache invalidation.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/cleanup-app`.
+- Define a scheduled task with ID: `cleanup-task-${trial_id}`.
+- The task should run every hour (`0 * * * *`).
+- The task's `run` function should log a message: `"Cleaning up resources for trial ${trial_id}..."`.
+- The task should be correctly exported.
+
+## Implementation Guide
+1. Initialize a Trigger.dev project in `/home/user/cleanup-app`.
+2. Read the `trial_id` from `/logs/trial_id`.
+3. Create a file `trigger/cleanup.ts` and use `schedules.task` (or the equivalent V4 scheduled task API).
+4. Ensure the task ID is suffixed with `trial_id`.
+
+## Constraints
+- Project path: /home/user/cleanup-app
+- Schedule: `0 * * * *` (hourly).
+- Task ID must include `${trial_id}` suffix.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo scheduled_cleanup__SqZMPUh > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3-flash --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Scheduled Cleanup Task
+
+## Background
+Trigger.dev supports scheduled tasks (cron) for recurring jobs like database cleanup or cache invalidation.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/cleanup-app`.
+- Define a scheduled task with ID: `cleanup-task-${trial_id}`.
+- The task should run every hour (`0 * * * *`).
+- The task's `run` function should log a message: `"Cleaning up resources for trial ${trial_id}..."`.
+- The task should be correctly exported.
+
+## Implementation Guide
+1. Initialize a Trigger.dev project in `/home/user/cleanup-app`.
+2. Read the `trial_id` from `/logs/trial_id`.
+3. Create a file `trigger/cleanup.ts` and use `schedules.task` (or the equivalent V4 scheduled task API).
+4. Ensure the task ID is suffixed with `trial_id`.
+
+## Constraints
+- Project path: /home/user/cleanup-app
+- Schedule: `0 * * * *` (hourly).
+- Task ID must include `${trial_id}` suffix.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo scheduled_cleanup__eRoEti4 > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model openai/gpt-5.2-codex --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Scheduled Cleanup Task
+
+## Background
+Trigger.dev supports scheduled tasks (cron) for recurring jobs like database cleanup or cache invalidation.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/cleanup-app`.
+- Define a scheduled task with ID: `cleanup-task-${trial_id}`.
+- The task should run every hour (`0 * * * *`).
+- The task's `run` function should log a message: `"Cleaning up resources for trial ${trial_id}..."`.
+- The task should be correctly exported.
+
+## Implementation Guide
+1. Initialize a Trigger.dev project in `/home/user/cleanup-app`.
+2. Read the `trial_id` from `/logs/trial_id`.
+3. Create a file `trigger/cleanup.ts` and use `schedules.task` (or the equivalent V4 scheduled task API).
+4. Ensure the task ID is suffixed with `trial_id`.
+
+## Constraints
+- Project path: /home/user/cleanup-app
+- Schedule: `0 * * * *` (hourly).
+- Task ID must include `${trial_id}` suffix.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo scheduled_cleanup__wWDFXNA > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model anthropic/claude-4-6-sonnet --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Scheduled Cleanup Task
+
+## Background
+Trigger.dev supports scheduled tasks (cron) for recurring jobs like database cleanup or cache invalidation.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/cleanup-app`.
+- Define a scheduled task with ID: `cleanup-task-${trial_id}`.
+- The task should run every hour (`0 * * * *`).
+- The task's `run` function should log a message: `"Cleaning up resources for trial ${trial_id}..."`.
+- The task should be correctly exported.
+
+## Implementation Guide
+1. Initialize a Trigger.dev project in `/home/user/cleanup-app`.
+2. Read the `trial_id` from `/logs/trial_id`.
+3. Create a file `trigger/cleanup.ts` and use `schedules.task` (or the equivalent V4 scheduled task API).
+4. Ensure the task ID is suffixed with `trial_id`.
+
+## Constraints
+- Project path: /home/user/cleanup-app
+- Schedule: `0 * * * *` (hourly).
+- Task ID must include `${trial_id}` suffix.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo scheduled_cleanup__Kv3ZRPz > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model zai/glm-4.7 --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Scheduled Cleanup Task
+
+## Background
+Trigger.dev supports scheduled tasks (cron) for recurring jobs like database cleanup or cache invalidation.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/cleanup-app`.
+- Define a scheduled task with ID: `cleanup-task-${trial_id}`.
+- The task should run every hour (`0 * * * *`).
+- The task's `run` function should log a message: `"Cleaning up resources for trial ${trial_id}..."`.
+- The task should be correctly exported.
+
+## Implementation Guide
+1. Initialize a Trigger.dev project in `/home/user/cleanup-app`.
+2. Read the `trial_id` from `/logs/trial_id`.
+3. Create a file `trigger/cleanup.ts` and use `schedules.task` (or the equivalent V4 scheduled task API).
+4. Ensure the task ID is suffixed with `trial_id`.
+
+## Constraints
+- Project path: /home/user/cleanup-app
+- Schedule: `0 * * * *` (hourly).
+- Task ID must include `${trial_id}` suffix.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo parallel_batch_processing__VJCd7uX > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Parallel Batch Processing
+
+## Background
+Trigger.dev V4 does not support `Promise.all` for task triggers. Instead, you must use `batch.triggerByTaskAndWait` to run sub-tasks in parallel.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/batch-app`.
+- Define a sub-task `process-item-${trial_id}` that accepts an `id` and returns it.
+- Define a parent task `batch-processor-${trial_id}` that takes an array of IDs.
+- Use `batch.triggerByTaskAndWait` to process all IDs in parallel using the sub-task.
+- Return the array of results.
+
+## Implementation Guide
+1. Initialize project in `/home/user/batch-app`.
+2. Define tasks in `trigger/batch.ts`.
+3. Import `batch` from `@trigger.dev/sdk`.
+4. Use `await batch.triggerByTaskAndWait(...)`.
+
+## Constraints
+- Project path: /home/user/batch-app
+- Use `batch.triggerByTaskAndWait` (NOT `Promise.all`).
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo parallel_batch_processing__8x5b2X3 > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3-flash --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Parallel Batch Processing
+
+## Background
+Trigger.dev V4 does not support `Promise.all` for task triggers. Instead, you must use `batch.triggerByTaskAndWait` to run sub-tasks in parallel.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/batch-app`.
+- Define a sub-task `process-item-${trial_id}` that accepts an `id` and returns it.
+- Define a parent task `batch-processor-${trial_id}` that takes an array of IDs.
+- Use `batch.triggerByTaskAndWait` to process all IDs in parallel using the sub-task.
+- Return the array of results.
+
+## Implementation Guide
+1. Initialize project in `/home/user/batch-app`.
+2. Define tasks in `trigger/batch.ts`.
+3. Import `batch` from `@trigger.dev/sdk`.
+4. Use `await batch.triggerByTaskAndWait(...)`.
+
+## Constraints
+- Project path: /home/user/batch-app
+- Use `batch.triggerByTaskAndWait` (NOT `Promise.all`).
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo parallel_batch_processing__Q5DucTU > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model openai/gpt-5.2-codex --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Parallel Batch Processing
+
+## Background
+Trigger.dev V4 does not support `Promise.all` for task triggers. Instead, you must use `batch.triggerByTaskAndWait` to run sub-tasks in parallel.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/batch-app`.
+- Define a sub-task `process-item-${trial_id}` that accepts an `id` and returns it.
+- Define a parent task `batch-processor-${trial_id}` that takes an array of IDs.
+- Use `batch.triggerByTaskAndWait` to process all IDs in parallel using the sub-task.
+- Return the array of results.
+
+## Implementation Guide
+1. Initialize project in `/home/user/batch-app`.
+2. Define tasks in `trigger/batch.ts`.
+3. Import `batch` from `@trigger.dev/sdk`.
+4. Use `await batch.triggerByTaskAndWait(...)`.
+
+## Constraints
+- Project path: /home/user/batch-app
+- Use `batch.triggerByTaskAndWait` (NOT `Promise.all`).
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo parallel_batch_processing__neQfLXB > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model anthropic/claude-4-6-sonnet --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Parallel Batch Processing
+
+## Background
+Trigger.dev V4 does not support `Promise.all` for task triggers. Instead, you must use `batch.triggerByTaskAndWait` to run sub-tasks in parallel.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/batch-app`.
+- Define a sub-task `process-item-${trial_id}` that accepts an `id` and returns it.
+- Define a parent task `batch-processor-${trial_id}` that takes an array of IDs.
+- Use `batch.triggerByTaskAndWait` to process all IDs in parallel using the sub-task.
+- Return the array of results.
+
+## Implementation Guide
+1. Initialize project in `/home/user/batch-app`.
+2. Define tasks in `trigger/batch.ts`.
+3. Import `batch` from `@trigger.dev/sdk`.
+4. Use `await batch.triggerByTaskAndWait(...)`.
+
+## Constraints
+- Project path: /home/user/batch-app
+- Use `batch.triggerByTaskAndWait` (NOT `Promise.all`).
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo parallel_batch_processing__CoF4G8w > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model zai/glm-4.7 --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Parallel Batch Processing
+
+## Background
+Trigger.dev V4 does not support `Promise.all` for task triggers. Instead, you must use `batch.triggerByTaskAndWait` to run sub-tasks in parallel.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/batch-app`.
+- Define a sub-task `process-item-${trial_id}` that accepts an `id` and returns it.
+- Define a parent task `batch-processor-${trial_id}` that takes an array of IDs.
+- Use `batch.triggerByTaskAndWait` to process all IDs in parallel using the sub-task.
+- Return the array of results.
+
+## Implementation Guide
+1. Initialize project in `/home/user/batch-app`.
+2. Define tasks in `trigger/batch.ts`.
+3. Import `batch` from `@trigger.dev/sdk`.
+4. Use `await batch.triggerByTaskAndWait(...)`.
+
+## Constraints
+- Project path: /home/user/batch-app
+- Use `batch.triggerByTaskAndWait` (NOT `Promise.all`).
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo basic_task_zod__7GcZ7nV > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Basic Trigger.dev Task with Zod Validation
+
+## Background
+Trigger.dev allows you to define tasks with schema validation using Zod. This ensures that the data passed to the task is valid before execution.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/trigger-app`.
+- Define a task using `schemaTask` with the following ID: `basic-zod-task-${trial_id}`.
+- The task should accept a payload with a `name` (string) and `age` (number).
+- The task should return a message: `"Hello ${name}, you are ${age} years old!"`.
+- Configure the task with a retry strategy: `maxAttempts: 3`.
+
+## Implementation Guide
+1. Initialize a Trigger.dev project in `/home/user/trigger-app` using `npx trigger.dev@latest init -p $TRIGGER_PROJECT_REF`.
+2. Read the `trial_id` from `/logs/trial_id`.
+3. Create a file `trigger/basic-task.ts` (or similar) and export the task.
+4. Use `zod` for the schema.
+5. Ensure the task ID is correctly suffixed with `trial_id`.
+
+## Constraints
+- Project path: /home/user/trigger-app
+- Use Zod for schema validation.
+- Task ID must include `${trial_id}` suffix.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo basic_task_zod__8DZY382 > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3-flash --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Basic Trigger.dev Task with Zod Validation
+
+## Background
+Trigger.dev allows you to define tasks with schema validation using Zod. This ensures that the data passed to the task is valid before execution.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/trigger-app`.
+- Define a task using `schemaTask` with the following ID: `basic-zod-task-${trial_id}`.
+- The task should accept a payload with a `name` (string) and `age` (number).
+- The task should return a message: `"Hello ${name}, you are ${age} years old!"`.
+- Configure the task with a retry strategy: `maxAttempts: 3`.
+
+## Implementation Guide
+1. Initialize a Trigger.dev project in `/home/user/trigger-app` using `npx trigger.dev@latest init -p $TRIGGER_PROJECT_REF`.
+2. Read the `trial_id` from `/logs/trial_id`.
+3. Create a file `trigger/basic-task.ts` (or similar) and export the task.
+4. Use `zod` for the schema.
+5. Ensure the task ID is correctly suffixed with `trial_id`.
+
+## Constraints
+- Project path: /home/user/trigger-app
+- Use Zod for schema validation.
+- Task ID must include `${trial_id}` suffix.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo basic_task_zod__rdeN8bw > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model openai/gpt-5.2-codex --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Basic Trigger.dev Task with Zod Validation
+
+## Background
+Trigger.dev allows you to define tasks with schema validation using Zod. This ensures that the data passed to the task is valid before execution.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/trigger-app`.
+- Define a task using `schemaTask` with the following ID: `basic-zod-task-${trial_id}`.
+- The task should accept a payload with a `name` (string) and `age` (number).
+- The task should return a message: `"Hello ${name}, you are ${age} years old!"`.
+- Configure the task with a retry strategy: `maxAttempts: 3`.
+
+## Implementation Guide
+1. Initialize a Trigger.dev project in `/home/user/trigger-app` using `npx trigger.dev@latest init -p $TRIGGER_PROJECT_REF`.
+2. Read the `trial_id` from `/logs/trial_id`.
+3. Create a file `trigger/basic-task.ts` (or similar) and export the task.
+4. Use `zod` for the schema.
+5. Ensure the task ID is correctly suffixed with `trial_id`.
+
+## Constraints
+- Project path: /home/user/trigger-app
+- Use Zod for schema validation.
+- Task ID must include `${trial_id}` suffix.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command failed
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Not retrying trial because the maximum number of retries has been reached
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo basic_task_zod__mMLUiZN > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model anthropic/claude-4-6-sonnet --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Basic Trigger.dev Task with Zod Validation
+
+## Background
+Trigger.dev allows you to define tasks with schema validation using Zod. This ensures that the data passed to the task is valid before execution.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/trigger-app`.
+- Define a task using `schemaTask` with the following ID: `basic-zod-task-${trial_id}`.
+- The task should accept a payload with a `name` (string) and `age` (number).
+- The task should return a message: `"Hello ${name}, you are ${age} years old!"`.
+- Configure the task with a retry strategy: `maxAttempts: 3`.
+
+## Implementation Guide
+1. Initialize a Trigger.dev project in `/home/user/trigger-app` using `npx trigger.dev@latest init -p $TRIGGER_PROJECT_REF`.
+2. Read the `trial_id` from `/logs/trial_id`.
+3. Create a file `trigger/basic-task.ts` (or similar) and export the task.
+4. Use `zod` for the schema.
+5. Ensure the task ID is correctly suffixed with `trial_id`.
+
+## Constraints
+- Project path: /home/user/trigger-app
+- Use Zod for schema validation.
+- Task ID must include `${trial_id}` suffix.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo basic_task_zod__Weg8NDa > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model zai/glm-4.7 --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Basic Trigger.dev Task with Zod Validation
+
+## Background
+Trigger.dev allows you to define tasks with schema validation using Zod. This ensures that the data passed to the task is valid before execution.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/trigger-app`.
+- Define a task using `schemaTask` with the following ID: `basic-zod-task-${trial_id}`.
+- The task should accept a payload with a `name` (string) and `age` (number).
+- The task should return a message: `"Hello ${name}, you are ${age} years old!"`.
+- Configure the task with a retry strategy: `maxAttempts: 3`.
+
+## Implementation Guide
+1. Initialize a Trigger.dev project in `/home/user/trigger-app` using `npx trigger.dev@latest init -p $TRIGGER_PROJECT_REF`.
+2. Read the `trial_id` from `/logs/trial_id`.
+3. Create a file `trigger/basic-task.ts` (or similar) and export the task.
+4. Use `zod` for the schema.
+5. Ensure the task ID is correctly suffixed with `trial_id`.
+
+## Constraints
+- Project path: /home/user/trigger-app
+- Use Zod for schema validation.
+- Task ID must include `${trial_id}` suffix.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo delayed_notification__JnhtKtt > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Delayed Notification with Trigger.dev
+
+## Background
+Trigger.dev's `wait.for` allows tasks to pause execution for a specific duration without consuming compute resources during the wait period.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/notify-app`.
+- Define a task with ID: `delayed-notify-${trial_id}`.
+- The task should accept a `userId` and `message`.
+- The task should wait for 10 seconds using `wait.for({ seconds: 10 })`.
+- After the wait, it should return an object with `sent: true` and the original `message`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/notify-app`.
+2. Create `trigger/notify.ts`.
+3. Import `wait` from `@trigger.dev/sdk`.
+4. Implement the delay and return the result.
+
+## Constraints
+- Project path: /home/user/notify-app
+- Wait duration: 10 seconds.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo delayed_notification__SignGvZ > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3-flash --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Delayed Notification with Trigger.dev
+
+## Background
+Trigger.dev's `wait.for` allows tasks to pause execution for a specific duration without consuming compute resources during the wait period.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/notify-app`.
+- Define a task with ID: `delayed-notify-${trial_id}`.
+- The task should accept a `userId` and `message`.
+- The task should wait for 10 seconds using `wait.for({ seconds: 10 })`.
+- After the wait, it should return an object with `sent: true` and the original `message`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/notify-app`.
+2. Create `trigger/notify.ts`.
+3. Import `wait` from `@trigger.dev/sdk`.
+4. Implement the delay and return the result.
+
+## Constraints
+- Project path: /home/user/notify-app
+- Wait duration: 10 seconds.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo delayed_notification__8Fgz47t > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model openai/gpt-5.2-codex --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Delayed Notification with Trigger.dev
+
+## Background
+Trigger.dev's `wait.for` allows tasks to pause execution for a specific duration without consuming compute resources during the wait period.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/notify-app`.
+- Define a task with ID: `delayed-notify-${trial_id}`.
+- The task should accept a `userId` and `message`.
+- The task should wait for 10 seconds using `wait.for({ seconds: 10 })`.
+- After the wait, it should return an object with `sent: true` and the original `message`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/notify-app`.
+2. Create `trigger/notify.ts`.
+3. Import `wait` from `@trigger.dev/sdk`.
+4. Implement the delay and return the result.
+
+## Constraints
+- Project path: /home/user/notify-app
+- Wait duration: 10 seconds.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo delayed_notification__DxZPet7 > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model anthropic/claude-4-6-sonnet --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Delayed Notification with Trigger.dev
+
+## Background
+Trigger.dev's `wait.for` allows tasks to pause execution for a specific duration without consuming compute resources during the wait period.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/notify-app`.
+- Define a task with ID: `delayed-notify-${trial_id}`.
+- The task should accept a `userId` and `message`.
+- The task should wait for 10 seconds using `wait.for({ seconds: 10 })`.
+- After the wait, it should return an object with `sent: true` and the original `message`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/notify-app`.
+2. Create `trigger/notify.ts`.
+3. Import `wait` from `@trigger.dev/sdk`.
+4. Implement the delay and return the result.
+
+## Constraints
+- Project path: /home/user/notify-app
+- Wait duration: 10 seconds.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo delayed_notification__UkFVkZx > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model zai/glm-4.7 --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Delayed Notification with Trigger.dev
+
+## Background
+Trigger.dev's `wait.for` allows tasks to pause execution for a specific duration without consuming compute resources during the wait period.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/notify-app`.
+- Define a task with ID: `delayed-notify-${trial_id}`.
+- The task should accept a `userId` and `message`.
+- The task should wait for 10 seconds using `wait.for({ seconds: 10 })`.
+- After the wait, it should return an object with `sent: true` and the original `message`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/notify-app`.
+2. Create `trigger/notify.ts`.
+3. Import `wait` from `@trigger.dev/sdk`.
+4. Implement the delay and return the result.
+
+## Constraints
+- Project path: /home/user/notify-app
+- Wait duration: 10 seconds.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo ai_agent_refinement_loop__KoQa4sF > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# AI Agent Refinement Loop
+
+## Background
+Trigger.dev's `ai.tool` allows you to expose tasks as tools for AI agents. You can build refinement loops where an agent calls a tool, evaluates the output, and calls it again if needed.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/ai-app`.
+- Define a `schemaTask` called `refine-text-${trial_id}` that takes a string and improves it (mocked or using a real LLM if configured, but here we check the integration).
+- Wrap this task using `ai.tool(refineTask)`.
+- Define a parent task `agent-loop-${trial_id}` that uses this tool in a loop to refine a text at least twice.
+
+## Implementation Guide
+1. Initialize project in `/home/user/ai-app`.
+2. Create `trigger/ai-agent.ts`.
+3. Use `ai.tool` from `@trigger.dev/sdk`.
+
+## Constraints
+- Project path: /home/user/ai-app
+- Use `ai.tool`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo ai_agent_refinement_loop__STtXcaL > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3-flash --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# AI Agent Refinement Loop
+
+## Background
+Trigger.dev's `ai.tool` allows you to expose tasks as tools for AI agents. You can build refinement loops where an agent calls a tool, evaluates the output, and calls it again if needed.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/ai-app`.
+- Define a `schemaTask` called `refine-text-${trial_id}` that takes a string and improves it (mocked or using a real LLM if configured, but here we check the integration).
+- Wrap this task using `ai.tool(refineTask)`.
+- Define a parent task `agent-loop-${trial_id}` that uses this tool in a loop to refine a text at least twice.
+
+## Implementation Guide
+1. Initialize project in `/home/user/ai-app`.
+2. Create `trigger/ai-agent.ts`.
+3. Use `ai.tool` from `@trigger.dev/sdk`.
+
+## Constraints
+- Project path: /home/user/ai-app
+- Use `ai.tool`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo ai_agent_refinement_loop__FHeUCbB > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model openai/gpt-5.2-codex --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# AI Agent Refinement Loop
+
+## Background
+Trigger.dev's `ai.tool` allows you to expose tasks as tools for AI agents. You can build refinement loops where an agent calls a tool, evaluates the output, and calls it again if needed.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/ai-app`.
+- Define a `schemaTask` called `refine-text-${trial_id}` that takes a string and improves it (mocked or using a real LLM if configured, but here we check the integration).
+- Wrap this task using `ai.tool(refineTask)`.
+- Define a parent task `agent-loop-${trial_id}` that uses this tool in a loop to refine a text at least twice.
+
+## Implementation Guide
+1. Initialize project in `/home/user/ai-app`.
+2. Create `trigger/ai-agent.ts`.
+3. Use `ai.tool` from `@trigger.dev/sdk`.
+
+## Constraints
+- Project path: /home/user/ai-app
+- Use `ai.tool`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo ai_agent_refinement_loop__kyPp8Z9 > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model anthropic/claude-4-6-sonnet --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# AI Agent Refinement Loop
+
+## Background
+Trigger.dev's `ai.tool` allows you to expose tasks as tools for AI agents. You can build refinement loops where an agent calls a tool, evaluates the output, and calls it again if needed.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/ai-app`.
+- Define a `schemaTask` called `refine-text-${trial_id}` that takes a string and improves it (mocked or using a real LLM if configured, but here we check the integration).
+- Wrap this task using `ai.tool(refineTask)`.
+- Define a parent task `agent-loop-${trial_id}` that uses this tool in a loop to refine a text at least twice.
+
+## Implementation Guide
+1. Initialize project in `/home/user/ai-app`.
+2. Create `trigger/ai-agent.ts`.
+3. Use `ai.tool` from `@trigger.dev/sdk`.
+
+## Constraints
+- Project path: /home/user/ai-app
+- Use `ai.tool`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo ai_agent_refinement_loop__vGc5RNc > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model zai/glm-4.7 --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# AI Agent Refinement Loop
+
+## Background
+Trigger.dev's `ai.tool` allows you to expose tasks as tools for AI agents. You can build refinement loops where an agent calls a tool, evaluates the output, and calls it again if needed.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/ai-app`.
+- Define a `schemaTask` called `refine-text-${trial_id}` that takes a string and improves it (mocked or using a real LLM if configured, but here we check the integration).
+- Wrap this task using `ai.tool(refineTask)`.
+- Define a parent task `agent-loop-${trial_id}` that uses this tool in a loop to refine a text at least twice.
+
+## Implementation Guide
+1. Initialize project in `/home/user/ai-app`.
+2. Create `trigger/ai-agent.ts`.
+3. Use `ai.tool` from `@trigger.dev/sdk`.
+
+## Constraints
+- Project path: /home/user/ai-app
+- Use `ai.tool`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo realtime_progress_updates__DPsCseA > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Real-time Progress Updates
+
+## Background
+You can report progress in Trigger.dev by updating the run's metadata. This can be viewed in real-time on the dashboard or fetched via the Realtime API.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/progress-app`.
+- Define a task `progress-task-${trial_id}`.
+- The task should simulate a long-running process with a loop (e.g., 5 steps).
+- In each step, it should update the metadata with the current progress percentage: `await ctx.run.updateMetadata({ progress: currentProgress })`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/progress-app`.
+2. Create `trigger/progress.ts`.
+3. Use `ctx.run.updateMetadata` inside the task's `run` function.
+
+## Constraints
+- Project path: /home/user/progress-app
+- Update metadata with `progress` key.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo realtime_progress_updates__wXaKyWt > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3-flash --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Real-time Progress Updates
+
+## Background
+You can report progress in Trigger.dev by updating the run's metadata. This can be viewed in real-time on the dashboard or fetched via the Realtime API.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/progress-app`.
+- Define a task `progress-task-${trial_id}`.
+- The task should simulate a long-running process with a loop (e.g., 5 steps).
+- In each step, it should update the metadata with the current progress percentage: `await ctx.run.updateMetadata({ progress: currentProgress })`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/progress-app`.
+2. Create `trigger/progress.ts`.
+3. Use `ctx.run.updateMetadata` inside the task's `run` function.
+
+## Constraints
+- Project path: /home/user/progress-app
+- Update metadata with `progress` key.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo realtime_progress_updates__VG2nMYs > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model openai/gpt-5.2-codex --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Real-time Progress Updates
+
+## Background
+You can report progress in Trigger.dev by updating the run's metadata. This can be viewed in real-time on the dashboard or fetched via the Realtime API.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/progress-app`.
+- Define a task `progress-task-${trial_id}`.
+- The task should simulate a long-running process with a loop (e.g., 5 steps).
+- In each step, it should update the metadata with the current progress percentage: `await ctx.run.updateMetadata({ progress: currentProgress })`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/progress-app`.
+2. Create `trigger/progress.ts`.
+3. Use `ctx.run.updateMetadata` inside the task's `run` function.
+
+## Constraints
+- Project path: /home/user/progress-app
+- Update metadata with `progress` key.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo realtime_progress_updates__fKaEiYA > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model anthropic/claude-4-6-sonnet --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Real-time Progress Updates
+
+## Background
+You can report progress in Trigger.dev by updating the run's metadata. This can be viewed in real-time on the dashboard or fetched via the Realtime API.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/progress-app`.
+- Define a task `progress-task-${trial_id}`.
+- The task should simulate a long-running process with a loop (e.g., 5 steps).
+- In each step, it should update the metadata with the current progress percentage: `await ctx.run.updateMetadata({ progress: currentProgress })`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/progress-app`.
+2. Create `trigger/progress.ts`.
+3. Use `ctx.run.updateMetadata` inside the task's `run` function.
+
+## Constraints
+- Project path: /home/user/progress-app
+- Update metadata with `progress` key.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo realtime_progress_updates__awFppLk > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model zai/glm-4.7 --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Real-time Progress Updates
+
+## Background
+You can report progress in Trigger.dev by updating the run's metadata. This can be viewed in real-time on the dashboard or fetched via the Realtime API.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/progress-app`.
+- Define a task `progress-task-${trial_id}`.
+- The task should simulate a long-running process with a loop (e.g., 5 steps).
+- In each step, it should update the metadata with the current progress percentage: `await ctx.run.updateMetadata({ progress: currentProgress })`.
+
+## Implementation Guide
+1. Initialize project in `/home/user/progress-app`.
+2. Create `trigger/progress.ts`.
+3. Use `ctx.run.updateMetadata` inside the task's `run` function.
+
+## Constraints
+- Project path: /home/user/progress-app
+- Update metadata with `progress` key.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo human_in_the_loop_approval__eXPGAyN > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Human-in-the-Loop Approval Workflow
+
+## Background
+Trigger.dev supports pausing workflows for human intervention using `wait.forToken`.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/approval-app`.
+- Define a task `approval-workflow-${trial_id}`.
+- The task should generate a token using `wait.forToken("manager-approval")`.
+- The task should return the data received from the token completion.
+
+## Implementation Guide
+1. Initialize project in `/home/user/approval-app`.
+2. Create `trigger/approval.ts`.
+3. Use `const { data } = await wait.forToken("manager-approval")`.
+
+## Constraints
+- Project path: /home/user/approval-app
+- Use `wait.forToken`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo human_in_the_loop_approval__Gycyh8r > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3-flash --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Human-in-the-Loop Approval Workflow
+
+## Background
+Trigger.dev supports pausing workflows for human intervention using `wait.forToken`.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/approval-app`.
+- Define a task `approval-workflow-${trial_id}`.
+- The task should generate a token using `wait.forToken("manager-approval")`.
+- The task should return the data received from the token completion.
+
+## Implementation Guide
+1. Initialize project in `/home/user/approval-app`.
+2. Create `trigger/approval.ts`.
+3. Use `const { data } = await wait.forToken("manager-approval")`.
+
+## Constraints
+- Project path: /home/user/approval-app
+- Use `wait.forToken`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo human_in_the_loop_approval__TGBXzeg > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model openai/gpt-5.2-codex --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Human-in-the-Loop Approval Workflow
+
+## Background
+Trigger.dev supports pausing workflows for human intervention using `wait.forToken`.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/approval-app`.
+- Define a task `approval-workflow-${trial_id}`.
+- The task should generate a token using `wait.forToken("manager-approval")`.
+- The task should return the data received from the token completion.
+
+## Implementation Guide
+1. Initialize project in `/home/user/approval-app`.
+2. Create `trigger/approval.ts`.
+3. Use `const { data } = await wait.forToken("manager-approval")`.
+
+## Constraints
+- Project path: /home/user/approval-app
+- Use `wait.forToken`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo human_in_the_loop_approval__mLy6pxA > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model anthropic/claude-4-6-sonnet --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Human-in-the-Loop Approval Workflow
+
+## Background
+Trigger.dev supports pausing workflows for human intervention using `wait.forToken`.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/approval-app`.
+- Define a task `approval-workflow-${trial_id}`.
+- The task should generate a token using `wait.forToken("manager-approval")`.
+- The task should return the data received from the token completion.
+
+## Implementation Guide
+1. Initialize project in `/home/user/approval-app`.
+2. Create `trigger/approval.ts`.
+3. Use `const { data } = await wait.forToken("manager-approval")`.
+
+## Constraints
+- Project path: /home/user/approval-app
+- Use `wait.forToken`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Running command: echo human_in_the_loop_approval__PhyuSvg > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model zai/glm-4.7 --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Human-in-the-Loop Approval Workflow
+
+## Background
+Trigger.dev supports pausing workflows for human intervention using `wait.forToken`.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/approval-app`.
+- Define a task `approval-workflow-${trial_id}`.
+- The task should generate a token using `wait.forToken("manager-approval")`.
+- The task should return the data received from the token completion.
+
+## Implementation Guide
+1. Initialize project in `/home/user/approval-app`.
+2. Create `trigger/approval.ts`.
+3. Use `const { data } = await wait.forToken("manager-approval")`.
+
+## Constraints
+- Project path: /home/user/approval-app
+- Use `wait.forToken`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo concurrency_controlled_queue__7DhZj6r > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Concurrency Control with Queues
+
+## Background
+Trigger.dev V4 requires queues to be explicitly defined. You can use queues to limit concurrency globally or per key.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/queue-app`.
+- Define a queue named `critical-queue-${trial_id}` with `concurrencyLimit: 1`.
+- Define a task `exclusive-task-${trial_id}` that uses this queue.
+- The task should also use a `concurrencyKey` based on the payload's `resourceId` to ensure only one run per resource ID.
+
+## Implementation Guide
+1. Initialize project in `/home/user/queue-app`.
+2. Create `trigger/queue.ts`.
+3. Use `queue({ name: ..., concurrencyLimit: 1 })`.
+4. Set `queue` and `concurrencyKey` in the task definition.
+
+## Constraints
+- Project path: /home/user/queue-app
+- Queue concurrency limit: 1.
+- Use `concurrencyKey`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo concurrency_controlled_queue__kXTFmQv > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3-flash --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Concurrency Control with Queues
+
+## Background
+Trigger.dev V4 requires queues to be explicitly defined. You can use queues to limit concurrency globally or per key.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/queue-app`.
+- Define a queue named `critical-queue-${trial_id}` with `concurrencyLimit: 1`.
+- Define a task `exclusive-task-${trial_id}` that uses this queue.
+- The task should also use a `concurrencyKey` based on the payload's `resourceId` to ensure only one run per resource ID.
+
+## Implementation Guide
+1. Initialize project in `/home/user/queue-app`.
+2. Create `trigger/queue.ts`.
+3. Use `queue({ name: ..., concurrencyLimit: 1 })`.
+4. Set `queue` and `concurrencyKey` in the task definition.
+
+## Constraints
+- Project path: /home/user/queue-app
+- Queue concurrency limit: 1.
+- Use `concurrencyKey`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo concurrency_controlled_queue__2c7goie > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model openai/gpt-5.2-codex --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Concurrency Control with Queues
+
+## Background
+Trigger.dev V4 requires queues to be explicitly defined. You can use queues to limit concurrency globally or per key.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/queue-app`.
+- Define a queue named `critical-queue-${trial_id}` with `concurrencyLimit: 1`.
+- Define a task `exclusive-task-${trial_id}` that uses this queue.
+- The task should also use a `concurrencyKey` based on the payload's `resourceId` to ensure only one run per resource ID.
+
+## Implementation Guide
+1. Initialize project in `/home/user/queue-app`.
+2. Create `trigger/queue.ts`.
+3. Use `queue({ name: ..., concurrencyLimit: 1 })`.
+4. Set `queue` and `concurrencyKey` in the task definition.
+
+## Constraints
+- Project path: /home/user/queue-app
+- Queue concurrency limit: 1.
+- Use `concurrencyKey`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo concurrency_controlled_queue__bL3DSUk > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model anthropic/claude-4-6-sonnet --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Concurrency Control with Queues
+
+## Background
+Trigger.dev V4 requires queues to be explicitly defined. You can use queues to limit concurrency globally or per key.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/queue-app`.
+- Define a queue named `critical-queue-${trial_id}` with `concurrencyLimit: 1`.
+- Define a task `exclusive-task-${trial_id}` that uses this queue.
+- The task should also use a `concurrencyKey` based on the payload's `resourceId` to ensure only one run per resource ID.
+
+## Implementation Guide
+1. Initialize project in `/home/user/queue-app`.
+2. Create `trigger/queue.ts`.
+3. Use `queue({ name: ..., concurrencyLimit: 1 })`.
+4. Set `queue` and `concurrencyKey` in the task definition.
+
+## Constraints
+- Project path: /home/user/queue-app
+- Queue concurrency limit: 1.
+- Use `concurrencyKey`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo concurrency_controlled_queue__edfqxXQ > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model zai/glm-4.7 --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Concurrency Control with Queues
+
+## Background
+Trigger.dev V4 requires queues to be explicitly defined. You can use queues to limit concurrency globally or per key.
+
+## Requirements
+- Create a Trigger.dev project in `/home/user/queue-app`.
+- Define a queue named `critical-queue-${trial_id}` with `concurrencyLimit: 1`.
+- Define a task `exclusive-task-${trial_id}` that uses this queue.
+- The task should also use a `concurrencyKey` based on the payload's `resourceId` to ensure only one run per resource ID.
+
+## Implementation Guide
+1. Initialize project in `/home/user/queue-app`.
+2. Create `trigger/queue.ts`.
+3. Use `queue({ name: ..., concurrencyLimit: 1 })`.
+4. Set `queue` and `concurrencyKey` in the task definition.
+
+## Constraints
+- Project path: /home/user/queue-app
+- Queue concurrency limit: 1.
+- Use `concurrencyKey`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Exception AgentTimeoutError is in exclude_exceptions, not retrying
+Not retrying trial because the exception is not in include_exceptions or the maximum number of retries has been reached

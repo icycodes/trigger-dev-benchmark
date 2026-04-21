@@ -1,0 +1,50 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 3,
+            "passed": 2,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776749179.5838706,
+            "stop": 1776749179.5968852
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_task_file_exists",
+                "status": "passed",
+                "duration": 0.0002234170005976921,
+                "start": 1776749179.5896702,
+                "stop": 1776749179.590004,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_task_content",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0002641909995872993,
+                "start": 1776749179.5901027,
+                "stop": 1776749179.5964284,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_task_content():\n        trial_id = get_trial_id()\n        expected_id = f\"basic-zod-task-{trial_id}\"\n    \n        trigger_dir = os.path.join(PROJECT_DIR, \"trigger\")\n        found_id = False\n        found_zod = False\n        found_retry = False\n    \n        for filename in os.listdir(trigger_dir):\n            if filename.endswith(\".ts\") or filename.endswith(\".js\"):\n                with open(os.path.join(trigger_dir, filename), \"r\") as f:\n                    content = f.read()\n                    if expected_id in content:\n                        found_id = True\n                    if \"z.object\" in content or \"zod\" in content:\n                        found_zod = True\n                    if \"maxAttempts: 3\" in content or \"maxAttempts:3\" in content:\n                        found_retry = True\n    \n>       assert found_id, f\"Task ID {expected_id} not found in any trigger file.\"\nE       AssertionError: Task ID basic-zod-task-basic_task_zod__mMLUiZN not found in any trigger file.\nE       assert False\n\ntests/test_final_state.py:42: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_package_json_dependencies",
+                "status": "passed",
+                "duration": 0.0002014679994317703,
+                "start": 1776749179.59654,
+                "stop": 1776749179.5968082,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

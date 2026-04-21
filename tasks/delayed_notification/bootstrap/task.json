@@ -1,0 +1,5 @@
+{
+  "task_name": "delayed_notification",
+  "task_description": "# Delayed Notification with Trigger.dev\n\n## Background\nTrigger.dev's `wait.for` allows tasks to pause execution for a specific duration without consuming compute resources during the wait period.\n\n## Requirements\n- Create a Trigger.dev project in `/home/user/notify-app`.\n- Define a task with ID: `delayed-notify-${trial_id}`.\n- The task should accept a `userId` and `message`.\n- The task should wait for 10 seconds using `wait.for({ seconds: 10 })`.\n- After the wait, it should return an object with `sent: true` and the original `message`.\n\n## Implementation Guide\n1. Initialize project in `/home/user/notify-app`.\n2. Create `trigger/notify.ts`.\n3. Import `wait` from `@trigger.dev/sdk`.\n4. Implement the delay and return the result.\n\n## Constraints\n- Project path: /home/user/notify-app\n- Wait duration: 10 seconds.\n\n## Integrations\n- Trigger.dev",
+  "truth": "# Verification Plan\n\n## Verification Steps\n1. Check code for `wait.for({ seconds: 10 })`.\n2. Verify task ID suffix.\n3. Verify return object structure."
+}

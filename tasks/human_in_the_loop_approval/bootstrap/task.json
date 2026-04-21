@@ -1,0 +1,5 @@
+{
+  "task_name": "human_in_the_loop_approval",
+  "task_description": "# Human-in-the-Loop Approval Workflow\n\n## Background\nTrigger.dev supports pausing workflows for human intervention using `wait.forToken`.\n\n## Requirements\n- Create a Trigger.dev project in `/home/user/approval-app`.\n- Define a task `approval-workflow-${trial_id}`.\n- The task should generate a token using `wait.forToken(\"manager-approval\")`.\n- The task should return the data received from the token completion.\n\n## Implementation Guide\n1. Initialize project in `/home/user/approval-app`.\n2. Create `trigger/approval.ts`.\n3. Use `const { data } = await wait.forToken(\"manager-approval\")`.\n\n## Constraints\n- Project path: /home/user/approval-app\n- Use `wait.forToken`.\n\n## Integrations\n- Trigger.dev",
+  "truth": "# Verification Plan\n\n## Verification Steps\n1. Check for `wait.forToken` usage.\n2. Verify the token name is \"manager-approval\"."
+}

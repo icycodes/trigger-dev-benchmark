@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776749177.8063145,
+            "stop": 1776749177.815559
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_wait_for_exists",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0002797879988065688,
+                "start": 1776749177.8098223,
+                "stop": 1776749177.815471,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_wait_for_exists():\n        trial_id = get_trial_id()\n        expected_id = f\"delayed-notify-{trial_id}\"\n        trigger_dir = os.path.join(PROJECT_DIR, \"trigger\")\n    \n        found_id = False\n        found_wait = False\n    \n>       for filename in os.listdir(trigger_dir):\n                        ^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/home/user/delayed_notification-app/trigger'\n\ntests/test_final_state.py:18: FileNotFoundError",
+                "message": "The test failed in the call phase"
+            }
+        ]
+    }
+}
