@@ -1,0 +1,48 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 7 packages in 2ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py F                                              [100%]
+
+=================================== FAILURES ===================================
+______________________ test_batch_trigger_implementation _______________________
+
+    def test_batch_trigger_implementation():
+        task_file = os.path.join(PROJECT_DIR, "trigger/tasks.ts")
+        assert os.path.exists(task_file), f"{task_file} not found."
+    
+        with open(task_file, "r") as f:
+            content = f.read()
+    
+        assert "batch.triggerByTaskAndWait" in content or "batch.triggerAndWait" in content
+>       assert "Promise.all" not in content or "Promise.all" in content and "triggerAndWait" not in content # Promise.all shouldn't be used with triggerAndWait
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert ('Promise.all' not in 'import { ta...n  },\n});\n'
+E         
+E         'Promise.all' is contained here:
+E           tern (NOT Promise.all + triggerAndWait)
+E         ?           +++++++++++
+E               const batchResult = await batch.triggerByTaskAndWait(batchItems);
+E           
+E               // Unwrap each run result and collect the squared values...
+E         
+E         ...Full output truncated (12 lines hidden), use '-vv' to show or ('Promise.all' in 'import { task, batch, wait } from "@trigger.dev/sdk";\n\nconst TRIAL_ID = "parallel_batch_trigger__6z62rdD";\n\n// Ch... ${run.error}`\n        );\n      }\n      return run.output.squared;\n    });\n\n    return { results };\n  },\n});\n' and 'triggerAndWait' not in 'import { ta...n  },\n});\n'
+E         
+E         'triggerAndWait' is contained here:
+E           ise.all + triggerAndWait)
+E               const batchResult = await batch.triggerByTaskAndWait(batchItems);
+E           
+E               // Unwrap each run result and collect the squared values
+E               const results = batchResult.runs.map((run) => {...
+E         
+E         ...Full output truncated (11 lines hidden), use '-vv' to show))
+
+tests/test_final_state.py:14: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_final_state.py::test_batch_trigger_implementation - assert ...
+============================== 1 failed in 0.02s ===============================

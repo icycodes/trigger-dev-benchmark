@@ -1,0 +1,29 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776744571.7886035,
+            "stop": 1776744571.7929854
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_scheduled_task_config",
+                "status": "passed",
+                "duration": 0.0002279919990542112,
+                "start": 1776744571.7925777,
+                "stop": 1776744571.7929065,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

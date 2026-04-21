@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776745392.820832,
+            "stop": 1776745392.830904
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_approval_logic",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.00031657999898015987,
+                "start": 1776745392.8252587,
+                "stop": 1776745392.8308196,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_approval_logic():\n        task_file = os.path.join(PROJECT_DIR, \"trigger/approval.ts\")\n        assert os.path.exists(task_file), f\"{task_file} not found.\"\n    \n        with open(task_file, \"r\") as f:\n            content = f.read()\n    \n        assert \"wait.createToken\" in content\n        assert \"timeout: \\\"1h\\\"\" in content or \"timeout:\\\"1h\\\"\" in content\n        assert \"wait.forToken\" in content\n>       assert \"approved: true\" in content or \"approved:true\" in content\nE       assert ('approved: true' in 'import { task, wait, logger } from \"@trigger.dev/sdk/v3\";\\n\\nconst trial_id = \"human_in_the_loop_approval__XWqUMs7\";\\...e) {\\n      logger.log(\"Request approved!\");\\n    } else {\\n      logger.log(\"Request rejected.\");\\n    }\\n  },\\n});\\n' or 'approved:true' in 'import { task, wait, logger } from \"@trigger.dev/sdk/v3\";\\n\\nconst trial_id = \"human_in_the_loop_approval__XWqUMs7\";\\...e) {\\n      logger.log(\"Request approved!\");\\n    } else {\\n      logger.log(\"Request rejected.\");\\n    }\\n  },\\n});\\n')\n\ntests/test_final_state.py:16: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

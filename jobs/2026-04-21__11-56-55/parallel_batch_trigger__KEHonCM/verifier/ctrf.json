@@ -1,0 +1,29 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776744277.52946,
+            "stop": 1776744277.5347033
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_batch_trigger_implementation",
+                "status": "passed",
+                "duration": 0.00023824499658076093,
+                "start": 1776744277.534267,
+                "stop": 1776744277.5346215,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

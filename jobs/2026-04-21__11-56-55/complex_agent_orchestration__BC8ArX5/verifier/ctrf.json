@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776744094.6718516,
+            "stop": 1776744094.6821904
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_agent_orchestration_logic",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0002997250012413133,
+                "start": 1776744094.6768012,
+                "stop": 1776744094.682107,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_agent_orchestration_logic():\n        task_file = os.path.join(PROJECT_DIR, \"trigger/agent.ts\")\n        assert os.path.exists(task_file), f\"{task_file} not found.\"\n    \n        with open(task_file, \"r\") as f:\n            content = f.read()\n    \n>       assert \"queue(\" in content\nE       assert 'queue(' in 'import { task, logger } from \"@trigger.dev/sdk\";\\n\\nconst trial_id = \"complex_agent_orchestration__BC8ArX5\";\\n\\n// De...eturn recursiveResult.output;\\n    }\\n\\n    // 4. Otherwise, return the final result.\\n    return result;\\n  },\\n});\\n'\n\ntests/test_final_state.py:13: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

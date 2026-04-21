@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776744792.1078544,
+            "stop": 1776744792.1177664
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_cancellable_stream_logic",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0003003389992954908,
+                "start": 1776744792.1120636,
+                "stop": 1776744792.1176805,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_cancellable_stream_logic():\n        task_file = os.path.join(PROJECT_DIR, \"trigger/ai.ts\")\n        assert os.path.exists(task_file), f\"{task_file} not found.\"\n    \n        with open(task_file, \"r\") as f:\n            content = f.read()\n    \n        assert \"streams.define\" in content\n        assert \"streams.input\" in content\n        assert \".on(\" in content\n        assert \".append(\" in content\n        assert \"wait.for\" in content\n>       assert \"10\" in content # Loop count\n        ^^^^^^^^^^^^^^^^^^^^^^\nE       assert '10' in 'import { client, streams, wait } from \"@trigger.dev/sdk\";\\n\\nconst trial_id = \"cancellable_ai_stream__XZFxibx\";\\n\\n//...\\n      status: cancelled ? \"cancelled\" : \"completed\",\\n      cancelReason,\\n      chunksGenerated,\\n    };\\n  },\\n});'\n\ntests/test_final_state.py:18: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

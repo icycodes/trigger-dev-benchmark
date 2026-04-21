@@ -1,0 +1,41 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 2,
+            "passed": 1,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776744549.2723339,
+            "stop": 1776744549.283539
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_task_retry_config",
+                "status": "passed",
+                "duration": 0.00021043200104031712,
+                "start": 1776744549.2777405,
+                "stop": 1776744549.278052,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_retry_fetch_usage",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0002772780007944675,
+                "start": 1776744549.2781427,
+                "stop": 1776744549.2834594,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_retry_fetch_usage():\n        task_file = os.path.join(PROJECT_DIR, \"trigger/unreliable-fetch.ts\")\n        with open(task_file, \"r\") as f:\n            content = f.read()\n    \n        assert \"retry.fetch\" in content, \"retry.fetch not found.\"\n        assert \"500-599\" in content, \"Retry on status 500-599 not found.\"\n>       assert \"strategy: \\\"backoff\\\"\" in content or \"strategy:'backoff'\" in content or \"strategy: \\\"backoff\\\"\" in content\nE       assert ('strategy: \"backoff\"' in 'import { task, retry } from \"@trigger.dev/sdk/v3\";\\n\\nexport const unreliableFetchTask = task({\\n  id: \"unreliable-fe...    },\\n      },\\n    });\\n\\n    return {\\n      status: response.status,\\n      ok: response.ok,\\n    };\\n  },\\n});\\n' or \"strategy:'backoff'\" in 'import { task, retry } from \"@trigger.dev/sdk/v3\";\\n\\nexport const unreliableFetchTask = task({\\n  id: \"unreliable-fe...    },\\n      },\\n    });\\n\\n    return {\\n      status: response.status,\\n      ok: response.ok,\\n    };\\n  },\\n});\\n' or 'strategy: \"backoff\"' in 'import { task, retry } from \"@trigger.dev/sdk/v3\";\\n\\nexport const unreliableFetchTask = task({\\n  id: \"unreliable-fe...    },\\n      },\\n    });\\n\\n    return {\\n      status: response.status,\\n      ok: response.ok,\\n    };\\n  },\\n});\\n')\n\ntests/test_final_state.py:24: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

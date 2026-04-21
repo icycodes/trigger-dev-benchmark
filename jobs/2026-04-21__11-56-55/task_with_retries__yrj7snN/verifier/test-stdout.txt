@@ -1,0 +1,30 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 7 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: json-ctrf-0.3.5
+collected 2 items
+
+tests/test_final_state.py .F                                             [100%]
+
+=================================== FAILURES ===================================
+____________________________ test_retry_fetch_usage ____________________________
+
+    def test_retry_fetch_usage():
+        task_file = os.path.join(PROJECT_DIR, "trigger/unreliable-fetch.ts")
+        with open(task_file, "r") as f:
+            content = f.read()
+    
+        assert "retry.fetch" in content, "retry.fetch not found."
+>       assert "500-599" in content, "Retry on status 500-599 not found."
+E       AssertionError: Retry on status 500-599 not found.
+E       assert '500-599' in 'import { client, task, retry } from "@trigger.dev/sdk";\n\nclient.initialize({\n  id: "retry-project",\n  apiKey: pro...row new Error(`Request failed with status ${response.status}`);\n    }\n\n    return await response.json();\n  },\n});'
+
+tests/test_final_state.py:23: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_task_retry_config
+FAILED tests/test_final_state.py::test_retry_fetch_usage - AssertionError: Re...
+========================= 1 failed, 1 passed in 0.01s ==========================

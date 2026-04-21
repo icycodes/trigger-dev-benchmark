@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776744080.471704,
+            "stop": 1776744080.4820457
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_agent_orchestration_logic",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0002957049982796889,
+                "start": 1776744080.4766154,
+                "stop": 1776744080.4819639,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_agent_orchestration_logic():\n        task_file = os.path.join(PROJECT_DIR, \"trigger/agent.ts\")\n        assert os.path.exists(task_file), f\"{task_file} not found.\"\n    \n        with open(task_file, \"r\") as f:\n            content = f.read()\n    \n>       assert \"queue(\" in content\nE       assert 'queue(' in 'import { task, tasks } from \"@trigger.dev/sdk/v3\";\\nimport fs from \"fs\";\\n\\nconst trial_id = fs.readFileSync(\"/logs/t...t : \"Error in recursion\";\\n    }\\n\\n    return searchResult.ok ? searchResult.output : \"Error in search\";\\n  },\\n});\\n'\n\ntests/test_final_state.py:13: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

@@ -1,0 +1,31 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 7 packages in 13ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: json-ctrf-0.3.5
+collected 2 items
+
+tests/test_final_state.py F.                                             [100%]
+
+=================================== FAILURES ===================================
+____________________________ test_task_retry_config ____________________________
+
+    def test_task_retry_config():
+        task_file = os.path.join(PROJECT_DIR, "trigger/unreliable-fetch.ts")
+        assert os.path.exists(task_file), f"{task_file} not found."
+    
+        with open(task_file, "r") as f:
+            content = f.read()
+    
+        assert "maxAttempts: 5" in content or "maxAttempts:5" in content
+>       assert "minTimeoutInMs: 1000" in content or "minTimeoutInMs:1000" in content
+E       assert ('minTimeoutInMs: 1000' in 'import { readFileSync } from "node:fs";\nimport { logger, retry, task } from "@trigger.dev/sdk";\n\nconst trialId = r...eted", {\n      status: response.status,\n    });\n\n    return {\n      status: response.status,\n    };\n  },\n});\n' or 'minTimeoutInMs:1000' in 'import { readFileSync } from "node:fs";\nimport { logger, retry, task } from "@trigger.dev/sdk";\n\nconst trialId = r...eted", {\n      status: response.status,\n    });\n\n    return {\n      status: response.status,\n    };\n  },\n});\n')
+
+tests/test_final_state.py:14: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_retry_fetch_usage
+FAILED tests/test_final_state.py::test_task_retry_config - assert ('minTimeou...
+========================= 1 failed, 1 passed in 0.01s ==========================

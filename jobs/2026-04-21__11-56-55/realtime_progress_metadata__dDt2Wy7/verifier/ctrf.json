@@ -1,0 +1,29 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776744139.365752,
+            "stop": 1776744139.3704298
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_metadata_updates",
+                "status": "passed",
+                "duration": 0.0002198330003011506,
+                "start": 1776744139.3700373,
+                "stop": 1776744139.3703518,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

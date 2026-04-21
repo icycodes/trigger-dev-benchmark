@@ -1,0 +1,164 @@
+{
+    "id": "33082174-e05b-4d3a-9202-223fdea8e667",
+    "started_at": "2026-04-21T11:56:55.455519",
+    "finished_at": "2026-04-21T12:26:11.897282",
+    "n_total_trials": 50,
+    "stats": {
+        "n_trials": 50,
+        "n_errors": 2,
+        "evals": {
+            "pochi__gemini-3.1-pro__tasks": {
+                "n_trials": 10,
+                "n_errors": 2,
+                "metrics": [
+                    {
+                        "mean": 0.8
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "idempotent_order_processing__CkPu7Mn",
+                            "realtime_progress_metadata__7WogCBG",
+                            "parallel_batch_trigger__jxJvzAd",
+                            "scheduled_cleanup_task__6KSdUir",
+                            "task_with_retries__r6X8haJ",
+                            "cancellable_ai_stream__KYWxRkf",
+                            "basic_task_setup__RY2Sjau",
+                            "concurrency_controlled_queue__m4ZNJFV"
+                        ],
+                        "0.0": [
+                            "complex_agent_orchestration__7Dd6qAg",
+                            "human_in_the_loop_approval__XiX6kXT"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "NonZeroAgentExitCodeError": [
+                        "scheduled_cleanup_task__6KSdUir"
+                    ],
+                    "AgentTimeoutError": [
+                        "basic_task_setup__RY2Sjau"
+                    ]
+                }
+            },
+            "pochi__gemini-3-flash__tasks": {
+                "n_trials": 10,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.7
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "idempotent_order_processing__CmN5ogf",
+                            "realtime_progress_metadata__dDt2Wy7",
+                            "parallel_batch_trigger__KEHonCM",
+                            "scheduled_cleanup_task__Snu2PcM",
+                            "cancellable_ai_stream__mU8xKJw",
+                            "basic_task_setup__P3RKnSU",
+                            "concurrency_controlled_queue__ed6qedr"
+                        ],
+                        "0.0": [
+                            "complex_agent_orchestration__BC8ArX5",
+                            "task_with_retries__dXVixAi",
+                            "human_in_the_loop_approval__7juN9ro"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            },
+            "pochi__gpt-5.2-codex__tasks": {
+                "n_trials": 10,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.8
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "idempotent_order_processing__K6uL9mG",
+                            "complex_agent_orchestration__T7Gz4r7",
+                            "realtime_progress_metadata__Jmng4Pv",
+                            "parallel_batch_trigger__zDiVsZP",
+                            "scheduled_cleanup_task__vL8F3Ex",
+                            "cancellable_ai_stream__avtjUN8",
+                            "human_in_the_loop_approval__BXxHERy",
+                            "concurrency_controlled_queue__xnbnHLV"
+                        ],
+                        "0.0": [
+                            "task_with_retries__ctHkLBz",
+                            "basic_task_setup__kvfCysR"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            },
+            "pochi__claude-4-6-sonnet__tasks": {
+                "n_trials": 10,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.8
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "idempotent_order_processing__MKNXX3o",
+                            "complex_agent_orchestration__3dZjQTJ",
+                            "realtime_progress_metadata__KcTsArH",
+                            "scheduled_cleanup_task__i7Sm38y",
+                            "task_with_retries__bWypSnp",
+                            "cancellable_ai_stream__kcWqQS4",
+                            "basic_task_setup__YPdoNuf",
+                            "concurrency_controlled_queue__VWZ9meg"
+                        ],
+                        "0.0": [
+                            "parallel_batch_trigger__6z62rdD",
+                            "human_in_the_loop_approval__XWqUMs7"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            },
+            "pochi__glm-4.7__tasks": {
+                "n_trials": 10,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.5
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "idempotent_order_processing__fS3HbWd",
+                            "realtime_progress_metadata__jrQdrmN",
+                            "parallel_batch_trigger__tD9PeGv",
+                            "scheduled_cleanup_task__ddyDTwN",
+                            "concurrency_controlled_queue__ygCHYRg"
+                        ],
+                        "0.0": [
+                            "complex_agent_orchestration__j3GRqpT",
+                            "task_with_retries__yrj7snN",
+                            "cancellable_ai_stream__XZFxibx",
+                            "basic_task_setup__bzJbwru",
+                            "human_in_the_loop_approval__f3DZ5Xu"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            }
+        }
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776743906.4594913,
+            "stop": 1776743906.4638774
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_idempotency_logic",
+                "status": "passed",
+                "duration": 0.00021236700195004232,
+                "start": 1776743906.4634993,
+                "stop": 1776743906.4638042,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

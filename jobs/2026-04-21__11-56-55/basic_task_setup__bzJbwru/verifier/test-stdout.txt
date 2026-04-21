@@ -1,0 +1,32 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 7 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: json-ctrf-0.3.5
+collected 3 items
+
+tests/test_final_state.py F..                                            [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_trigger_config_exists __________________________
+
+    def test_trigger_config_exists():
+>       assert os.path.exists(os.path.join(PROJECT_DIR, "trigger.config.ts")), "trigger.config.ts not found."
+E       AssertionError: trigger.config.ts not found.
+E       assert False
+E        +  where False = <function exists at 0x7ff8e879f560>('/home/user/my-project/trigger.config.ts')
+E        +    where <function exists at 0x7ff8e879f560> = <module 'posixpath' (frozen)>.exists
+E        +      where <module 'posixpath' (frozen)> = os.path
+E        +    and   '/home/user/my-project/trigger.config.ts' = <function join at 0x7ff8e8564c20>('/home/user/my-project', 'trigger.config.ts')
+E        +      where <function join at 0x7ff8e8564c20> = <module 'posixpath' (frozen)>.join
+E        +        where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:8: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_task_file_exists
+PASSED tests/test_final_state.py::test_task_id_and_logic
+FAILED tests/test_final_state.py::test_trigger_config_exists - AssertionError...
+========================= 1 failed, 2 passed in 0.01s ==========================

@@ -1,0 +1,30 @@
+- Initializing MCP connections...
+You
+# Scheduled Data Cleanup Task ## Background Create a recurring task that runs on a schedule to perform maintenance or cleanup operations. ## Requirements * Initialize a Trigger.dev project in `/home/user/cron-project`. * Create a scheduled task `cleanupTask-${trial_id}` in `trigger/cleanup.ts`. * The task should run every day at midnight UTC (`0 0 * * *`). * The task should log the `timestamp` and `lastTimestamp` from the payload. * Use `trial_id` from `/logs/trial_id`. ## Implementation Guide 1. Use `schedules.task` from `@trigger.dev/sdk`. 2. Define the `cron` property in the task definition. ## Constraints * Project path: /home/user/cron-project * Use Trigger.dev V4 SDK. ## Integrations * Trigger.dev   
+
+Pochi
+💭 Thinking for 146 characters   
+📂 Listing files in /home/user ✔ 
+💭 Thinking for 0 characters   
+📂 Listing files in /home ✔ 
+💭 Thinking for 0 characters   
+📂 Listing files in /home/user recursively ✔ 
+💭 Thinking for 0 characters   
+📖 Reading /logs/trial_id ✔ 
+💭 Thinking for 321 characters   
+💭 Thinking for 302 characters   
+📋 Updating todo list (3 items) ✔ 
+💭 Thinking for 178 characters   
+✏️  Writing /home/user/cron-project/package.json ✔ 
+💭 Thinking for 0 characters   
+✏️  Writing /home/user/cron-project/tsconfig.json ✔ 
+💭 Thinking for 0 characters   
+✏️  Writing /home/user/cron-project/trigger.config.ts ✔ 
+💭 Thinking for 229 characters   
+✏️  Writing /home/user/cron-project/trigger/cleanup.ts ✔ 
+💭 Thinking for 0 characters   
+📋 Updating todo list (3 items) ✔ 
+💭 Thinking for 0 characters   
+🎉 Task Completed
+Initialized Trigger.dev project in /home/user/cron-project with package.json, tsconfig.json, and trigger.config.ts, and added trigger/cleanup.ts defining cleanupTask-scheduled_cleanup_task__vL8F3Ex on daily midnight UTC cron logging timestamp and lastTimestamp.   
+  

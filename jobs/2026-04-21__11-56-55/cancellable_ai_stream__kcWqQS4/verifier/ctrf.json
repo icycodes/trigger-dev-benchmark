@@ -1,0 +1,29 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776744824.1909778,
+            "stop": 1776744824.1956916
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_cancellable_stream_logic",
+                "status": "passed",
+                "duration": 0.00022786000226915348,
+                "start": 1776744824.1952813,
+                "stop": 1776744824.195607,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

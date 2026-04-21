@@ -1,0 +1,50 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 3,
+            "passed": 2,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776745106.9050448,
+            "stop": 1776745106.9171205
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_trigger_config_exists",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0003557460004230961,
+                "start": 1776745106.9102752,
+                "stop": 1776745106.916356,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_trigger_config_exists():\n>       assert os.path.exists(os.path.join(PROJECT_DIR, \"trigger.config.ts\")), \"trigger.config.ts not found.\"\nE       AssertionError: trigger.config.ts not found.\nE       assert False\nE        +  where False = <function exists at 0x7fa3f0ff3560>('/home/user/my-project/trigger.config.ts')\nE        +    where <function exists at 0x7fa3f0ff3560> = <module 'posixpath' (frozen)>.exists\nE        +      where <module 'posixpath' (frozen)> = os.path\nE        +    and   '/home/user/my-project/trigger.config.ts' = <function join at 0x7fa3f0db4c20>('/home/user/my-project', 'trigger.config.ts')\nE        +      where <function join at 0x7fa3f0db4c20> = <module 'posixpath' (frozen)>.join\nE        +        where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:8: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_task_file_exists",
+                "status": "passed",
+                "duration": 0.0001807669996196637,
+                "start": 1776745106.9164712,
+                "stop": 1776745106.9167268,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_task_id_and_logic",
+                "status": "passed",
+                "duration": 0.0001747879978211131,
+                "start": 1776745106.9168155,
+                "stop": 1776745106.917047,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

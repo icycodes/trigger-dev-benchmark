@@ -1,0 +1,102 @@
+{
+    "id": "a36b3df2-8ce2-4acc-b3d7-6ae480ef17d6",
+    "task_name": "idempotent_order_processing",
+    "trial_name": "idempotent_order_processing__K6uL9mG",
+    "trial_uri": "file:///mnt/E/Icy/data/run-harbor/jobs/2026-04-21__11-56-55/idempotent_order_processing__K6uL9mG",
+    "task_id": {
+        "path": "/mnt/E/Icy/data/run-harbor/local_scripts/../tasks/idempotent_order_processing"
+    },
+    "source": "tasks",
+    "task_checksum": "66dd8eda3c342ceaa5295469617409aad8ce7a667b0e7659cc77daacddde247f",
+    "config": {
+        "task": {
+            "path": "/mnt/E/Icy/data/run-harbor/local_scripts/../tasks/idempotent_order_processing",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": "tasks"
+        },
+        "trial_name": "idempotent_order_processing__K6uL9mG",
+        "trials_dir": "/mnt/E/Icy/data/run-harbor/local_scripts/../jobs/2026-04-21__11-56-55",
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": null,
+            "import_path": "agents.pochi:Pochi",
+            "model_name": "openai/gpt-5.2-codex",
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "kwargs": {},
+            "env": {}
+        },
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "suppress_override_warnings": false,
+            "mounts_json": null,
+            "env": {},
+            "kwargs": {}
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "env": {},
+            "disable": false
+        },
+        "artifacts": [],
+        "job_id": "33082174-e05b-4d3a-9202-223fdea8e667"
+    },
+    "agent_info": {
+        "name": "pochi",
+        "version": "\u001b[37m2026-04-21 03:57:00.367\u001b[39m\u001b[0m\u001b[0m\t\u001b[32m\u001b[1mDEBUG\u001b[22m\u001b[39m\u001b[0m\u001b[0m\t\u001b[37m$bunfs/root/pochi:436715\u001b[39m\u001b[0m\u001b[0m\u001b[1m\u001b[37m\tPochiConfigManager\u001b[39m\u001b[22m\u001b[0m\u001b[0m\tFailed to load config file\n\n\u001b[97m\u001b[101m\u001b[1m Error \u001b[22m\u001b[49m\u001b[39m\u001b[0m\u001b[0m ENOENT: no such file or directory, open '/root/.pochi/config.jsonc', ENOENT, /root/.pochi/config.jsonc, open, -2, 436720, 38, 436720, 38, /$bunfs/root/pochi\u001b[0m\u001b[0m\nerror stack:\n  • \u001b[33m\u001b[39m\u001b[0m\u001b[0m\t\u001b[0m\u001b[0m\n\t\u001b[37m\u001b[39m\u001b[0m\u001b[0m\n  • \u001b[33mpochi\u001b[39m\u001b[0m\u001b[0m\tload\u001b[0m\u001b[0m\n\t\u001b[37m$bunfs/root/pochi:436720\u001b[39m\u001b[0m\u001b[0m\n  • \u001b[33mpochi\u001b[39m\u001b[0m\u001b[0m\tnew PochiConfigFile\u001b[0m\u001b[0m\n\t\u001b[37m$bunfs/root/pochi:436715\u001b[39m\u001b[0m\u001b[0m\n  • \u001b[33mpochi\u001b[39m\u001b[0m\u001b[0m\tnew PochiConfigManager\u001b[0m\u001b[0m\n\t\u001b[37m$bunfs/root/pochi:436837\u001b[39m\u001b[0m\u001b[0m\n  • \u001b[33mpochi\u001b[39m\u001b[0m\u001b[0m\t\u001b[0m\u001b[0m\n\t\u001b[37m$bunfs/root/pochi:436958\u001b[39m\u001b[0m\u001b[0m\n  • \u001b[33mnative\u001b[39m\u001b[0m\u001b[0m\tmoduleEvaluation\u001b[0m\u001b[0m\n\t\u001b[37mnative:1\u001b[39m\u001b[0m\u001b[0m\n  • \u001b[33mnative\u001b[39m\u001b[0m\u001b[0m\tmoduleEvaluation\u001b[0m\u001b[0m\n\t\u001b[37mnative:1\u001b[39m\u001b[0m\u001b[0m\n  • \u001b[33m\u001b[39m\u001b[0m\u001b[0m\t\u001b[0m\u001b[0m\n\t\u001b[37m\u001b[39m\u001b[0m\u001b[0m\u001b[0m\u001b[0m\n\u001b[37m2026-04-21 03:57:00.466\u001b[39m\u001b[0m\u001b[0m\t\u001b[32m\u001b[1mDEBUG\u001b[22m\u001b[39m\u001b[0m\u001b[0m\t\u001b[37mnative:1\u001b[39m\u001b[0m\u001b[0m\u001b[1m\u001b[37m\tPochi\u001b[39m\u001b[22m\u001b[0m\u001b[0m\tpochi v0.6.7\n0.6.7",
+        "model_info": {
+            "name": "gpt-5.2-codex",
+            "provider": "openai"
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 0,
+        "n_cache_tokens": 0,
+        "n_output_tokens": 14044,
+        "cost_usd": null,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 1.0
+        }
+    },
+    "exception_info": null,
+    "started_at": "2026-04-21T03:56:56.544745Z",
+    "finished_at": "2026-04-21T03:58:37.347126Z",
+    "environment_setup": {
+        "started_at": "2026-04-21T03:56:56.545160Z",
+        "finished_at": "2026-04-21T03:56:58.988141Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-04-21T03:56:58.988152Z",
+        "finished_at": "2026-04-21T03:57:00.477054Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-04-21T03:57:00.477097Z",
+        "finished_at": "2026-04-21T03:58:25.356404Z"
+    },
+    "verifier": {
+        "started_at": "2026-04-21T03:58:25.407559Z",
+        "finished_at": "2026-04-21T03:58:26.540411Z"
+    }
+}

@@ -1,0 +1,28 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 7 packages in 13ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py F                                              [100%]
+
+=================================== FAILURES ===================================
+________________________ test_agent_orchestration_logic ________________________
+
+    def test_agent_orchestration_logic():
+        task_file = os.path.join(PROJECT_DIR, "trigger/agent.ts")
+        assert os.path.exists(task_file), f"{task_file} not found."
+    
+        with open(task_file, "r") as f:
+            content = f.read()
+    
+>       assert "queue(" in content
+E       assert 'queue(' in 'import { task, tasks } from "@trigger.dev/sdk/v3";\nimport fs from "fs";\n\nconst trial_id = fs.readFileSync("/logs/t...t : "Error in recursion";\n    }\n\n    return searchResult.ok ? searchResult.output : "Error in search";\n  },\n});\n'
+
+tests/test_final_state.py:13: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_final_state.py::test_agent_orchestration_logic - assert 'qu...
+============================== 1 failed in 0.01s ===============================

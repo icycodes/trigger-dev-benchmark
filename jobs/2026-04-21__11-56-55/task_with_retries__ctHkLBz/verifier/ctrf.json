@@ -1,0 +1,41 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 2,
+            "passed": 1,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776744632.564171,
+            "stop": 1776744632.5756412
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_task_retry_config",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0003481580006337026,
+                "start": 1776744632.569654,
+                "stop": 1776744632.5752103,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_task_retry_config():\n        task_file = os.path.join(PROJECT_DIR, \"trigger/unreliable-fetch.ts\")\n        assert os.path.exists(task_file), f\"{task_file} not found.\"\n    \n        with open(task_file, \"r\") as f:\n            content = f.read()\n    \n        assert \"maxAttempts: 5\" in content or \"maxAttempts:5\" in content\n>       assert \"minTimeoutInMs: 1000\" in content or \"minTimeoutInMs:1000\" in content\nE       assert ('minTimeoutInMs: 1000' in 'import { readFileSync } from \"node:fs\";\\nimport { logger, retry, task } from \"@trigger.dev/sdk\";\\n\\nconst trialId = r...eted\", {\\n      status: response.status,\\n    });\\n\\n    return {\\n      status: response.status,\\n    };\\n  },\\n});\\n' or 'minTimeoutInMs:1000' in 'import { readFileSync } from \"node:fs\";\\nimport { logger, retry, task } from \"@trigger.dev/sdk\";\\n\\nconst trialId = r...eted\", {\\n      status: response.status,\\n    });\\n\\n    return {\\n      status: response.status,\\n    };\\n  },\\n});\\n')\n\ntests/test_final_state.py:14: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_retry_fetch_usage",
+                "status": "passed",
+                "duration": 0.00018079199981002603,
+                "start": 1776744632.5753188,
+                "stop": 1776744632.5755668,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

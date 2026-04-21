@@ -1,0 +1,50 @@
+
+Pochi 0.6.7 (update available 0.6.8)
+────────────────────────────────────────────────────────────────────────────────
+- Initializing MCP connections...
+You
+# Task with Custom Retry Strategy ## Background Implement a task that fetches data from an unreliable API and uses a custom exponential backoff retry strategy. ## Requirements * Initialize a Trigger.dev project in `/home/user/retry-project`. * Create a task in `trigger/unreliable-fetch.ts`. * Task ID: `unreliable-fetch-${trial_id}`. * Retry strategy: * `maxAttempts`: 5 * `minTimeoutInMs`: 1000 * `maxTimeoutInMs`: 10000 * `factor`: 2 * The task should use `retry.fetch` to call `https://httpbin.org/status/500,200` (which randomly returns 500 or 200). * Configure `retry.fetch` to retry on 500-599 status codes using the same backoff strategy. ## Implementation Guide 1. Read `trial_id` from `/logs/trial_id`. 2. Initialize Trigger.dev project. 3. Implement the task with the specified `retry` object in the task definition. 4. Inside the `run` function, use `retry.fetch` with the `retry` option for status codes 500-599. ## Constraints * Project path: /home/user/retry-project * Use Trigger.dev V4 SDK. ## Integrations * Trigger.dev   
+
+Pochi
+💭 Thinking for 0 characters   
+📂 Listing files in /home/user ✔ 
+💭 Thinking for 0 characters   
+📂 Listing files in /home ✔ 
+💭 Thinking for 0 characters   
+📂 Listing files in /home/user recursively ✔ 
+💭 Thinking for 193 characters   
+📋 Updating todo list (3 items) ✔ 
+💭 Thinking for 202 characters   
+📖 Reading /logs/trial_id ✔ 
+💭 Thinking for 227 characters   
+💫 Executing mkdir -p /home/user/retry-project && cd /home/user/retry-project && npx --yes trigger.dev@latest init ✔ 
+💭 Thinking for 237 characters   
+📂 Listing files in /home/user/retry-project ✔ 
+💭 Thinking for 258 characters   
+💫 Executing cd /home/user/retry-project && npx --yes trigger.dev@latest init --help ✔ 
+💭 Thinking for 294 characters   
+💭 Thinking for 195 characters   
+🛠️ Tool webSearch ✔ 
+💭 Thinking for 329 characters   
+🛠️ Tool webSearch ✔ 
+💭 Thinking for 198 characters   
+🛠️ Tool webFetch ✔ 
+💭 Thinking for 380 characters   
+💭 Thinking for 379 characters   
+✏️  Writing /home/user/retry-project/package.json ✔ 
+💭 Thinking for 0 characters   
+✏️  Writing /home/user/retry-project/trigger.config.ts ✔ 
+💭 Thinking for 0 characters   
+✏️  Writing /home/user/retry-project/trigger/unreliable-fetch.ts ✔ 
+💭 Thinking for 0 characters   
+📋 Updating todo list (3 items) ✔ 
+💭 Thinking for 306 characters   
+🎉 Task Completed
+Initialized the Trigger.dev project structure in /home/user/retry-project with package.json and trigger.config.ts, and added trigger/unreliable-fetch.ts that reads /logs/trial_id, sets task ID to unreliable-fetch-task_with_retries__ctHkLBz, and uses retry.fetch with the specified backoff for 500-599.
+
+Tests not run (not requested).
+
+Sources:
+- [Errors & Retrying - Trigger.dev](https://trigger.dev/docs/errors-retrying)
+- [Config file - Trigger.dev](https://trigger.dev/docs/config/config-file)   
+  

@@ -1,0 +1,29 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776744073.524145,
+            "stop": 1776744073.5295403
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_agent_orchestration_logic",
+                "status": "passed",
+                "duration": 0.0002189030019508209,
+                "start": 1776744073.5291533,
+                "stop": 1776744073.529466,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

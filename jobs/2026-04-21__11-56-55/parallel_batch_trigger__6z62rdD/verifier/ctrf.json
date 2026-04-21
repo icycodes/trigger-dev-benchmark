@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1776744473.4223738,
+            "stop": 1776744473.4396336
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_batch_trigger_implementation",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.006783229999200557,
+                "start": 1776744473.4274793,
+                "stop": 1776744473.439548,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_batch_trigger_implementation():\n        task_file = os.path.join(PROJECT_DIR, \"trigger/tasks.ts\")\n        assert os.path.exists(task_file), f\"{task_file} not found.\"\n    \n        with open(task_file, \"r\") as f:\n            content = f.read()\n    \n        assert \"batch.triggerByTaskAndWait\" in content or \"batch.triggerAndWait\" in content\n>       assert \"Promise.all\" not in content or \"Promise.all\" in content and \"triggerAndWait\" not in content # Promise.all shouldn't be used with triggerAndWait\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       assert ('Promise.all' not in 'import { ta...n  },\\n});\\n'\nE         \nE         'Promise.all' is contained here:\nE           tern (NOT Promise.all + triggerAndWait)\nE         ?           +++++++++++\nE               const batchResult = await batch.triggerByTaskAndWait(batchItems);\nE           \nE               // Unwrap each run result and collect the squared values...\nE         \nE         ...Full output truncated (12 lines hidden), use '-vv' to show or ('Promise.all' in 'import { task, batch, wait } from \"@trigger.dev/sdk\";\\n\\nconst TRIAL_ID = \"parallel_batch_trigger__6z62rdD\";\\n\\n// Ch... ${run.error}`\\n        );\\n      }\\n      return run.output.squared;\\n    });\\n\\n    return { results };\\n  },\\n});\\n' and 'triggerAndWait' not in 'import { ta...n  },\\n});\\n'\nE         \nE         'triggerAndWait' is contained here:\nE           ise.all + triggerAndWait)\nE               const batchResult = await batch.triggerByTaskAndWait(batchItems);\nE           \nE               // Unwrap each run result and collect the squared values\nE               const results = batchResult.runs.map((run) => {...\nE         \nE         ...Full output truncated (11 lines hidden), use '-vv' to show))\n\ntests/test_final_state.py:14: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}
