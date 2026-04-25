@@ -1,0 +1,25 @@
+{
+  "name": "ai-agent-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@ai-sdk/openai": "^3.0.53",
+    "@trigger.dev/sdk": "^4.4.4",
+    "ai": "^6.0.168",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.4.4",
+    "@types/node": "^25.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

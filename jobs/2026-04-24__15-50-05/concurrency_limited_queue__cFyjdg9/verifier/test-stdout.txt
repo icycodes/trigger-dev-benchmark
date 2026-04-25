@@ -1,0 +1,48 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 8ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py .                                              [100%]
+
+==================================== PASSES ====================================
+____________________________ test_concurrency_limit ____________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=2424
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+[?25l│
+
+◒  Checking for notifications
+[999D[J◐  Checking for notifications[999D[J◓  Checking for notifications
+[999D[J◑  Checking for notifications
+[999D[J◒  Checking for notifications
+[999D[J◐  Checking for notifications
+[999D[J◓  Checking for notifications[999D[J◑  Checking for notifications
+[999D[J◒  Checking for notifications.
+[999D[J◐  Checking for notifications.
+[999D[J◓  Checking for notifications.
+[999D[J◑  Checking for notifications.[999D[J◒  Checking for notifications.
+[999D[J◐  Checking for notifications.[999D[J◇  No new notifications
+
+[?25hKey: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260424.28
+
+start_trigger_dev process startup detected
+----------------------------- Captured stdout call -----------------------------
+Concurrency limit verification passed: no overlaps detected.
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_concurrency_limit
+============================== 1 passed in 55.48s ==============================
