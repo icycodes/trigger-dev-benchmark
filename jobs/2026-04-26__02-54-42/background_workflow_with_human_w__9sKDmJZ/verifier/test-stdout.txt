@@ -1,0 +1,62 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 2 items
+
+tests/test_final_state.py F.                                             [100%]
+
+=================================== FAILURES ===================================
+_____________________ test_human_approval_workflow_success _____________________
+
+start_trigger_dev = None
+
+    def test_human_approval_workflow_success(start_trigger_dev):
+        """
+        Priority 1: Trigger task, capture token, complete token via script/API, verify run completion.
+        """
+        # 1. Trigger the workflow
+        trigger_result = subprocess.run(
+            ["npm", "run", "trigger-workflow"],
+            cwd=PROJECT_DIR,
+            capture_output=True,
+            text=True
+        )
+>       assert trigger_result.returncode == 0, f"Trigger script failed: {trigger_result.stderr}"
+E       AssertionError: Trigger script failed: npm error Missing script: "trigger-workflow"
+E         npm error
+E         npm error Did you mean this?
+E         npm error   npm run trigger:workflow # run the "trigger:workflow" package script
+E         npm error
+E         npm error To see a list of scripts, run:
+E         npm error   npm run
+E         npm error A complete log of this run can be found in: /root/.npm/_logs/2026-04-25T19_29_28_102Z-debug-0.log
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['npm', 'run', 'trigger-workflow'], returncode=1, stdout='', stderr='npm error Missing script: "...pm run\nnpm error A complete log of this run can be found in: /root/.npm/_logs/2026-04-25T19_29_28_102Z-debug-0.log\n').returncode
+
+tests/test_final_state.py:58: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1031
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260425.5
+
+start_trigger_dev process startup detected
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_project_files_exist
+FAILED tests/test_final_state.py::test_human_approval_workflow_success - Asse...
+========================= 1 failed, 1 passed in 24.13s =========================

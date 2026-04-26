@@ -1,0 +1,63 @@
+# Batch Processing with Results Aggregation in Trigger.dev
+
+## Background
+Trigger.dev is a background job platform that allows for durable execution of workflows. A common pattern is to process a large number of items by triggering child tasks and then aggregating their results. This task involves implementing a parent task that triggers multiple child tasks in parallel and waits for all of them to complete before returning a summary.
+
+## Requirements
+- Implement a child task `process-item` that simulates processing an item (e.g., squaring a number) with a small delay.
+- Implement a parent task `batch-process` that takes an array of numbers, triggers the `process-item` task for each number using `batchTriggerAndWait`, and returns the sum of all processed results.
+- Use `trial_id` from `/logs/trial_id` to suffix task IDs to avoid collisions.
+- Ensure the project is correctly configured using `trigger.config.ts`.
+- Provide an entry point to trigger the `batch-process` task and log the `run_id`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Initialize a Node.js project in `/home/user/batch-task`.
+2. Read `trial_id` from `/logs/trial_id`.
+3. Create `src/trigger/tasks.ts` and define:
+    - `processItemTask`: A task that takes a number, waits for 1 second, and returns the square of the number. Suffix ID with `trial_id`.
+    - `batchProcessTask`: A task that takes an array of numbers, uses `batchTriggerAndWait` to run `processItemTask` for each, and returns the sum of the results. Suffix ID with `trial_id`.
+4. Add an `npm run run-task` script in `package.json` that triggers `batchProcessTask` with the input `[1, 2, 3, 4, 5]` and prints `Run ID: <run_id>`.
+
+## Constraints
+- Project path: /home/user/batch-task
+- Start task: `npm run run-task`
+- Must use `batchTriggerAndWait` for parallel processing.
+- Must suffix task IDs with `trial_id`.
+
+## Integrations
+- Trigger.dev

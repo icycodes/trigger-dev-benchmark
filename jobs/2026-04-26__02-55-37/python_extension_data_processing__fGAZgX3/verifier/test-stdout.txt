@@ -1,0 +1,58 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 26ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 3 items
+
+tests/test_final_state.py F..                                            [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_python_extension_task __________________________
+
+start_trigger_dev = None
+
+    def test_python_extension_task(start_trigger_dev):
+        # Trigger the task
+        result = subprocess.run(
+          ["npm", "run", "run-task"],
+          cwd=PROJECT_DIR,
+          capture_output=True,
+          text=True
+        )
+    
+        # Find run id in result.stdout
+        run_id_match = re.search(r"Run ID: ([a-zA-Z0-9_]+)", result.stdout)
+>       assert run_id_match, f"Run ID not found in the trigger result, stdout: {result.stdout}, stderr: {result.stderr}"
+E       AssertionError: Run ID not found in the trigger result, stdout: 
+E         > python-task@1.0.0 run-task
+E         > ts-node run.ts
+E         
+E         , stderr: 
+E       assert None
+
+tests/test_final_state.py:67: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=791
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260425.24
+
+start_trigger_dev process startup detected
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_requirements_file_exists
+PASSED tests/test_final_state.py::test_python_script_exists
+FAILED tests/test_final_state.py::test_python_extension_task - AssertionError...
+========================= 1 failed, 2 passed in 33.15s =========================

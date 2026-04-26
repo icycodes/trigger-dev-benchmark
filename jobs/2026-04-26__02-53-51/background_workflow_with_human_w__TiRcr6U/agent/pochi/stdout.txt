@@ -1,0 +1,106 @@
+- Initializing MCP connections...
+You
+# Multi-Step Background Workflow with Human-in-the-Loop Approval ## Background Trigger.dev is designed for long-running workflows that can span across multiple steps and even wait for external events or human approvals without consuming compute resources during the wait period. This task demonstrates how to create a multi-step workflow that uses `wait.forToken` to pause execution until a human provides an approval via an external trigger. ## Requirements * Create a Trigger.dev task named `human-approval-workflow`. * The task should: 1. Log an initial message indicating the workflow has started. 2. Create a waitpoint token using `wait.createToken` with a timeout of 10 minutes. 3. Log the token ID and the callback URL. 4. Pause execution using `wait.forToken` until the token is completed. 5. Based on the output of the token completion (`{ approved: boolean }`), log whether the workflow was approved or rejected. 6. Return a final status object. * Implement a script to trigger the task and another script to complete the token (simulating human approval). ## Implementation Guide ### Trigger.dev Project Setup Guide **Note**: For more information, refer to the official https://trigger.dev/docs/manual-setup. 1. **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials: ```bash mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami ``` 2. **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages. ```bash npm init -y npm add @trigger.dev/sdk@latest npm add -D @trigger.dev/build@latest typescript @types/node ts-node ``` 3. **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`. ```ts import { defineConfig } from "@trigger.dev/sdk"; export default defineConfig({ project: process.env.TRIGGER_PROJECT_REF!, dirs: ["./src/trigger"], maxDuration: 3600, retries: { enabledInDev: true, default: { maxAttempts: 2, minTimeoutInMs: 1000, maxTimeoutInMs: 10000, factor: 2, randomize: true, }, }, }); ``` 4. **Check Project Configuration**: Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file. ### Task Implementation 1. Read `trial_id` from `/logs/trial_id`. 2. Create `src/trigger/workflow.ts`: ```ts import { task, wait, logger } from "@trigger.dev/sdk"; import fs from "fs"; const trial_id = fs.readFileSync("/logs/trial_id", "utf-8").trim(); export const humanApprovalWorkflow = task({ id: `human-approval-workflow-${trial_id}`, run: async (payload: { name: string }) => { logger.info("Workflow started", { payload }); const token = await wait.createToken({ timeout: "10m", }); logger.info("Waitpoint created", { tokenId: token.id, url: token.url }); const result = await wait.forToken<{ approved: boolean }>(token.id); if (result.ok) { logger.info("Result received", { approved: result.output.approved }); return { status: "completed", approved: result.output.approved }; } else { logger.error("Waitpoint timed out or failed", { error: result.error }); return { status: "failed", error: result.error }; } }, }); ``` 3. Create a trigger script `trigger-workflow.ts` that triggers the task and prints the `runId` and `tokenId`. Since the `tokenId` is logged by the task, you might need to fetch the run details to get the `tokenId` from logs or just design the task to be easily verifiable. 4. Create a completion script `complete-approval.ts` that takes a `tokenId` and completes it with `{ approved: true }`. 5. Add `scripts` to `package.json` to run these via `npm run`. ## Constraints * Project path: /home/user/trigger-approval * Implementation must use `@trigger.dev/sdk` v4 (latest). * Must use `trial_id` for task ID isolation. * The trigger script must print `Run ID: <run_id>` and `Token ID: <token_id>` to stdout. ## Integrations * Trigger.dev   
+
+Pochi
+💭 Thinking for 1157 characters   
+I'll create a multi-step background workflow with human-in-the-loop approval using Trigger.dev. Let me break this down into manageable tasks.   
+📋 Updating todo list (7 items) ✔ 
+💭 Thinking for 55 characters   
+📖 Reading /logs/trial_id ✔ 
+💭 Thinking for 172 characters   
+💫 Executing mkdir -p /home/user/trigger-approval && cd /home/user/trigger-approval && npm init -y ✔ 
+💭 Thinking for 70 characters   
+💫 Executing npm add @trigger.dev/sdk@latest ✔ 
+💭 Thinking for 46 characters   
+💫 Executing npm add -D @trigger.dev/build@latest typescript @types/node ts-node ✔ 
+💭 Thinking for 104 characters   
+📋 Updating todo list (7 items) ✔ 
+💭 Thinking for 45 characters   
+✏️  Writing /home/user/trigger-approval/trigger.config.ts ✔ 
+💭 Thinking for 47 characters   
+✏️  Writing /home/user/trigger-approval/tsconfig.json ✔ 
+💭 Thinking for 42 characters   
+✏️  Writing /home/user/trigger-approval/src/trigger/workflow.ts ✔ 
+💭 Thinking for 126 characters   
+✏️  Writing /home/user/trigger-approval/trigger-workflow.ts ✔ 
+💭 Thinking for 1316 characters   
+🔧 Applying diff to /home/user/trigger-approval/trigger-workflow.ts ✔ 
+💭 Thinking for 46 characters   
+✏️  Writing /home/user/trigger-approval/complete-approval.ts ✔ 
+💭 Thinking for 104 characters   
+📖 Reading /home/user/trigger-approval/package.json ✔ 
+💭 Thinking for 54 characters   
+🔧 Applying diff to /home/user/trigger-approval/package.json ✔ 
+💭 Thinking for 69 characters   
+📋 Updating todo list (7 items) ✔ 
+💭 Thinking for 99 characters   
+💫 Executing npx tsc --skipLibCheck --noEmit trigger.config.ts ✔ 
+💭 Thinking for 98 characters   
+📂 Listing files in /home/user/trigger-approval recursively ✔ 
+💭 Thinking for 115 characters   
+📖 Reading /home/user/trigger-approval/package.json ✔ 
+💭 Thinking for 45 characters   
+📖 Reading /home/user/trigger-approval/src/trigger/workflow.ts ✔ 
+💭 Thinking for 79 characters   
+🎉 Task Completed
+I've successfully created a multi-step background workflow with human-in-the-loop approval using Trigger.dev. Here's what was implemented:
+
+## Project Structure
+
+**Location:** `/home/user/trigger-approval`
+
+### Files Created:
+
+1. **`package.json`** - Project configuration with scripts:
+   - `npm run trigger` - Triggers the workflow
+   - `npm run complete-approval` - Completes the approval token
+
+2. **`trigger.config.ts`** - Trigger.dev project configuration with:
+   - Project reference from environment variable
+   - Task directory: `./src/trigger`
+   - Max duration: 3600 seconds
+   - Retry configuration enabled in dev
+
+3. **`tsconfig.json`** - TypeScript configuration for compilation
+
+4. **`src/trigger/workflow.ts`** - Main workflow implementation:
+   - Task ID: `human-approval-workflow-background_workflow_with_human_w__TiRcr6U` (uses trial_id for isolation)
+   - Logs initial workflow start message
+   - Creates a waitpoint token with 10-minute timeout
+   - Logs token ID and callback URL
+   - Pauses execution using `wait.forToken` until token completion
+   - Processes approval result and logs whether approved/rejected
+   - Returns final status object
+
+5. **`trigger-workflow.ts`** - Script to trigger the workflow:
+   - Sends event to start the workflow
+   - Prints `Run ID: <run_id>` to stdout
+   - Waits for workflow to start
+   - Fetches run details to extract token ID from logs
+   - Prints `Token ID: <token_id>` to stdout
+
+6. **`complete-approval.ts`** - Script to complete approval:
+   - Takes token ID as argument
+   - Optionally takes approval boolean (defaults to true)
+   - Completes the token with `{ approved: boolean }`
+
+## Usage
+
+```bash
+# Trigger the workflow
+npm run trigger
+
+# Complete approval (true or false)
+npm run complete-approval <token_id> [true|false]
+```
+
+## Key Features
+
+- Uses `@trigger.dev/sdk` v4 (latest)
+- Implements human-in-the-loop approval pattern
+- 10-minute timeout for approval
+- Proper error handling and logging
+- Task ID isolation using trial_id
+- Type-safe TypeScript implementation   
+  

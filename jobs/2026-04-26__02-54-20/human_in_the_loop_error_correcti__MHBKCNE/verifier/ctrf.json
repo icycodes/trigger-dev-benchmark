@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777147553.5655162,
+            "stop": 1777147574.5607514
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_human_in_the_loop_error_correction",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 20.982342578001408,
+                "start": 1777147553.5711644,
+                "stop": 1777147574.5602887,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_human_in_the_loop_error_correction(start_trigger_dev):\n        # 1. Start Pipeline\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-pipeline\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n>       assert result.returncode == 0, f\"run-pipeline failed: {result.stderr}\"\nE       AssertionError: run-pipeline failed: AuthenticationError [TriggerApiError]: Invalid API Key\nE             at ApiError.generate (/home/user/resilient-pipeline/node_modules/@trigger.dev/core/src/v3/apiClient/errors.ts:77:14)\nE             at _doZodFetchWithRetries (/home/user/resilient-pipeline/node_modules/@trigger.dev/core/src/v3/apiClient/core.ts:252:24)\nE             at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\nE             at async <anonymous> (/home/user/resilient-pipeline/node_modules/@trigger.dev/core/src/v3/apiClient/core.ts:212:20)\nE             at async params.options.tracer.startActiveSpan.attributes (/home/user/resilient-pipeline/node_modules/@trigger.dev/core/src/v3/apiClient/core.ts:187:14)\nE             at async <anonymous> (/home/user/resilient-pipeline/node_modules/@trigger.dev/core/src/v3/tracer.ts:137:18)\nE             at async traceZodFetch (/home/user/resilient-pipeline/node_modules/@trigger.dev/core/src/v3/apiClient/core.ts:184:10) {\nE           status: 401,\nE           headers: {\nE             'access-control-expose-headers': 'x-trigger-jwt,x-trigger-jwt-claims',\nE             connection: 'keep-alive',\nE             'content-type': 'application/json; charset=utf-8',\nE             date: 'Sat, 25 Apr 2026 20:06:14 GMT',\nE             'strict-transport-security': 'max-age=3153600000',\nE             'transfer-encoding': 'chunked',\nE             'x-ratelimit-limit': '1500',\nE             'x-ratelimit-remaining': '1499',\nE             'x-ratelimit-reset': '1777147576198',\nE             'x-robots-tag': 'noindex, nofollow'\nE           },\nE           error: 'Invalid API Key',\nE           code: undefined,\nE           param: undefined,\nE           type: undefined\nE         }\nE         \nE       assert 1 == 0\nE        +  where 1 = CompletedProcess(args=['npm', 'run', 'run-pipeline'], returncode=1, stdout='\\n> resilient-pipeline@1.0.0 run-pipeline\\...oindex, nofollow'\\n  },\\n  error: 'Invalid API Key',\\n  code: undefined,\\n  param: undefined,\\n  type: undefined\\n}\\n\").returncode\n\ntests/test_final_state.py:55: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

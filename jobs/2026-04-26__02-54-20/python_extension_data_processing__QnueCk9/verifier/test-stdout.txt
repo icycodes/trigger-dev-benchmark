@@ -1,0 +1,80 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 7ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 3 items
+
+tests/test_final_state.py F..                                            [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_python_extension_task __________________________
+
+start_trigger_dev = None
+
+    def test_python_extension_task(start_trigger_dev):
+        # Trigger the task
+        result = subprocess.run(
+          ["npm", "run", "run-task"],
+          cwd=PROJECT_DIR,
+          capture_output=True,
+          text=True
+        )
+    
+        # Find run id in result.stdout
+        run_id_match = re.search(r"Run ID: ([a-zA-Z0-9_]+)", result.stdout)
+        assert run_id_match, f"Run ID not found in the trigger result, stdout: {result.stdout}, stderr: {result.stderr}"
+        run_id = run_id_match.group(1)
+    
+        # Example of checking run result logic
+        trigger_secret_key = os.environ.get("TRIGGER_SECRET_KEY")
+        for _ in range(20): # Increase range to 20 for potentially slower python builds
+            run_result = subprocess.run(
+              ["curl", "-s", "-H", f"Authorization: Bearer {trigger_secret_key}", f"https://api.trigger.dev/api/v3/runs/{run_id}"],
+              capture_output=True,
+              text=True
+            )
+            assert run_result.returncode == 0, f"Retrieve run result failed with code {run_result.returncode}"
+            run_result_json = json.loads(run_result.stdout)
+            assert "status" in run_result_json, f"Run status is missing in {run_result_json}"
+            run_status = run_result_json["status"]
+    
+            if run_status == "COMPLETED":
+                assert "output" in run_result_json, f"Run output is missing in {run_result_json}"
+                output = run_result_json["output"]
+                # The output should be the average of [10, 20, 30, 40, 50] which is 30
+                # Depending on how the user implements it, it might be a number or a string or an object
+                # Our truth says "contains the correct average: 30"
+                output_str = str(output)
+                assert "30" in output_str, f"The output average is not correct, output: {output}"
+                break
+            elif run_status in ["FAILED", "CRASHED", "CANCELED", "EXPIRED", "TIMED_OUT", "SYSTEM_FAILURE"]:
+>               assert False, f"Run failed with status: {run_status}. Response: {run_result_json}"
+E               AssertionError: Run failed with status: FAILED. Response: {'id': 'run_cmoetgt2p70a50hokuub4v7if', 'taskIdentifier': 'python-process-python_extension_data_processing__QnueCk9', 'version': '20260425.13', 'status': 'FAILED', 'createdAt': '2026-04-25T20:53:25.691Z', 'startedAt': '2026-04-25T20:53:30.397Z', 'updatedAt': '2026-04-25T20:53:35.976Z', 'finishedAt': '2026-04-25T20:53:35.959Z', 'ttl': '10m', 'costInCents': 0, 'baseCostInCents': 0.0025, 'durationMs': 187, 'isTest': False, 'depth': 0, 'tags': [], 'isQueued': False, 'isExecuting': False, 'isCompleted': True, 'isFailed': True, 'isSuccess': False, 'isCancelled': False, 'isWaiting': False, 'triggerFunction': 'trigger', 'payload': [10, 20, 30, 40, 50], 'error': {'name': 'Error', 'message': './scripts/process.py 10 20 30 40 50 exited with a non-zero code 1:\n\nTraceback (most recent call last):\n  File "/home/user/python-task/./scripts/process.py", line 2, in <module>\n    import numpy as np\nModuleNotFoundError: No module named \'numpy\'\n', 'stackTrace': 'Error: ./scripts/process.py 10 20 30 40 50 exited with a non-zero code 1:\n\nTraceback (most recent call last):\n  File "/home/user/python-task/./scripts/process.py", line 2, in <module>\n    import numpy as np\nModuleNotFoundError: No module named \'numpy\'\n\n    at logger.trace.attributes.pythonBin (file:///home/user/python-task/node_modules/@trigger.dev/python/src/index.ts:112:17)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/tracer.ts:137:18\n    at Object.runScript (file:///home/user/python-task/node_modules/@trigger.dev/python/src/index.ts:77:12)\n    at run (file:///home/user/python-task/src/trigger/python-task.ts:10:20)\n    at _tracer.startActiveSpan.attributes (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/workers/taskExecutor.ts:430:18)\n    at file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/tracer.ts:137:18\n    at file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/workers/taskExecutor.ts:425:14\n    at _RunTimelineMetricsAPI.measureMetric (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/runTimelineMetrics/index.ts:67:22)\n    at file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/workers/taskExecutor.ts:189:26'}, 'attemptCount': 1, 'attempts': [], 'relatedRuns': {'children': []}}
+E               assert False
+
+tests/test_final_state.py:93: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1687
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260425.13
+
+start_trigger_dev process startup detected
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_requirements_file_exists
+PASSED tests/test_final_state.py::test_python_script_exists
+FAILED tests/test_final_state.py::test_python_extension_task - AssertionError...
+========================= 1 failed, 2 passed in 30.17s =========================

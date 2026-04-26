@@ -1,0 +1,24 @@
+{
+  "name": "trigger-approval",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "trigger:workflow": "ts-node trigger-workflow.ts",
+    "complete:approval": "ts-node complete-approval.ts",
+    "typecheck:config": "tsc --skipLibCheck --noEmit trigger.config.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.4.4"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.4.4",
+    "@types/node": "^25.6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

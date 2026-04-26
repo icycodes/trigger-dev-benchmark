@@ -1,0 +1,83 @@
+- Initializing MCP connections...
+You
+# Multi-Step Background Workflow with Human-in-the-Loop Approval ## Background Trigger.dev is designed for long-running workflows that can span across multiple steps and even wait for external events or human approvals without consuming compute resources during the wait period. This task demonstrates how to create a multi-step workflow that uses `wait.forToken` to pause execution until a human provides an approval via an external trigger. ## Requirements * Create a Trigger.dev task named `human-approval-workflow`. * The task should: 1. Log an initial message indicating the workflow has started. 2. Create a waitpoint token using `wait.createToken` with a timeout of 10 minutes. 3. Log the token ID and the callback URL. 4. Pause execution using `wait.forToken` until the token is completed. 5. Based on the output of the token completion (`{ approved: boolean }`), log whether the workflow was approved or rejected. 6. Return a final status object. * Implement a script to trigger the task and another script to complete the token (simulating human approval). ## Implementation Guide ### Trigger.dev Project Setup Guide **Note**: For more information, refer to the official https://trigger.dev/docs/manual-setup. 1. **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials: ```bash mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami ``` 2. **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages. ```bash npm init -y npm add @trigger.dev/sdk@latest npm add -D @trigger.dev/build@latest typescript @types/node ts-node ``` 3. **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`. ```ts import { defineConfig } from "@trigger.dev/sdk"; export default defineConfig({ project: process.env.TRIGGER_PROJECT_REF!, dirs: ["./src/trigger"], maxDuration: 3600, retries: { enabledInDev: true, default: { maxAttempts: 2, minTimeoutInMs: 1000, maxTimeoutInMs: 10000, factor: 2, randomize: true, }, }, }); ``` 4. **Check Project Configuration**: Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file. ### Task Implementation 1. Read `trial_id` from `/logs/trial_id`. 2. Create `src/trigger/workflow.ts`: ```ts import { task, wait, logger } from "@trigger.dev/sdk"; import fs from "fs"; const trial_id = fs.readFileSync("/logs/trial_id", "utf-8").trim(); export const humanApprovalWorkflow = task({ id: `human-approval-workflow-${trial_id}`, run: async (payload: { name: string }) => { logger.info("Workflow started", { payload }); const token = await wait.createToken({ timeout: "10m", }); logger.info("Waitpoint created", { tokenId: token.id, url: token.url }); const result = await wait.forToken<{ approved: boolean }>(token.id); if (result.ok) { logger.info("Result received", { approved: result.output.approved }); return { status: "completed", approved: result.output.approved }; } else { logger.error("Waitpoint timed out or failed", { error: result.error }); return { status: "failed", error: result.error }; } }, }); ``` 3. Create a trigger script `trigger-workflow.ts` that triggers the task and prints the `runId` and `tokenId`. Since the `tokenId` is logged by the task, you might need to fetch the run details to get the `tokenId` from logs or just design the task to be easily verifiable. 4. Create a completion script `complete-approval.ts` that takes a `tokenId` and completes it with `{ approved: true }`. 5. Add `scripts` to `package.json` to run these via `npm run`. ## Constraints * Project path: /home/user/trigger-approval * Implementation must use `@trigger.dev/sdk` v4 (latest). * Must use `trial_id` for task ID isolation. * The trigger script must print `Run ID: <run_id>` and `Token ID: <token_id>` to stdout. ## Integrations * Trigger.dev   
+
+Pochi
+💭 Thinking for 0 characters   
+📂 Listing files in . ✔ 
+💭 Thinking for 0 characters   
+📂 Listing files in /home/user/trigger-approval ✔ 
+💭 Thinking for 0 characters   
+📋 Updating todo list (4 items) ✔ 
+💭 Thinking for 199 characters   
+💫 Executing npm init -y ✔ 
+💭 Thinking for 0 characters   
+💫 Executing npm add @trigger.dev/sdk@latest ✔ 
+💭 Thinking for 0 characters   
+💫 Executing npm add -D @trigger.dev/build@latest typescript @types/node ts-node ✔ 
+💭 Thinking for 0 characters   
+📋 Updating todo list (4 items) ✔ 
+💭 Thinking for 0 characters   
+✏️  Writing /home/user/trigger-approval/trigger.config.ts ✔ 
+💭 Thinking for 316 characters   
+📂 Listing files in /home/user/trigger-approval/node_modules/@trigger.dev/sdk ✔ 
+💭 Thinking for 253 characters   
+📖 Reading /home/user/trigger-approval/node_modules/@trigger.dev/sdk/README.md ✔ 
+💭 Thinking for 147 characters   
+🔍 Searching for TriggerClient|client|sendEvent|trigger in *.d.ts files in /home/user/trigger-approval/node_modules/@trigger.dev/sdk/dist ✔ 
+💭 Thinking for 250 characters   
+📖 Reading /home/user/trigger-approval/node_modules/@trigger.dev/sdk/dist/esm/index.d.ts ✖ "ENOENT: no such file or directory, open '/home/user/trigger-approval/node_modules/@trigger.dev/sdk/dist/esm/index.d.ts'"
+💭 Thinking for 0 characters   
+📂 Listing files in /home/user/trigger-approval/node_modules/@trigger.dev/sdk/dist ✔ 
+💭 Thinking for 0 characters   
+📂 Listing files in /home/user/trigger-approval/node_modules/@trigger.dev/sdk/dist/esm ✔ 
+💭 Thinking for 271 characters   
+📖 Reading /home/user/trigger-approval/node_modules/@trigger.dev/sdk/dist/esm/package.json ✔ 
+💭 Thinking for 0 characters   
+📖 Reading /home/user/trigger-approval/node_modules/@trigger.dev/sdk/package.json ✔ 
+💭 Thinking for 250 characters   
+📖 Reading /home/user/trigger-approval/node_modules/@trigger.dev/sdk/dist/esm/v3/index.d.ts ✔ 
+💭 Thinking for 194 characters   
+📖 Reading /home/user/trigger-approval/node_modules/@trigger.dev/sdk/dist/esm/v3/tasks.d.ts ✔ 
+💭 Thinking for 431 characters   
+📖 Reading /home/user/trigger-approval/node_modules/@trigger.dev/sdk/dist/esm/v3/metadata.d.ts ✔ 
+💭 Thinking for 0 characters   
+📖 Reading /home/user/trigger-approval/node_modules/@trigger.dev/sdk/dist/esm/v3/runs.d.ts ✔ 
+💭 Thinking for 305 characters   
+📖 Reading /home/user/trigger-approval/node_modules/@trigger.dev/sdk/dist/esm/v3/auth.d.ts ✔ 
+💭 Thinking for 287 characters   
+🔍 Searching for completeToken|completeWaitpoint|waitpoint in *.d.ts files in /home/user/trigger-approval/node_modules/@trigger.dev/sdk/dist/esm/v3 ✔ 
+💭 Thinking for 418 characters   
+💭 Thinking for 387 characters   
+✏️  Writing /home/user/trigger-approval/src/trigger/workflow.ts ✔ 
+💭 Thinking for 270 characters   
+💭 Thinking for 302 characters   
+✏️  Writing /home/user/trigger-approval/trigger-workflow.ts ✔ 
+💭 Thinking for 0 characters   
+✏️  Writing /home/user/trigger-approval/complete-approval.ts ✔ 
+💭 Thinking for 0 characters   
+✏️  Writing /home/user/trigger-approval/tsconfig.json ✔ 
+💭 Thinking for 0 characters   
+📖 Reading /home/user/trigger-approval/package.json ✔ 
+💭 Thinking for 0 characters   
+🔧 Applying diff to /home/user/trigger-approval/package.json ✔ 
+💭 Thinking for 116 characters   
+💫 Executing npx tsc --skipLibCheck --noEmit trigger.config.ts ✔ 
+💭 Thinking for 0 characters   
+📋 Updating todo list (4 items) ✔ 
+💭 Thinking for 307 characters   
+🎉 Task Completed
+Implemented the Trigger.dev human approval workflow in /home/user/trigger-approval with task metadata tracking, trigger and completion scripts, and project configuration. Added npm scripts for triggering, completing approvals, and type-checking the config; verified trigger.config.ts with tsc. 
+
+Key files:
+- src/trigger/workflow.ts: task with waitpoint token, metadata tokenId, and approval handling.
+- trigger-workflow.ts: triggers run and prints Run ID and Token ID from run metadata.
+- complete-approval.ts: completes a token with { approved: true }.
+- trigger.config.ts and tsconfig.json.
+
+Run:
+- npm run trigger:workflow
+- npm run complete:approval -- <tokenId>
+
+Ensure TRIGGER_PROJECT_REF (for config) and TRIGGER_SECRET_KEY (for API calls) are set in the environment.   
+  

@@ -1,0 +1,84 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py F                                              [100%]
+
+=================================== FAILURES ===================================
+______________________ test_trigger_dev_retry_and_logging ______________________
+
+start_trigger_dev = None
+
+    def test_trigger_dev_retry_and_logging(start_trigger_dev):
+        # Trigger the task
+        result = subprocess.run(
+          ["npm", "run", "run-task"],
+          cwd=PROJECT_DIR,
+          capture_output=True,
+          text=True
+        )
+        assert result.returncode == 0, f"Failed to trigger task: {result.stderr}"
+    
+        # Find run id in result.stdout
+        run_id_match = re.search(r"Run ID: ([a-zA-Z0-9_]+)", result.stdout)
+        assert run_id_match, f"Run ID not found in the trigger result, stdout: {result.stdout}"
+        run_id = run_id_match.group(1)
+    
+        trigger_secret_key = os.environ.get("TRIGGER_SECRET_KEY")
+    
+        # Poll for completion
+        max_checks = 30
+        check_interval = 10
+    
+        for i in range(max_checks):
+            run_result = subprocess.run(
+              ["curl", "-s", "-H", f"Authorization: Bearer {trigger_secret_key}", f"https://api.trigger.dev/api/v3/runs/{run_id}"],
+              capture_output=True,
+              text=True
+            )
+            assert run_result.returncode == 0, f"Retrieve run result failed with code {run_result.returncode}"
+    
+            try:
+                run_result_json = json.loads(run_result.stdout)
+            except json.JSONDecodeError:
+                pytest.fail(f"Failed to parse API response: {run_result.stdout}")
+    
+            assert "status" in run_result_json, f"Run status is missing in {run_result_json}"
+            run_status = run_result_json["status"]
+    
+            if run_status == "COMPLETED":
+                output = run_result_json.get("output")
+                assert output is not None, "Run completed but output is missing"
+                assert output.get("status") == "success", f"Expected status 'success', got {output.get('status')}"
+                assert output.get("userId") == "user_123", f"Expected userId 'user_123', got {output.get('userId')}"
+                assert output.get("attempt") == 3, f"Expected task to succeed on attempt 3, but got attempt {output.get('attempt')}"
+                return
+            elif run_status in ["FAILED", "CRASHED", "CANCELED", "EXPIRED", "TIMED_OUT", "SYSTEM_FAILURE"]:
+>               pytest.fail(f"Run failed with status: {run_status}. Response: {run_result.stdout}")
+E               Failed: Run failed with status: FAILED. Response: {"id":"run_cmoeqbp2c6bi40hn1pj6g3f4v","taskIdentifier":"retry-logic-task-custom_retry_and_logging__Fr2oJVE","version":"20260425.4","status":"FAILED","createdAt":"2026-04-25T19:25:28.368Z","startedAt":"2026-04-25T19:25:28.401Z","updatedAt":"2026-04-25T19:26:05.285Z","finishedAt":"2026-04-25T19:26:05.275Z","ttl":"10m","costInCents":0,"baseCostInCents":0.0025,"durationMs":708,"isTest":false,"depth":0,"tags":[],"isQueued":false,"isExecuting":false,"isCompleted":true,"isFailed":true,"isSuccess":false,"isCancelled":false,"isWaiting":false,"triggerFunction":"trigger","payload":{"userId":"user_123"},"error":{"name":"TypeError","message":"Cannot read properties of undefined (reading 'number')","stackTrace":"TypeError: Cannot read properties of undefined (reading 'number')\n    at run (file:///home/user/trigger-retry-lab/src/trigger/retry-task.ts:12:43)\n    at _tracer.startActiveSpan.attributes (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/workers/taskExecutor.ts:430:24)\n    at file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/tracer.ts:137:24\n    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)\n    at AsyncLocalStorageContextManager.with (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@opentelemetry/context-async-hooks/src/AsyncLocalStorageContextManager.ts:40:36)\n    at ContextAPI2.with (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@opentelemetry/api/src/api/context.ts:77:42)\n    at Tracer.startActiveSpan (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@opentelemetry/sdk-trace-base/src/Tracer.ts:246:24)\n    at TriggerTracer.startActiveSpan (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/tracer.ts:81:24)\n    at file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/workers/taskExecutor.ts:425:33\n    at _RunTimelineMetricsAPI.measureMetric (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/runTimelineMetrics/index.ts:67:28)"},"attemptCount":4,"attempts":[],"relatedRuns":{"children":[]}}
+
+tests/test_final_state.py:96: Failed
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=2641
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260425.4
+
+start_trigger_dev process startup detected
+=========================== short test summary info ============================
+FAILED tests/test_final_state.py::test_trigger_dev_retry_and_logging - Failed...
+========================= 1 failed in 61.15s (0:01:01) =========================

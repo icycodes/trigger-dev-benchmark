@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777147770.6753557,
+            "stop": 1777147806.6155903
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_multi_tenant_concurrency",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 35.92678240599707,
+                "start": 1777147770.6809473,
+                "stop": 1777147806.61534,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_multi_tenant_concurrency(start_trigger_dev):\n        # Trigger the tasks\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n        assert result.returncode == 0, f\"Triggering tasks failed: {result.stderr}\"\n    \n        # Find run ids in result.stdout\n        # Expected format: Run IDs: <id_A1>, <id_A2>, <id_B1>, <id_B2>\n        match = re.search(r\"Run IDs: ([a-zA-Z0-9_]+), ([a-zA-Z0-9_]+), ([a-zA-Z0-9_]+), ([a-zA-Z0-9_]+)\", result.stdout)\n        assert match, f\"Run IDs not found in expected format. stdout: {result.stdout}\"\n    \n        run_ids = {\n            \"A1\": match.group(1),\n            \"A2\": match.group(2),\n            \"B1\": match.group(3),\n            \"B2\": match.group(4)\n        }\n    \n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n        run_details = {}\n    \n        # Wait for all runs to complete\n        max_retries = 30 # 30 * 5s = 150s\n        completed_runs = set()\n    \n        for i in range(max_retries):\n            for key, run_id in run_ids.items():\n                if key in completed_runs:\n                    continue\n    \n                res = subprocess.run(\n                    [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n                    capture_output=True,\n                    text=True\n                )\n                if res.returncode != 0:\n                    continue\n    \n                data = json.loads(res.stdout)\n                if data.get(\"status\") == \"COMPLETED\":\n                    run_details[key] = data\n                    completed_runs.add(key)\n    \n            if len(completed_runs) == 4:\n                break\n            time.sleep(5)\n        else:\n            assert False, f\"Not all runs completed in time. Completed: {completed_runs}\"\n    \n        # Verify Sequential Execution for User A (A2 starts after A1 finishes)\n        a1_end = parse_date(run_details[\"A1\"][\"finishedAt\"])\n        a2_start = parse_date(run_details[\"A2\"][\"startedAt\"])\n>       assert a2_start >= a1_end, f\"User A runs were not sequential. A1 ended at {a1_end}, A2 started at {a2_start}\"\nE       AssertionError: User A runs were not sequential. A1 ended at 2026-04-25 20:10:03.402000+00:00, A2 started at 2026-04-25 20:09:51.499000+00:00\nE       assert datetime.datetime(2026, 4, 25, 20, 9, 51, 499000, tzinfo=datetime.timezone.utc) >= datetime.datetime(2026, 4, 25, 20, 10, 3, 402000, tzinfo=datetime.timezone.utc)\n\ntests/test_final_state.py:107: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

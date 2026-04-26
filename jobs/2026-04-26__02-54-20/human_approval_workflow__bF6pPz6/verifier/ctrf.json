@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777149738.918438,
+            "stop": 1777149814.5364459
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_human_approval_workflow",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 75.60537090199796,
+                "start": 1777149738.924103,
+                "stop": 1777149814.5362687,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_human_approval_workflow(start_trigger_dev):\n        # 1. Trigger the task\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n        assert result.returncode == 0, f\"npm run run-task failed: {result.stderr}\"\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}\"\n        run_id = run_id_match.group(1)\n    \n        # 2. Wait for approval_url.txt\n        approval_url_path = os.path.join(PROJECT_DIR, \"approval_url.txt\")\n        for _ in range(30):\n            if os.path.exists(approval_url_path):\n                break\n            time.sleep(2)\n        else:\n>           pytest.fail(\"approval_url.txt was not created in time\")\nE           Failed: approval_url.txt was not created in time\n\ntests/test_final_state.py:71: Failed",
+                "message": "The test failed in the call phase"
+            }
+        ]
+    }
+}

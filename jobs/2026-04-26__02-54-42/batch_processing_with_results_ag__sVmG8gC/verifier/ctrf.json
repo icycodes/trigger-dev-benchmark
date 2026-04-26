@@ -1,0 +1,30 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777143664.4612775,
+            "stop": 1777143862.2633781
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_batch_processing_results",
+                "status": "failed",
+                "duration": 197.78303748600047,
+                "start": 1777143664.4661474,
+                "stop": 1777143862.263238,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "xprocess = <xprocess.xprocess.XProcess object at 0x7f117ad54650>\n\n    @pytest.fixture(scope=\"session\")\n    def start_trigger_dev(xprocess):\n        \"\"\"\n        Starts the `npx trigger.dev@latest dev` service using xprocess.\n        \"\"\"\n    \n        # Create the Trigger.dev config file before executing the first `npx trigger.dev` command\n        cmd = 'mkdir -p ~/.config/trigger && printf \"%s\" \"$TRIGGER_CREDENTIAL_CONFIG_JSON\" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami'\n        subprocess.run(\n            cmd,\n            shell=True,\n            check=False,\n            text=True,\n            capture_output=True,\n            executable=\"/bin/bash\"\n        )\n    \n        class Starter(ProcessStarter):\n            name = \"start_trigger_dev\"\n            args = [\"npx\", \"trigger.dev@latest\", \"dev\", \"--skip-update-check\", \"--skip-telemetry\"]\n            env = os.environ.copy()\n            popen_kwargs = {\n                \"cwd\": PROJECT_DIR,\n                \"text\": True,\n            }\n            # Use a pattern to detect when startup is finished.\n            # Trigger.dev prints the message \"Local worker ready\" when initialization is done.\n            pattern = \"Local worker ready\"\n            # Maximum output lines to wait for the pattern.\n            max_read_lines = 1000\n            # Maximum seconds to wait for the pattern.\n            timeout = 180\n            # Terminate the start_trigger_dev process on exit.\n            terminate_on_interrupt = True\n    \n>       xprocess.ensure(Starter.name, Starter)\n\ntests/test_final_state.py:46: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \nroot/.cache/uv/archive-v0/McKwNcDQNH25voaJ-r9sZ/lib/python3.12/site-packages/xprocess/xprocess.py:284: in ensure\n    if not starter.wait(log_file_handle):\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nroot/.cache/uv/archive-v0/McKwNcDQNH25voaJ-r9sZ/lib/python3.12/site-packages/xprocess/xprocess.py:411: in wait\n    pattern_ok = self.wait_pattern(log_file)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nroot/.cache/uv/archive-v0/McKwNcDQNH25voaJ-r9sZ/lib/python3.12/site-packages/xprocess/xprocess.py:424: in wait_pattern\n    has_match = any(re.search(self.pattern, line) for line in lines)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nroot/.cache/uv/archive-v0/McKwNcDQNH25voaJ-r9sZ/lib/python3.12/site-packages/xprocess/xprocess.py:424: in <genexpr>\n    has_match = any(re.search(self.pattern, line) for line in lines)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nroot/.cache/uv/archive-v0/McKwNcDQNH25voaJ-r9sZ/lib/python3.12/site-packages/xprocess/xprocess.py:429: in <genexpr>\n    non_empty_lines = (x for x in lines if x.strip())\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <test_final_state.start_trigger_dev.<locals>.Starter object at 0x7f117aec2bd0>\nlog_file = <_io.TextIOWrapper name='/tests/.pytest_cache/d/.xprocess/start_trigger_dev/xprocess.log' mode='r' encoding='utf-8'>\n\n    def get_lines(self, log_file):\n        \"\"\"Read and yield one line at a time from log_file. Will raise\n        TimeoutError if pattern is not matched before self.timeout\n        seconds.\"\"\"\n        while True:\n            line = log_file.readline()\n            if not line:\n                time.sleep(0.1)\n            if datetime.now() > self._max_time:\n>               raise TimeoutError(\n                    \"The provided start pattern {} could not be matched \\\n                    within the specified time interval of {} seconds\".format(\n                        self.pattern, self.timeout\n                    )\n                )\nE               TimeoutError: The provided start pattern Local worker ready could not be matched                     within the specified time interval of 180 seconds\n\nroot/.cache/uv/archive-v0/McKwNcDQNH25voaJ-r9sZ/lib/python3.12/site-packages/xprocess/xprocess.py:446: TimeoutError"
+            }
+        ]
+    }
+}

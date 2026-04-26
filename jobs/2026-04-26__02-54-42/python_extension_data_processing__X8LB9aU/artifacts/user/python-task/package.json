@@ -1,0 +1,18 @@
+{
+  "name": "python-task",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "run-task": "node scripts/run-task.js"
+  },
+  "dependencies": {
+    "@trigger.dev/sdk": "latest",
+    "@trigger.dev/python": "latest"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "latest",
+    "@types/node": "latest",
+    "ts-node": "latest",
+    "typescript": "latest"
+  }
+}

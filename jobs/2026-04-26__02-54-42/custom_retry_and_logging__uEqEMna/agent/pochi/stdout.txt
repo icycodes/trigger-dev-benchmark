@@ -1,0 +1,84 @@
+- Initializing MCP connections...
+You
+# Trigger.dev Custom Retry and Logging ## Background Trigger.dev is a platform for building long-running background jobs in TypeScript. It provides built-in observability and powerful retry mechanisms. In this task, you will implement a task that uses custom retry logic and advanced logging to track task attempts. ## Requirements * Initialize a Trigger.dev project in `/home/user/trigger-retry-lab`. * Create a task named `retry-logic-task` in `src/trigger/retry-task.ts`. * The task should accept a payload with a `userId` (string). * Implement custom retry logic: * `maxAttempts`: 4 * `minTimeoutInMs`: 2000 * `maxTimeoutInMs`: 10000 * `factor`: 2 * In the `run` function: * Use `logger.info` to log the current attempt number (available in `ctx.run.attempt.number`). Format: `"Attempt number: ${ctx.run.attempt.number}"`. * Simulate a transient failure: throw an error on the first 2 attempts. The error message should be `"Transient failure on attempt ${ctx.run.attempt.number}"`. * On the 3rd attempt, succeed and return an object: `{ status: "success", userId: payload.userId, attempt: ctx.run.attempt.number }`. * Add an `npm run run-task` command in `package.json` that triggers the task with `userId: "user_123"` and prints the run\_id with format `Run ID: ${run_id}`. ## Trigger.dev Project Setup Guide **Note**: For more information, refer to the official https://trigger.dev/docs/manual-setup. 1. **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials: ```bash mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami ``` 2. **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages. ```bash npm add @trigger.dev/sdk@latest npm add -D @trigger.dev/build@latest ``` 3. **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`. ```ts import { defineConfig } from "@trigger.dev/sdk"; export default defineConfig({ project: process.env.TRIGGER_PROJECT_REF, dirs: ["./src/trigger"], maxDuration: 3600, retries: { enabledInDev: true, default: { maxAttempts: 2, minTimeoutInMs: 1000, maxTimeoutInMs: 10000, factor: 2, randomize: true, }, }, }); ``` 4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file. ## Awareness of Parallel Trials Running Be aware that multiple trials for one task may run concurrently against the same Trigger.dev project referenced by `TRIGGER_PROJECT_REF`. To avoid collisions, you must use `trial_id` to isolate each trial's resources. In the task running environment, there is a `trial_id` saved in the `/logs/trial_id` text file. Whenever you create a Trigger.dev task, suffix the task ID with the `trial_id`. ## Constraints * Project path: /home/user/trigger-retry-lab * Start task: `npm run run-task` * Use `trial_id` from `/logs/trial_id` as a suffix for the task ID (e.g., `retry-logic-task-${trial_id}`). ## Integrations * Trigger.dev   
+
+Pochi
+💭 Thinking for 135 characters   
+📋 Updating todo list (5 items) ✔ 
+📂 Listing files in /home/user ✔ 
+💭 Thinking for 158 characters   
+📂 Listing files in /home ✔ 
+💭 Thinking for 0 characters   
+📂 Listing files in /home/user ✔ 
+💭 Thinking for 0 characters   
+📂 Listing files in /home/user recursively ✔ 
+💭 Thinking for 136 characters   
+📖 Reading /logs/trial_id ✔ 
+💭 Thinking for 253 characters   
+💫 Executing mkdir -p /home/user/trigger-retry-lab ✔ 
+💭 Thinking for 0 characters   
+💫 Executing npm init -y ✔ 
+💭 Thinking for 0 characters   
+💫 Executing npm add @trigger.dev/sdk@latest ✔ 
+💭 Thinking for 0 characters   
+💫 Executing npm add -D @trigger.dev/build@latest ✔ 
+💭 Thinking for 220 characters   
+📋 Updating todo list (5 items) ✔ 
+💭 Thinking for 0 characters   
+✏️  Writing /home/user/trigger-retry-lab/trigger.config.ts ✔ 
+💭 Thinking for 364 characters   
+🔍 Searching for task\( in *.d.ts files in /home/user/trigger-retry-lab/node_modules/@trigger.dev/sdk ✔ 
+💭 Thinking for 0 characters   
+📖 Reading /home/user/trigger-retry-lab/node_modules/@trigger.dev/sdk/dist/esm/v3/usage.d.ts ✔ 
+💭 Thinking for 0 characters   
+📖 Reading /home/user/trigger-retry-lab/node_modules/@trigger.dev/sdk/dist/esm/v3/tasks.d.ts ✔ 
+💭 Thinking for 162 characters   
+🔍 Searching for run:\s*async in *.d.ts files in /home/user/trigger-retry-lab/node_modules/@trigger.dev/sdk/dist/esm/v3 ✔ 
+💭 Thinking for 127 characters   
+📖 Reading /home/user/trigger-retry-lab/node_modules/@trigger.dev/sdk/dist/esm/v3/shared.d.ts ✔ 
+💭 Thinking for 207 characters   
+🔍 Searching for logger in *.d.ts files in /home/user/trigger-retry-lab/node_modules/@trigger.dev/sdk/dist/esm/v3 ✔ 
+💭 Thinking for 229 characters   
+📖 Reading /home/user/trigger-retry-lab/node_modules/@trigger.dev/sdk/dist/esm/v3/index.d.ts ✔ 
+💭 Thinking for 242 characters   
+🔍 Searching for ctx\. in *.d.ts files in /home/user/trigger-retry-lab/node_modules/@trigger.dev/sdk/dist/esm/v3 ✔ 
+💭 Thinking for 0 characters   
+🔍 Searching for interface Context|type Context in *.d.ts files in /home/user/trigger-retry-lab/node_modules/@trigger.dev/sdk/dist/esm/v3 ✔ 
+📖 Reading /home/user/trigger-retry-lab/node_modules/@trigger.dev/sdk/dist/esm/v3/shared.d.ts ✔ 
+💭 Thinking for 166 characters   
+🔍 Searching for interface TaskRunContext|type TaskRunContext in *.d.ts files in /home/user/trigger-retry-lab/node_modules/@trigger.dev/core ✔ 
+📖 Reading /home/user/trigger-retry-lab/node_modules/@trigger.dev/core/dist/esm/v3/schemas/common.d.ts ✔ 
+💭 Thinking for 269 characters   
+🔍 Searching for ctx\.run in *.d.ts files in /home/user/trigger-retry-lab/node_modules/@trigger.dev ✔ 
+💭 Thinking for 232 characters   
+🔍 Searching for interface TaskOptions|type TaskOptions in *.d.ts files in /home/user/trigger-retry-lab/node_modules/@trigger.dev/core/dist/esm/v3 ✔ 
+📖 Reading /home/user/trigger-retry-lab/node_modules/@trigger.dev/core/dist/esm/v3/types/tasks.d.ts ✔ 
+💭 Thinking for 0 characters   
+🔍 Searching for type RunFnParams in *.d.ts files in /home/user/trigger-retry-lab/node_modules/@trigger.dev/core/dist/esm/v3/types ✔ 
+📖 Reading /home/user/trigger-retry-lab/node_modules/@trigger.dev/core/dist/esm/v3/types/tasks.d.ts ✔ 
+💭 Thinking for 184 characters   
+🔍 Searching for retry in tasks.d.ts files in /home/user/trigger-retry-lab/node_modules/@trigger.dev/core/dist/esm/v3/types ✔ 
+📖 Reading /home/user/trigger-retry-lab/node_modules/@trigger.dev/core/dist/esm/v3/types/tasks.d.ts ✔ 
+💭 Thinking for 404 characters   
+💭 Thinking for 440 characters   
+💫 Executing mkdir -p /home/user/trigger-retry-lab/src/trigger /home/user/trigger-retry-lab/scripts ✔ 
+💭 Thinking for 0 characters   
+✏️  Writing /home/user/trigger-retry-lab/src/trigger/retry-task.ts ✔ 
+💭 Thinking for 0 characters   
+✏️  Writing /home/user/trigger-retry-lab/scripts/run-task.js ✔ 
+💭 Thinking for 141 characters   
+📖 Reading /home/user/trigger-retry-lab/package.json ✔ 
+💭 Thinking for 0 characters   
+🔧 Applying diff to /home/user/trigger-retry-lab/package.json ✔ 
+💭 Thinking for 140 characters   
+💫 Executing npx tsc --skipLibCheck --noEmit trigger.config.ts ✖ "Command exited with code 1"
+💭 Thinking for 0 characters   
+💫 Executing npm add -D typescript ✔ 
+💭 Thinking for 0 characters   
+💫 Executing npx tsc --skipLibCheck --noEmit trigger.config.ts ✔ 
+💭 Thinking for 0 characters   
+📋 Updating todo list (5 items) ✔ 
+💭 Thinking for 200 characters   
+🎉 Task Completed
+Initialized the Trigger.dev project in /home/user/trigger-retry-lab with trigger.config.ts, created the retry-logic task using the trial_id suffix, and added a run-task script that triggers the task with userId "user_123" and prints the Run ID. Added TypeScript as a dev dependency so trigger.config.ts passes the required tsc check. The task is located at src/trigger/retry-task.ts and the script at scripts/run-task.js.   
+  

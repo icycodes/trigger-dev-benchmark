@@ -1,0 +1,13 @@
+{
+  "name": "approval-workflow",
+  "private": true,
+  "scripts": {
+    "run-task": "node --input-type=module -e \"import { tasks } from '@trigger.dev/sdk'; const run = await tasks.trigger('deploy-approval-human_approval_workflow__vphmjct', { version: 'v1.0.0' }); console.log('Run ID: ' + run.id);\""
+  },
+  "dependencies": {
+    "@trigger.dev/sdk": "latest"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "latest"
+  }
+}

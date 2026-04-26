@@ -1,0 +1,158 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py E                                              [100%]
+
+==================================== ERRORS ====================================
+__________ ERROR at setup of test_human_in_the_loop_error_correction ___________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7f1de9d24650>
+
+    @pytest.fixture(scope="session")
+    def start_trigger_dev(xprocess):
+        """
+        Starts the `npx trigger.dev@latest dev` service using xprocess.
+        """
+        # Create the Trigger.dev config file before executing the first `npx trigger.dev` command
+        cmd = 'mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami'
+        subprocess.run(
+            cmd,
+            shell=True,
+            check=False,
+            text=True,
+            capture_output=True,
+            executable="/bin/bash"
+        )
+        # Kill process if it's already running
+        subprocess.run(["pkill", "-f", "npx trigger.dev"], check=False)
+    
+        class Starter(ProcessStarter):
+            name = "start_trigger_dev"
+            args = ["npx", "trigger.dev@latest", "dev", "--skip-update-check", "--skip-telemetry"]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            pattern = "Local worker ready"
+            timeout = 180
+            terminate_on_interrupt = True
+    
+>       xprocess.ensure(Starter.name, Starter)
+
+tests/test_final_state.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+root/.cache/uv/archive-v0/XN71DrZvMHiJZF3cV1fdT/lib/python3.12/site-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/XN71DrZvMHiJZF3cV1fdT/lib/python3.12/site-packages/xprocess/xprocess.py:411: in wait
+    pattern_ok = self.wait_pattern(log_file)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/XN71DrZvMHiJZF3cV1fdT/lib/python3.12/site-packages/xprocess/xprocess.py:424: in wait_pattern
+    has_match = any(re.search(self.pattern, line) for line in lines)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/XN71DrZvMHiJZF3cV1fdT/lib/python3.12/site-packages/xprocess/xprocess.py:424: in <genexpr>
+    has_match = any(re.search(self.pattern, line) for line in lines)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/XN71DrZvMHiJZF3cV1fdT/lib/python3.12/site-packages/xprocess/xprocess.py:429: in <genexpr>
+    non_empty_lines = (x for x in lines if x.strip())
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_trigger_dev.<locals>.Starter object at 0x7f1de9dfbbf0>
+log_file = <_io.TextIOWrapper name='/tests/.pytest_cache/d/.xprocess/start_trigger_dev/xprocess.log' mode='r' encoding='utf-8'>
+
+    def get_lines(self, log_file):
+        """Read and yield one line at a time from log_file. Will raise
+        TimeoutError if pattern is not matched before self.timeout
+        seconds."""
+        while True:
+            line = log_file.readline()
+            if not line:
+                time.sleep(0.1)
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided start pattern {} could not be matched \
+                    within the specified time interval of {} seconds".format(
+                        self.pattern, self.timeout
+                    )
+                )
+E               TimeoutError: The provided start pattern Local worker ready could not be matched                     within the specified time interval of 180 seconds
+
+root/.cache/uv/archive-v0/XN71DrZvMHiJZF3cV1fdT/lib/python3.12/site-packages/xprocess/xprocess.py:446: TimeoutError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1118
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+│
+
+■  Error: Error: ENOENT: no such file or directory, open '/home/user/resilient-pipeline/waitpoint_token.txt'
+
+│      at Object.readFileSync (node:fs:440:20)
+
+│      at run (file:///home/user/resilient-pipeline/src/trigger/complete-waitpoint.cjs:6:6)
+
+│      at src/trigger/complete-waitpoint.cjs (file:///home/user/resilient-pipeline/src/trigger/complete-waitpoint.cjs:13:1)
+
+│      at __require2 (file:///home/user/resilient-pipeline/.trigger/tmp/build-QMFjo6/chunk-AIZLHSDQ.mjs:18:50)
+
+│      at file:///home/user/resilient-pipeline/.trigger/tmp/build-QMFjo6/home/user/resilient-pipeline/src/trigger/complete-waitpoint.mjs:30:16
+
+│      at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+
+│      at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+
+│      at tryImport (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/src/indexing/registerResources.ts:48:20)
+
+│      at registerResources (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/src/indexing/registerResources.ts:15:24)
+
+│      at bootstrap (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/src/entryPoints/dev-index-worker.ts:92:37) {
+
+│    errno: -2,
+
+│    code: 'ENOENT',
+
+│    syscall: 'open',
+
+│    path: '/home/user/resilient-pipeline/waitpoint_token.txt'
+
+│  }
+
+│  
+
+│
+
+■  Error: Build failed: Worker exited with code 1
+
+│  
+
+│         Error: Worker exited with code 1
+
+│             at ChildProcess.<anonymous> (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/indexing/indexWorkerManifest.js:66:24)
+
+│             at ChildProcess.emit (node:events:508:28)
+
+│             at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+
+│
+
+│  💡 Get a fix for this error using AI https://cloud.trigger.dev/projects/proj_mrvszcxwsukrgcykybqi/ai-help?q=Build+failed%3A%0A+Worker+exited+with+code+1%0AError%3A+Worker+exited+with+code+1%0A++++at+ChildProcess.%3Canonymous%3E+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Findexing%2FindexWorkerManifest.js%3A66%3A24%29%0A++++at+ChildProcess.emit+%28node%3Aevents%3A508%3A28%29%0A++++at+ChildProcess._handle.onexit+%28node%3Ainternal%2Fchild_process%3A294%3A12%29
+
+=========================== short test summary info ============================
+ERROR tests/test_final_state.py::test_human_in_the_loop_error_correction - Ti...
+========================= 1 error in 184.48s (0:03:04) =========================

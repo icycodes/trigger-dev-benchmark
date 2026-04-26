@@ -1,0 +1,19 @@
+{
+  "name": "approval-workflow",
+  "version": "1.0.0",
+  "description": "Deployment approval workflow with Trigger.dev waitpoints",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run-task": "npx trigger.dev@latest run deploy-approval-human_approval_workflow__qYnAe9f --json '{\"version\":\"v1.0.0\"}'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.4.4"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.4.4"
+  }
+}

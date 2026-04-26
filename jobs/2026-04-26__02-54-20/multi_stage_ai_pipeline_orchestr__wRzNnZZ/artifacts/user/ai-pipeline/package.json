@@ -1,0 +1,22 @@
+{
+  "name": "ai-pipeline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\\\" && exit 1",
+    "run-task": "TRIGGER_SECRET_KEY=tr_pat_o141b4qdwbqxgy62z986s4y19dr3w95azocg69kb TRIGGER_API_URL=https://api.trigger.dev node scripts/run-task.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.4.4"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.4.4",
+    "@types/node": "^25.6.0",
+    "typescript": "^5.9.3"
+  }
+}

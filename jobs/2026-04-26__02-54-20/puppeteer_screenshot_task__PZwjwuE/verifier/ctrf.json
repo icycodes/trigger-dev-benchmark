@@ -1,0 +1,41 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 2,
+            "passed": 1,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777150030.8763092,
+            "stop": 1777150062.6514194
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_puppeteer_screenshot_task",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 31.709929618002207,
+                "start": 1777150030.882297,
+                "stop": 1777150062.620104,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_puppeteer_screenshot_task(start_trigger_dev):\n        # Trigger the task\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}, stderr: {result.stderr}\"\n        run_id = run_id_match.group(1)\n    \n        # Example of checking run result logic\n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n        for _ in range(20): # Increased attempts for Puppeteer task which might take longer\n            run_result = subprocess.run(\n              [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n              capture_output=True,\n              text=True\n            )\n            assert run_result.returncode == 0, f\"Retrieve run result failed with code {run_result.returncode}\"\n            run_result_json = json.loads(run_result.stdout)\n            assert \"status\" in run_result_json, f\"Run status is missing in {run_result_json}\"\n            run_status = run_result_json[\"status\"]\n    \n            if run_status == \"COMPLETED\":\n                assert \"output\" in run_result_json, f\"Run output is missing in {run_result_json}\"\n                output = run_result_json[\"output\"]\n>               assert \"path\" in output, f\"The output 'path' is missing, output: {output}\"\nE               AssertionError: The output 'path' is missing, output: {'screenshotPath': '/home/user/screenshot-service/screenshots/example.com.png'}\nE               assert 'path' in {'screenshotPath': '/home/user/screenshot-service/screenshots/example.com.png'}\n\ntests/test_final_state.py:86: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_trigger_config_contains_puppeteer",
+                "status": "passed",
+                "duration": 0.03064939500109176,
+                "start": 1777150062.6204283,
+                "stop": 1777150062.6512334,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

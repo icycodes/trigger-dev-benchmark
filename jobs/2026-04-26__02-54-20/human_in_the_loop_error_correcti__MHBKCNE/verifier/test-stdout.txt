@@ -1,0 +1,75 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py F                                              [100%]
+
+=================================== FAILURES ===================================
+___________________ test_human_in_the_loop_error_correction ____________________
+
+start_trigger_dev = None
+
+    def test_human_in_the_loop_error_correction(start_trigger_dev):
+        # 1. Start Pipeline
+        result = subprocess.run(
+            ["npm", "run", "run-pipeline"],
+            cwd=PROJECT_DIR,
+            capture_output=True,
+            text=True
+        )
+>       assert result.returncode == 0, f"run-pipeline failed: {result.stderr}"
+E       AssertionError: run-pipeline failed: AuthenticationError [TriggerApiError]: Invalid API Key
+E             at ApiError.generate (/home/user/resilient-pipeline/node_modules/@trigger.dev/core/src/v3/apiClient/errors.ts:77:14)
+E             at _doZodFetchWithRetries (/home/user/resilient-pipeline/node_modules/@trigger.dev/core/src/v3/apiClient/core.ts:252:24)
+E             at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+E             at async <anonymous> (/home/user/resilient-pipeline/node_modules/@trigger.dev/core/src/v3/apiClient/core.ts:212:20)
+E             at async params.options.tracer.startActiveSpan.attributes (/home/user/resilient-pipeline/node_modules/@trigger.dev/core/src/v3/apiClient/core.ts:187:14)
+E             at async <anonymous> (/home/user/resilient-pipeline/node_modules/@trigger.dev/core/src/v3/tracer.ts:137:18)
+E             at async traceZodFetch (/home/user/resilient-pipeline/node_modules/@trigger.dev/core/src/v3/apiClient/core.ts:184:10) {
+E           status: 401,
+E           headers: {
+E             'access-control-expose-headers': 'x-trigger-jwt,x-trigger-jwt-claims',
+E             connection: 'keep-alive',
+E             'content-type': 'application/json; charset=utf-8',
+E             date: 'Sat, 25 Apr 2026 20:06:14 GMT',
+E             'strict-transport-security': 'max-age=3153600000',
+E             'transfer-encoding': 'chunked',
+E             'x-ratelimit-limit': '1500',
+E             'x-ratelimit-remaining': '1499',
+E             'x-ratelimit-reset': '1777147576198',
+E             'x-robots-tag': 'noindex, nofollow'
+E           },
+E           error: 'Invalid API Key',
+E           code: undefined,
+E           param: undefined,
+E           type: undefined
+E         }
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['npm', 'run', 'run-pipeline'], returncode=1, stdout='\n> resilient-pipeline@1.0.0 run-pipeline\...oindex, nofollow'\n  },\n  error: 'Invalid API Key',\n  code: undefined,\n  param: undefined,\n  type: undefined\n}\n").returncode
+
+tests/test_final_state.py:55: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1874
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260425.9
+
+start_trigger_dev process startup detected
+=========================== short test summary info ============================
+FAILED tests/test_final_state.py::test_human_in_the_loop_error_correction - A...
+============================== 1 failed in 21.00s ==============================

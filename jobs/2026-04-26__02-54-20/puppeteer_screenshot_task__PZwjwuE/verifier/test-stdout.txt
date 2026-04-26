@@ -1,0 +1,80 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 2 items
+
+tests/test_final_state.py F.                                             [100%]
+
+=================================== FAILURES ===================================
+________________________ test_puppeteer_screenshot_task ________________________
+
+start_trigger_dev = None
+
+    def test_puppeteer_screenshot_task(start_trigger_dev):
+        # Trigger the task
+        result = subprocess.run(
+          ["npm", "run", "run-task"],
+          cwd=PROJECT_DIR,
+          capture_output=True,
+          text=True
+        )
+    
+        # Find run id in result.stdout
+        run_id_match = re.search(r"Run ID: ([a-zA-Z0-9_]+)", result.stdout)
+        assert run_id_match, f"Run ID not found in the trigger result, stdout: {result.stdout}, stderr: {result.stderr}"
+        run_id = run_id_match.group(1)
+    
+        # Example of checking run result logic
+        trigger_secret_key = os.environ.get("TRIGGER_SECRET_KEY")
+        for _ in range(20): # Increased attempts for Puppeteer task which might take longer
+            run_result = subprocess.run(
+              ["curl", "-s", "-H", f"Authorization: Bearer {trigger_secret_key}", f"https://api.trigger.dev/api/v3/runs/{run_id}"],
+              capture_output=True,
+              text=True
+            )
+            assert run_result.returncode == 0, f"Retrieve run result failed with code {run_result.returncode}"
+            run_result_json = json.loads(run_result.stdout)
+            assert "status" in run_result_json, f"Run status is missing in {run_result_json}"
+            run_status = run_result_json["status"]
+    
+            if run_status == "COMPLETED":
+                assert "output" in run_result_json, f"Run output is missing in {run_result_json}"
+                output = run_result_json["output"]
+>               assert "path" in output, f"The output 'path' is missing, output: {output}"
+E               AssertionError: The output 'path' is missing, output: {'screenshotPath': '/home/user/screenshot-service/screenshots/example.com.png'}
+E               assert 'path' in {'screenshotPath': '/home/user/screenshot-service/screenshots/example.com.png'}
+
+tests/test_final_state.py:86: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1038
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+[?25l│
+
+◒  Checking for notifications
+[999D[J◐  Checking for notifications
+[999D[J◓  Checking for notifications
+[999D[J◑  Checking for notifications
+[999D[J◒  Checking for notifications[999D[J◇  No new notifications
+
+[?25hKey: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260425.12
+
+start_trigger_dev process startup detected
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_trigger_config_contains_puppeteer
+FAILED tests/test_final_state.py::test_puppeteer_screenshot_task - AssertionE...
+========================= 1 failed, 1 passed in 31.77s =========================

@@ -1,0 +1,78 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 4ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 2 items
+
+tests/test_final_state.py F.                                             [100%]
+
+=================================== FAILURES ===================================
+________________________ test_ai_workflow_cancellation _________________________
+
+start_trigger_dev = None
+
+    def test_ai_workflow_cancellation(start_trigger_dev):
+        """Verify that the task handles cancellation via the onCancel hook."""
+        # 1. Trigger the task
+        result = subprocess.run(
+            ["npm", "run", "run-task"],
+            cwd=PROJECT_DIR,
+            capture_output=True,
+            text=True
+        )
+        assert result.returncode == 0, f"Triggering task failed: {result.stderr}"
+    
+        # 2. Extract Run ID
+        run_id_match = re.search(r"Run ID: ([a-zA-Z0-9_]+)", result.stdout)
+        assert run_id_match, f"Run ID not found in output: {result.stdout}"
+        run_id = run_id_match.group(1)
+    
+        # 3. Wait 2 seconds and then cancel
+        time.sleep(2)
+        cancel_result = subprocess.run(
+            ["npm", "run", "cancel-task", "--", run_id],
+            cwd=PROJECT_DIR,
+            capture_output=True,
+            text=True
+        )
+        assert cancel_result.returncode == 0, f"Cancelling task failed: {cancel_result.stderr}"
+    
+        # 4. Wait for onCancel hook and check status file
+        # We poll the status file for up to 10 seconds
+        for _ in range(10):
+            if os.path.exists(STATUS_FILE):
+                with open(STATUS_FILE, "r") as f:
+                    data = json.load(f)
+                    if data.get("status") == "cancelled":
+                        break
+            time.sleep(2)
+        else:
+>           assert False, f"Status file did not reflect 'cancelled' state. Content: {Path(STATUS_FILE).read_text() if os.path.exists(STATUS_FILE) else 'File not found'}"
+E           AssertionError: Status file did not reflect 'cancelled' state. Content: File not found
+E           assert False
+
+tests/test_final_state.py:85: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1804
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260425.6
+
+start_trigger_dev process startup detected
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_ai_workflow_completion
+FAILED tests/test_final_state.py::test_ai_workflow_cancellation - AssertionEr...
+==================== 1 failed, 1 passed in 65.45s (0:01:05) ====================

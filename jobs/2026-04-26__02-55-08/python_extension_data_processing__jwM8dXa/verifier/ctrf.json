@@ -1,0 +1,50 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 3,
+            "passed": 2,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777148691.3821151,
+            "stop": 1777148720.0085561
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_python_extension_task",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 28.59068740100338,
+                "start": 1777148691.388242,
+                "stop": 1777148719.9861672,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_python_extension_task(start_trigger_dev):\n        # Trigger the task\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}, stderr: {result.stderr}\"\n        run_id = run_id_match.group(1)\n    \n        # Example of checking run result logic\n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n        for _ in range(20): # Increase range to 20 for potentially slower python builds\n            run_result = subprocess.run(\n              [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n              capture_output=True,\n              text=True\n            )\n            assert run_result.returncode == 0, f\"Retrieve run result failed with code {run_result.returncode}\"\n            run_result_json = json.loads(run_result.stdout)\n>           assert \"status\" in run_result_json, f\"Run status is missing in {run_result_json}\"\nE           AssertionError: Run status is missing in {'error': 'Not found'}\nE           assert 'status' in {'error': 'Not found'}\n\ntests/test_final_state.py:80: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_requirements_file_exists",
+                "status": "passed",
+                "duration": 0.000204329004191095,
+                "start": 1777148719.9863212,
+                "stop": 1777148719.9866076,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_python_script_exists",
+                "status": "passed",
+                "duration": 0.021633099000609946,
+                "start": 1777148719.9866996,
+                "stop": 1777148720.0083938,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

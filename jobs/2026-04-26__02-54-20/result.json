@@ -1,0 +1,57 @@
+{
+    "id": "57a12b17-e4e6-4675-88c7-1fec8123372d",
+    "started_at": "2026-04-26T02:54:20.998108",
+    "finished_at": "2026-04-26T05:44:59.055679",
+    "n_total_trials": 18,
+    "stats": {
+        "n_trials": 18,
+        "n_errors": 6,
+        "evals": {
+            "pochi__claude-4-6-sonnet__tasks": {
+                "n_trials": 17,
+                "n_errors": 6,
+                "metrics": [
+                    {
+                        "mean": 0.16666666666666666
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "ffmpeg_video_processing_extensio__NMsoPLs",
+                            "scheduled_sync__nnPoQ5K",
+                            "concurrency_limited_queue__q2CLLKH"
+                        ],
+                        "0.0": [
+                            "batch_processing_with_results_ag__dfPGgo9",
+                            "realtime_task_streaming_dashboar__pvxx6SM",
+                            "resilient_webhook_idempotency__Nd3NVDV",
+                            "custom_retry_and_logging__RSxMie9",
+                            "ai_workflow_cancellation_handler__GysGko8",
+                            "background_workflow_with_human_w__92oQZ4X",
+                            "human_in_the_loop_error_correcti__MHBKCNE",
+                            "human_approval_workflow__bF6pPz6",
+                            "puppeteer_screenshot_task__PZwjwuE",
+                            "python_extension_data_processing__QnueCk9",
+                            "ai_agent_human_in_the_loop_appro__5NCT3ER",
+                            "multi_tenant_concurrency_control__d7ZKH8v",
+                            "ai_agent_with_tool_and_streaming__eNsgM8r",
+                            "multi_stage_ai_pipeline_orchestr__wRzNnZZ"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "realtime_task_streaming_dashboar__pvxx6SM",
+                        "background_workflow_with_human_w__92oQZ4X",
+                        "subscription_onboarding_with_wai__8SyaU3w",
+                        "ai_agent_human_in_the_loop_appro__5NCT3ER",
+                        "ai_agent_with_tool_and_streaming__eNsgM8r",
+                        "multi_stage_ai_pipeline_orchestr__wRzNnZZ"
+                    ]
+                }
+            }
+        }
+    }
+}

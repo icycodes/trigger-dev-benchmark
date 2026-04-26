@@ -1,0 +1,157 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py E                                              [100%]
+
+==================================== ERRORS ====================================
+________________ ERROR at setup of test_human_approval_workflow ________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7efe210595e0>
+
+    @pytest.fixture(scope="session")
+    def start_trigger_dev(xprocess):
+        """
+        Starts the `npx trigger.dev@latest dev` service using xprocess.
+        """
+        # Create the Trigger.dev config file before executing the first `npx trigger.dev` command
+        cmd = 'mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami'
+        subprocess.run(
+            cmd,
+            shell=True,
+            check=False,
+            text=True,
+            capture_output=True,
+            executable="/bin/bash"
+        )
+        # Kill process if it's already running
+        subprocess.run(["pkill", "-f", "npx trigger.dev"], check=False)
+    
+        class Starter(ProcessStarter):
+            name = "start_trigger_dev"
+            args = ["npx", "trigger.dev@latest", "dev", "--skip-update-check", "--skip-telemetry"]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            pattern = "Local worker ready"
+            max_read_lines = 1000
+            timeout = 180
+            terminate_on_interrupt = True
+    
+>       xprocess.ensure(Starter.name, Starter)
+
+tests/test_final_state.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+root/.cache/uv/archive-v0/NhPV3jXNGopb138ICBRI4/lib/python3.12/site-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/NhPV3jXNGopb138ICBRI4/lib/python3.12/site-packages/xprocess/xprocess.py:411: in wait
+    pattern_ok = self.wait_pattern(log_file)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/NhPV3jXNGopb138ICBRI4/lib/python3.12/site-packages/xprocess/xprocess.py:424: in wait_pattern
+    has_match = any(re.search(self.pattern, line) for line in lines)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/NhPV3jXNGopb138ICBRI4/lib/python3.12/site-packages/xprocess/xprocess.py:424: in <genexpr>
+    has_match = any(re.search(self.pattern, line) for line in lines)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/NhPV3jXNGopb138ICBRI4/lib/python3.12/site-packages/xprocess/xprocess.py:429: in <genexpr>
+    non_empty_lines = (x for x in lines if x.strip())
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_trigger_dev.<locals>.Starter object at 0x7efe21059a00>
+log_file = <_io.TextIOWrapper name='/tests/.pytest_cache/d/.xprocess/start_trigger_dev/xprocess.log' mode='r' encoding='utf-8'>
+
+    def get_lines(self, log_file):
+        """Read and yield one line at a time from log_file. Will raise
+        TimeoutError if pattern is not matched before self.timeout
+        seconds."""
+        while True:
+            line = log_file.readline()
+            if not line:
+                time.sleep(0.1)
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided start pattern {} could not be matched \
+                    within the specified time interval of {} seconds".format(
+                        self.pattern, self.timeout
+                    )
+                )
+E               TimeoutError: The provided start pattern Local worker ready could not be matched                     within the specified time interval of 180 seconds
+
+root/.cache/uv/archive-v0/NhPV3jXNGopb138ICBRI4/lib/python3.12/site-packages/xprocess/xprocess.py:446: TimeoutError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=616
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+X Error: Package subpath './build' is not defined by "exports" in /home/user/approval-workflow/node_modules/@trigger.dev/sdk/package.json
+
+node:internal/modules/esm/resolve:314
+
+  return new ERR_PACKAGE_PATH_NOT_EXPORTED(
+
+         ^
+
+Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: Package subpath './build' is not defined by "exports" in /home/user/approval-workflow/node_modules/@trigger.dev/sdk/package.json
+
+    at exportsNotFound (node:internal/modules/esm/resolve:314:10)
+
+    at packageExportsResolve (node:internal/modules/esm/resolve:662:9)
+
+    at resolveExports (node:internal/modules/cjs/loader:685:36)
+
+    at Module._findPath (node:internal/modules/cjs/loader:752:31)
+
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1441:27)
+
+    at require.resolve (node:internal/modules/helpers:163:19)
+
+    at _resolve (/root/.npm/_npx/f51a09bd0abf5f10/node_modules/jiti/dist/jiti.js:1:246378)
+
+    at jiti (/root/.npm/_npx/f51a09bd0abf5f10/node_modules/jiti/dist/jiti.js:1:249092)
+
+    at /home/user/approval-workflow/trigger.config.ts:1:176
+
+    at evalModule (/root/.npm/_npx/f51a09bd0abf5f10/node_modules/jiti/dist/jiti.js:1:251913)
+
+    at Object.jiti (/root/.npm/_npx/f51a09bd0abf5f10/node_modules/jiti/dist/jiti.js:1:249841)
+
+    at resolveConfig (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/c12/dist/shared/c12.cab0c9da.mjs:345:26)
+
+    at loadConfig (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/c12/dist/shared/c12.cab0c9da.mjs:147:29)
+
+    at Module.watchConfig (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/c12/dist/index.mjs:25:22)
+
+    at watchConfig (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/config.js:23:30)
+
+    at startDev (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/commands/dev.js:153:25)
+
+    at async devCommand (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/commands/dev.js:119:29)
+
+    at async file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/commands/dev.js:62:13
+
+    at async wrapCommandAction (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/cli/common.js:47:24) {
+
+  code: 'ERR_PACKAGE_PATH_NOT_EXPORTED'
+
+}
+
+Node.js v24.14.1
+
+=========================== short test summary info ============================
+ERROR tests/test_final_state.py::test_human_approval_workflow - TimeoutError:...
+========================= 1 error in 197.12s (0:03:17) =========================

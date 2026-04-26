@@ -1,0 +1,21 @@
+{
+  "name": "ai-workflow-cancellation-handler",
+  "version": "1.0.0",
+  "description": "AI workflow with cancellation handler using Trigger.dev",
+  "main": "index.js",
+  "scripts": {
+    "run-task": "ts-node scripts/trigger.ts",
+    "cancel-task": "ts-node scripts/cancel.ts"
+  },
+  "keywords": ["trigger.dev", "ai", "workflow", "cancellation"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@trigger.dev/build": "^3.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@trigger.dev/sdk": "^3.0.0"
+  }
+}

@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777148152.4281874,
+            "stop": 1777148229.2277222
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_human_in_the_loop_error_correction",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 76.77308727899981,
+                "start": 1777148152.43351,
+                "stop": 1777148229.2274365,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_human_in_the_loop_error_correction(start_trigger_dev):\n        # 1. Start Pipeline\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-pipeline\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n        assert result.returncode == 0, f\"run-pipeline failed: {result.stderr}\"\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}\"\n        run_id = run_id_match.group(1)\n    \n        # 2. Verify Waitpoint Token File\n        # Wait for the token file to be created (max 30 seconds)\n        for _ in range(12):\n            if os.path.exists(TOKEN_FILE):\n                break\n            time.sleep(5)\n        else:\n>           pytest.fail(f\"Waitpoint token file {TOKEN_FILE} was not created.\")\nE           Failed: Waitpoint token file /home/user/resilient-pipeline/waitpoint_token.txt was not created.\n\ntests/test_final_state.py:69: Failed",
+                "message": "The test failed in the call phase"
+            }
+        ]
+    }
+}

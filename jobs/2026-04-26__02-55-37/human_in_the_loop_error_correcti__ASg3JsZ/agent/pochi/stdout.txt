@@ -1,0 +1,233 @@
+- Initializing MCP connections...
+You
+# Durable Error Recovery with Human-in-the-Loop ## Background Trigger.dev's durable execution allows workflows to pause and wait for external input without consuming compute resources. This is particularly useful for building resilient pipelines that require human intervention when an automated step fails or requires manual correction. ## Requirements * Initialize a Trigger.dev project in `/home/user/resilient-pipeline`. * Implement a child task `unreliable-task-${trial_id}` that: * Accepts a payload `{ input: string, shouldFail: boolean }`. * If `shouldFail` is true, it throws an error: `"Simulated failure: ${input}"`. * Otherwise, it returns `{ result: `Processed: ${input}` }`. * Implement a parent task `resilient-pipeline-${trial_id}` that: * Accepts an initial payload `{ input: string }`. * Triggers `unreliable-task-${trial_id}` with `{ input: payload.input, shouldFail: true }` (forcing an initial failure). * Catches the error from the child task. * Creates a waitpoint token using `wait.createToken()`. * Writes the token ID to `/home/user/resilient-pipeline/waitpoint_token.txt`. * Pauses execution using `wait.forToken()`. * The token completion payload will be `{ correctedInput: string }`. * Once the token is completed, it triggers `unreliable-task-${trial_id}` again with `{ input: completion.output.correctedInput, shouldFail: false }`. * Returns the final result from the second child task call. * Suffix all task IDs with the `trial_id` read from `/logs/trial_id`. ## Trigger.dev Project Setup Guide **Note**: For more information, refer to the official https://trigger.dev/docs/manual-setup. 1. **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials: ```bash mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami ``` 2. **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages. ```bash npm init -y npm add @trigger.dev/sdk@latest npm add -D @trigger.dev/build@latest typescript @types/node npx tsc --init ``` 3. **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`. ```ts import { defineConfig } from "@trigger.dev/sdk"; export default defineConfig({ project: process.env.TRIGGER_PROJECT_REF!, dirs: ["./src/trigger"], maxDuration: 3600, }); ``` 4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file. ## Implementation Guide 1. Read `trial_id` from `/logs/trial_id`. 2. In `src/trigger/tasks.ts`, define the two tasks as described. Use `triggerAndWait` for calling the child task. 3. Ensure the parent task correctly catches the error from `triggerAndWait` and proceeds to create the waitpoint. 4. Add an `npm run run-pipeline` command in `package.json` that triggers the parent task with `{ input: "initial data" }` and prints the Run ID with format `Run ID: ${run_id}`. 5. Add an `npm run complete-waitpoint` command in `package.json` that reads the token from `waitpoint_token.txt` and uses the Trigger.dev SDK to complete it with `{ correctedInput: "fixed data" }`. ## Constraints * Project path: /home/user/resilient-pipeline * Start task: `npm run run-pipeline` (to start the pipeline) and `npm run complete-waitpoint` (to provide the manual correction). * Task ID suffix: `${trial_id}` ## Integrations * Trigger.dev   
+
+Pochi
+💭 Thinking for 756 characters   
+💫 Executing mkdir -p /home/user/resilient-pipeline && cd /home/user/resilient-pipeline && mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami ✔ 
+💭 Thinking for 204 characters   
+💫 Executing cd /home/user/resilient-pipeline && npm init -y && npm add @trigger.dev/sdk@latest && npm add -D @trigger.dev/build@latest typescript @types/node && npx tsc --init ✔ 
+💭 Thinking for 168 characters   
+💫 Executing cd /home/user/resilient-pipeline && cat /logs/trial_id ✔ 
+💭 Thinking for 140 characters   
+💫 Executing cat << 'EOF' > /home/user/resilient-pipeline/trigger.config.ts
+import { defineConfig } from "@trigger.dev/sdk";
+
+export default defineConfig({
+  project: process.env.TRIGGER_PROJECT_REF!,
+  dirs: ["./src/trigger"],
+  maxDuration: 3600,
+});
+EOF
+npx tsc --skipLibCheck --noEmit /home/user/resilient-pipeline/trigger.config.ts
+ ✖ "Command exited with code 1"
+💭 Thinking for 912 characters   
+💫 Executing cd /home/user/resilient-pipeline && mkdir -p src/trigger && cat << 'EOF' > src/trigger/tasks.ts
+import { task, wait } from "@trigger.dev/sdk/v3";
+import * as fs from "fs";
+
+const trial_id = process.env.TRIAL_ID || "human_in_the_loop_error_correcti__ASg3JsZ";
+
+export const unreliableTask = task({
+  id: `unreliable-task-${trial_id}`,
+  run: async (payload: { input: string; shouldFail: boolean }) => {
+    if (payload.shouldFail) {
+      throw new Error(`Simulated failure: ${payload.input}`);
+    }
+    return { result: `Processed: ${payload.input}` };
+  },
+});
+
+export const resilientPipeline = task({
+  id: `resilient-pipeline-${trial_id}`,
+  run: async (payload: { input: string }) => {
+    try {
+      await unreliableTask.triggerAndWait({ input: payload.input, shouldFail: true });
+    } catch (error) {
+      const waitpoint = await wait.createToken();
+      fs.writeFileSync("/home/user/resilient-pipeline/waitpoint_token.txt", waitpoint.id);
+      
+      const completion = await wait.forToken<{ correctedInput: string }>(waitpoint.id);
+      
+      const finalResult = await unreliableTask.triggerAndWait({ 
+        input: completion.output.correctedInput, 
+        shouldFail: false 
+      });
+      
+      return finalResult;
+    }
+  },
+});
+EOF
+ ✔ 
+💭 Thinking for 267 characters   
+💫 Executing cd /home/user/resilient-pipeline && cat << 'EOF' > scripts.js
+const fs = require('fs');
+
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+pkg.scripts = {
+  ...pkg.scripts,
+  "run-pipeline": "node -e \"const { tasks } = require('@trigger.dev/sdk/v3'); tasks.trigger('resilient-pipeline-human_in_the_loop_error_correcti__ASg3JsZ', { input: 'initial data' }).then(r => console.log('Run ID: ' + r.id))\"",
+  "complete-waitpoint": "node -e \"const fs = require('fs'); const { wait } = require('@trigger.dev/sdk/v3'); const token = fs.readFileSync('waitpoint_token.txt', 'utf8').trim(); wait.completeToken(token, { correctedInput: 'fixed data' }).then(() => console.log('Waitpoint completed'))\""
+};
+
+fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+EOF
+node scripts.js
+ ✔ 
+💭 Thinking for 221 characters   
+💫 Executing cd /home/user/resilient-pipeline && cat package.json ✔ 
+💭 Thinking for 249 characters   
+💫 Executing cd /home/user/resilient-pipeline && cat src/trigger/tasks.ts ✔ 
+💭 Thinking for 1128 characters   
+💫 Executing cat << 'EOF' > /home/user/resilient-pipeline/trigger.config.ts
+import { defineConfig } from "@trigger.dev/sdk/v3";
+
+export default defineConfig({
+  project: process.env.TRIGGER_PROJECT_REF || "proj_1234",
+  dirs: ["./src/trigger"],
+  maxDuration: 3600,
+});
+EOF
+ ✔ 
+💭 Thinking for 529 characters   
+💫 Executing cat << 'EOF' > /home/user/resilient-pipeline/trigger.config.ts
+import { defineConfig } from "@trigger.dev/sdk/v3";
+
+export default defineConfig({
+  project: process.env.TRIGGER_PROJECT_REF!,
+  dirs: ["./src/trigger"],
+  maxDuration: 3600,
+});
+EOF
+ ✔ 
+💭 Thinking for 219 characters   
+💫 Executing cd /home/user/resilient-pipeline && npx tsc --skipLibCheck --noEmit trigger.config.ts ✔ 
+💭 Thinking for 231 characters   
+💫 Executing cd /home/user/resilient-pipeline && npx tsc --skipLibCheck --noEmit src/trigger/tasks.ts ✖ "Command exited with code 2"
+💭 Thinking for 544 characters   
+💫 Executing cd /home/user/resilient-pipeline && cat << 'EOF' > test.ts
+import { wait } from "@trigger.dev/sdk/v3";
+type T = Awaited<ReturnType<typeof wait.forToken>>;
+EOF
+npx tsc --skipLibCheck --noEmit test.ts ✔ 
+💭 Thinking for 206 characters   
+💫 Executing cd /home/user/resilient-pipeline && cat << 'EOF' > test2.ts
+import { wait } from "@trigger.dev/sdk/v3";
+async function x() {
+  const t = await wait.forToken<{ correctedInput: string }>("abc");
+  if (t.ok) {
+     console.log(t.payload);
+  }
+}
+EOF
+npx tsc --skipLibCheck --noEmit test2.ts ✖ "Command exited with code 2"
+💭 Thinking for 526 characters   
+💫 Executing cd /home/user/resilient-pipeline && cat << 'EOF' > src/trigger/tasks.ts
+import { task, wait } from "@trigger.dev/sdk/v3";
+import * as fs from "fs";
+
+const trial_id = fs.readFileSync("/logs/trial_id", "utf8").trim();
+
+export const unreliableTask = task({
+  id: `unreliable-task-${trial_id}`,
+  run: async (payload: { input: string; shouldFail: boolean }) => {
+    if (payload.shouldFail) {
+      throw new Error(`Simulated failure: ${payload.input}`);
+    }
+    return { result: `Processed: ${payload.input}` };
+  },
+});
+
+export const resilientPipeline = task({
+  id: `resilient-pipeline-${trial_id}`,
+  run: async (payload: { input: string }) => {
+    try {
+      await unreliableTask.triggerAndWait({ input: payload.input, shouldFail: true });
+    } catch (error) {
+      const waitpoint = await wait.createToken();
+      fs.writeFileSync("/home/user/resilient-pipeline/waitpoint_token.txt", waitpoint.id);
+      
+      const completion = await wait.forToken<{ correctedInput: string }>(waitpoint.id);
+      if (!completion.ok) {
+         throw new Error("Waitpoint failed");
+      }
+      
+      const finalResult = await unreliableTask.triggerAndWait({ 
+        input: completion.output.correctedInput, 
+        shouldFail: false 
+      });
+      
+      return finalResult;
+    }
+  },
+});
+EOF
+npx tsc --skipLibCheck --noEmit src/trigger/tasks.ts
+ ✔ 
+💭 Thinking for 258 characters   
+💫 Executing cd /home/user/resilient-pipeline && cat << 'EOF' > test3.ts
+import { wait } from "@trigger.dev/sdk/v3";
+async function x() {
+  const w = await wait.createToken();
+  console.log(w.id);
+}
+EOF
+npx tsc --skipLibCheck --noEmit test3.ts ✔ 
+💭 Thinking for 250 characters   
+💫 Executing cd /home/user/resilient-pipeline && cat << 'EOF' > test4.ts
+import { wait } from "@trigger.dev/sdk/v3";
+async function x() {
+  await wait.completeToken("abc", { correctedInput: "fixed data" });
+}
+EOF
+npx tsc --skipLibCheck --noEmit test4.ts ✔ 
+💭 Thinking for 596 characters   
+💫 Executing cd /home/user/resilient-pipeline && cat << 'EOF' > update-pkg.js
+const fs = require('fs');
+const trial_id = fs.readFileSync('/logs/trial_id', 'utf8').trim();
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+pkg.scripts = {
+  ...pkg.scripts,
+  "run-pipeline": `node -e "const { tasks } = require('@trigger.dev/sdk/v3'); tasks.trigger('resilient-pipeline-${trial_id}', { input: 'initial data' }).then(r => console.log('Run ID: ' + r.id))"`,
+  "complete-waitpoint": `node -e "const fs = require('fs'); const { wait } = require('@trigger.dev/sdk/v3'); const token = fs.readFileSync('waitpoint_token.txt', 'utf8').trim(); wait.completeToken(token, { correctedInput: 'fixed data' }).then(() => console.log('Waitpoint completed'))"`
+};
+
+fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+EOF
+node update-pkg.js
+cat package.json
+ ✔ 
+💭 Thinking for 237 characters   
+💫 Executing cd /home/user/resilient-pipeline && cat << 'EOF' > test5.ts
+import { tasks } from "@trigger.dev/sdk/v3";
+async function x() {
+  const r = await tasks.trigger("abc", {});
+  console.log(r.id);
+}
+EOF
+npx tsc --skipLibCheck --noEmit test5.ts ✔ 
+💭 Thinking for 913 characters   
+💫 Executing cat /home/user/resilient-pipeline/src/trigger/tasks.ts ✔ 
+💭 Thinking for 637 characters   
+💫 Executing cd /home/user/resilient-pipeline && npx tsc --skipLibCheck --noEmit src/trigger/tasks.ts ✔ 
+💭 Thinking for 112 characters   
+🎉 Task Completed
+I have successfully set up the Trigger.dev project with durable execution in `/home/user/resilient-pipeline`. 
+
+Here are the actions taken:
+1. **Configured Trigger.dev CLI credentials** and initialized a new Node.js project.
+2. **Installed the required Trigger.dev SDK** packages (`@trigger.dev/sdk@latest`, `@trigger.dev/build@latest`).
+3. **Created `trigger.config.ts`** with the appropriate `TRIGGER_PROJECT_REF` configuration.
+4. **Created `src/trigger/tasks.ts`**, which includes:
+   - Reading the `trial_id` from `/logs/trial_id`.
+   - `unreliable-task-${trial_id}`: The child task that simulates a failure if `shouldFail` is `true`.
+   - `resilient-pipeline-${trial_id}`: The parent task that triggers the child task, catches the error, creates a waitpoint, writes the token to `/home/user/resilient-pipeline/waitpoint_token.txt`, pauses execution with `wait.forToken`, and retries the child task with the corrected input once the token completes.
+5. **Configured `package.json` scripts**:
+   - `npm run run-pipeline`: Triggers the parent task with `{ input: "initial data" }` and prints the resulting Run ID.
+   - `npm run complete-waitpoint`: Reads the waitpoint token from `waitpoint_token.txt` and completes it using the Trigger.dev SDK with the payload `{ correctedInput: "fixed data" }`.
+
+The pipeline is fully set up and ready to run.   
+  

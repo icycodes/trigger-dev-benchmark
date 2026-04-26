@@ -1,0 +1,56 @@
+{
+    "id": "566dd606-ae96-4ddd-ae18-877b57404e74",
+    "started_at": "2026-04-26T02:55:08.653649",
+    "finished_at": "2026-04-26T04:55:24.537715",
+    "n_total_trials": 18,
+    "stats": {
+        "n_trials": 18,
+        "n_errors": 4,
+        "evals": {
+            "pochi__gemini-3-flash__tasks": {
+                "n_trials": 18,
+                "n_errors": 4,
+                "metrics": [
+                    {
+                        "mean": 0.2777777777777778
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "ffmpeg_video_processing_extensio__3bTJA6m",
+                            "batch_processing_with_results_ag__9gcMejt",
+                            "realtime_task_streaming_dashboar__zZa8BZL",
+                            "custom_retry_and_logging__Fr2oJVE",
+                            "ai_workflow_cancellation_handler__GrZE2b9",
+                            "background_workflow_with_human_w__yPfNwjr",
+                            "human_in_the_loop_error_correcti__dBdSiJ4",
+                            "subscription_onboarding_with_wai__fxrS7Bw",
+                            "puppeteer_screenshot_task__ByCn3JK",
+                            "python_extension_data_processing__jwM8dXa",
+                            "ai_agent_human_in_the_loop_appro__F79yaDs",
+                            "multi_tenant_concurrency_control__PtK9n4V",
+                            "ai_agent_with_tool_and_streaming__BhNUS9u"
+                        ],
+                        "1.0": [
+                            "resilient_webhook_idempotency__xpSF8ko",
+                            "scheduled_sync__n66mBp7",
+                            "human_approval_workflow__BRoa77H",
+                            "concurrency_limited_queue__6BMGHHa",
+                            "multi_stage_ai_pipeline_orchestr__hDBM3jG"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "custom_retry_and_logging__Fr2oJVE",
+                        "background_workflow_with_human_w__yPfNwjr",
+                        "human_approval_workflow__BRoa77H",
+                        "ai_agent_with_tool_and_streaming__BhNUS9u"
+                    ]
+                }
+            }
+        }
+    }
+}

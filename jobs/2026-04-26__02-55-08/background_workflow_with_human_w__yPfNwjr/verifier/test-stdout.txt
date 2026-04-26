@@ -1,0 +1,153 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 2 items
+
+tests/test_final_state.py E.                                             [100%]
+
+==================================== ERRORS ====================================
+____________ ERROR at setup of test_human_approval_workflow_success ____________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7fd9e02eb740>
+
+    @pytest.fixture(scope="session")
+    def start_trigger_dev(xprocess):
+        """
+        Starts the `npx trigger.dev@latest dev` service using xprocess.
+        """
+        # Create the Trigger.dev config file before executing the first `npx trigger.dev` command
+        cmd = 'mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami'
+        subprocess.run(
+            cmd,
+            shell=True,
+            check=False,
+            text=True,
+            capture_output=True,
+            executable="/bin/bash"
+        )
+        # Kill process if it's already running
+        subprocess.run(["pkill", "-f", "npx trigger.dev"], check=False)
+    
+        class Starter(ProcessStarter):
+            name = "start_trigger_dev"
+            args = ["npx", "trigger.dev@latest", "dev", "--skip-update-check", "--skip-telemetry"]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            pattern = "Local worker ready"
+            max_read_lines = 1000
+            timeout = 180
+            terminate_on_interrupt = True
+    
+>       xprocess.ensure(Starter.name, Starter)
+
+tests/test_final_state.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+root/.cache/uv/archive-v0/_4kAVa-mYznteAQsyljAR/lib/python3.12/site-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/_4kAVa-mYznteAQsyljAR/lib/python3.12/site-packages/xprocess/xprocess.py:411: in wait
+    pattern_ok = self.wait_pattern(log_file)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/_4kAVa-mYznteAQsyljAR/lib/python3.12/site-packages/xprocess/xprocess.py:424: in wait_pattern
+    has_match = any(re.search(self.pattern, line) for line in lines)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/_4kAVa-mYznteAQsyljAR/lib/python3.12/site-packages/xprocess/xprocess.py:424: in <genexpr>
+    has_match = any(re.search(self.pattern, line) for line in lines)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/_4kAVa-mYznteAQsyljAR/lib/python3.12/site-packages/xprocess/xprocess.py:429: in <genexpr>
+    non_empty_lines = (x for x in lines if x.strip())
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_trigger_dev.<locals>.Starter object at 0x7fd9e02ea180>
+log_file = <_io.TextIOWrapper name='/tests/.pytest_cache/d/.xprocess/start_trigger_dev/xprocess.log' mode='r' encoding='utf-8'>
+
+    def get_lines(self, log_file):
+        """Read and yield one line at a time from log_file. Will raise
+        TimeoutError if pattern is not matched before self.timeout
+        seconds."""
+        while True:
+            line = log_file.readline()
+            if not line:
+                time.sleep(0.1)
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided start pattern {} could not be matched \
+                    within the specified time interval of {} seconds".format(
+                        self.pattern, self.timeout
+                    )
+                )
+E               TimeoutError: The provided start pattern Local worker ready could not be matched                     within the specified time interval of 180 seconds
+
+root/.cache/uv/archive-v0/_4kAVa-mYznteAQsyljAR/lib/python3.12/site-packages/xprocess/xprocess.py:446: TimeoutError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=2507
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+│
+
+│  💡 Get a fix for this error using AI https://cloud.trigger.dev/projects/proj_tgjysxazyuvqzetfzwzy/ai-help?q=Build+failed%3A%0A+ENOENT%3A+no+such+file+or+directory%2C+open+%27%2Fhome%2Fuser%2Ftrigger-approval%2F.trigger%2Ftmp%2Fstore%2FHXO1Hpy3KOA%27%0A%0AError%3A+ENOENT%3A+no+such+file+or+directory%2C+open+%27%2Fhome%2Fuser%2Ftrigger-approval%2F.trigger%2Ftmp%2Fstore%2FHXO1Hpy3KOA%27%0A++++at+async+open+%28node%3Ainternal%2Ffs%2Fpromises%3A640%3A25%29%0A++++at+async+Object.writeFile+%28node%3Ainternal%2Ffs%2Fpromises%3A1253%3A14%29%0A++++at+async+createFileWithStore+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Futilities%2FfileSystem.js%3A61%3A5%29%0A++++at+async+getBundleResultFromBuild+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fbuild%2Fbundle.js%3A157%3A13%29%0A++++at+async+bundleWorker+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fbuild%2Fbundle.js%3A90%3A26%29%0A++++at+async+runBundle+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fdev%2FdevSession.js%3A119%3A34%29%0A++++at+async+startDevSession+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fdev%2FdevSession.js%3A144%3A26%29%0A++++at+async+startDev+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fcommands%2Fdev.js%3A191%3A23%29%0A++++at+async+devCommand+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fcommands%2Fdev.js%3A119%3A29%29%0A++++at+async+file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fcommands%2Fdev.js%3A62%3A13
+
+X Error: ENOENT: no such file or directory, open '/home/user/trigger-approval/.trigger/tmp/store/HXO1Hpy3KOA'
+
+node:internal/process/promises:394
+
+    triggerUncaughtException(err, true /* fromPromise */);
+
+    ^
+
+Error: ENOENT: no such file or directory, open '/home/user/trigger-approval/.trigger/tmp/store/HXO1Hpy3KOA'
+
+    at async open (node:internal/fs/promises:640:25)
+
+    at async Object.writeFile (node:internal/fs/promises:1253:14)
+
+    at async createFileWithStore (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/utilities/fileSystem.js:61:5)
+
+    at async getBundleResultFromBuild (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/build/bundle.js:157:13)
+
+    at async bundleWorker (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/build/bundle.js:90:26)
+
+    at async runBundle (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/dev/devSession.js:119:34)
+
+    at async startDevSession (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/dev/devSession.js:144:26)
+
+    at async startDev (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/commands/dev.js:191:23)
+
+    at async devCommand (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/commands/dev.js:119:29)
+
+    at async file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/trigger.dev/dist/esm/commands/dev.js:62:13 {
+
+  errno: -2,
+
+  code: 'ENOENT',
+
+  syscall: 'open',
+
+  path: '/home/user/trigger-approval/.trigger/tmp/store/HXO1Hpy3KOA'
+
+}
+
+Node.js v24.14.1
+
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_project_files_exist
+ERROR tests/test_final_state.py::test_human_approval_workflow_success - Timeo...
+==================== 1 passed, 1 error in 185.18s (0:03:05) ====================

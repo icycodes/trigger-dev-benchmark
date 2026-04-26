@@ -1,0 +1,23 @@
+{
+  "name": "resilient-pipeline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run-pipeline": "node -e \"const { tasks } = require('@trigger.dev/sdk/v3'); tasks.trigger('resilient-pipeline-human_in_the_loop_error_correcti__ASg3JsZ', { input: 'initial data' }).then(r => console.log('Run ID: ' + r.id))\"",
+    "complete-waitpoint": "node -e \"const fs = require('fs'); const { wait } = require('@trigger.dev/sdk/v3'); const token = fs.readFileSync('waitpoint_token.txt', 'utf8').trim(); wait.completeToken(token, { correctedInput: 'fixed data' }).then(() => console.log('Waitpoint completed'))\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.4.4"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.4.4",
+    "@types/node": "^25.6.0",
+    "typescript": "^5.9.3"
+  }
+}

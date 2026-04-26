@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777151966.3438854,
+            "stop": 1777151982.5684173
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_multi_tenant_concurrency",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 16.208273163996637,
+                "start": 1777151966.3494108,
+                "stop": 1777151982.5682473,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_multi_tenant_concurrency(start_trigger_dev):\n        # Trigger the tasks\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n>       assert result.returncode == 0, f\"Triggering tasks failed: {result.stderr}\"\nE       AssertionError: Triggering tasks failed: npm error Missing script: \"run-task\"\nE         npm error\nE         npm error To see a list of scripts, run:\nE         npm error   npm run\nE         npm error A complete log of this run can be found in: /root/.npm/_logs/2026-04-25T21_19_42_505Z-debug-0.log\nE         \nE       assert 1 == 0\nE        +  where 1 = CompletedProcess(args=['npm', 'run', 'run-task'], returncode=1, stdout='', stderr='npm error Missing script: \"run-task...pm run\\nnpm error A complete log of this run can be found in: /root/.npm/_logs/2026-04-25T21_19_42_505Z-debug-0.log\\n').returncode\n\ntests/test_final_state.py:59: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

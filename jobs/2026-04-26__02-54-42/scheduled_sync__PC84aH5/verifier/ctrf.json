@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777145548.323505,
+            "stop": 1777145563.2084894
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_scheduled_sync_execution",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 14.869734011001128,
+                "start": 1777145548.3286545,
+                "stop": 1777145563.2082963,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_scheduled_sync_execution(start_trigger_dev):\n        # Trigger the task manually\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n>       assert result.returncode == 0, f\"npm run run-task failed: {result.stderr}\"\nE       AssertionError: npm run run-task failed: error: unknown command 'tasks'\nE         \nE       assert 1 == 0\nE        +  where 1 = CompletedProcess(args=['npm', 'run', 'run-task'], returncode=1, stdout='\\n> trigger-sync@1.0.0 run-task\\n> npx trigger.dev@latest tasks trigger scheduled-sync-scheduled_sync__PC84aH5\\n\\n', stderr=\"error: unknown command 'tasks'\\n\").returncode\n\ntests/test_final_state.py:53: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

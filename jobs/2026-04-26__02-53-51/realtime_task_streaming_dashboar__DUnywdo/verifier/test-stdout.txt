@@ -1,0 +1,118 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py E                                              [100%]
+
+==================================== ERRORS ====================================
+__________________ ERROR at setup of test_realtime_dashboard ___________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7f1d638e6d50>
+
+    @pytest.fixture(scope="session")
+    def start_trigger_dev(xprocess):
+        """
+        Starts the `npx trigger.dev@latest dev` service using xprocess.
+        """
+        # Create the Trigger.dev config file before executing the first `npx trigger.dev` command
+        trigger_credential_config_json = os.environ.get("TRIGGER_CREDENTIAL_CONFIG_JSON")
+        cmd = f'mkdir -p ~/.config/trigger && printf "%s" \'{trigger_credential_config_json}\' > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami'
+        subprocess.run(
+            cmd,
+            shell=True,
+            check=False,
+            text=True,
+            capture_output=True,
+            executable="/bin/bash"
+        )
+        # Kill process if it's already running
+        subprocess.run(["pkill", "-f", "npx trigger.dev"], check=False)
+    
+        class Starter(ProcessStarter):
+            name = "start_trigger_dev"
+            args = ["npx", "trigger.dev@latest", "dev", "--skip-update-check", "--skip-telemetry"]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            pattern = "Local worker ready"
+            max_read_lines = 1000
+            timeout = 180
+            terminate_on_interrupt = True
+    
+>       xprocess.ensure(Starter.name, Starter)
+
+tests/test_final_state.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+root/.cache/uv/archive-v0/DFvaTiCxwwpRrXxdQNHhh/lib/python3.12/site-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/DFvaTiCxwwpRrXxdQNHhh/lib/python3.12/site-packages/xprocess/xprocess.py:411: in wait
+    pattern_ok = self.wait_pattern(log_file)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/DFvaTiCxwwpRrXxdQNHhh/lib/python3.12/site-packages/xprocess/xprocess.py:424: in wait_pattern
+    has_match = any(re.search(self.pattern, line) for line in lines)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/DFvaTiCxwwpRrXxdQNHhh/lib/python3.12/site-packages/xprocess/xprocess.py:424: in <genexpr>
+    has_match = any(re.search(self.pattern, line) for line in lines)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/DFvaTiCxwwpRrXxdQNHhh/lib/python3.12/site-packages/xprocess/xprocess.py:429: in <genexpr>
+    non_empty_lines = (x for x in lines if x.strip())
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_trigger_dev.<locals>.Starter object at 0x7f1d636f76b0>
+log_file = <_io.TextIOWrapper name='/tests/.pytest_cache/d/.xprocess/start_trigger_dev/xprocess.log' mode='r' encoding='utf-8'>
+
+    def get_lines(self, log_file):
+        """Read and yield one line at a time from log_file. Will raise
+        TimeoutError if pattern is not matched before self.timeout
+        seconds."""
+        while True:
+            line = log_file.readline()
+            if not line:
+                time.sleep(0.1)
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided start pattern {} could not be matched \
+                    within the specified time interval of {} seconds".format(
+                        self.pattern, self.timeout
+                    )
+                )
+E               TimeoutError: The provided start pattern Local worker ready could not be matched                     within the specified time interval of 180 seconds
+
+root/.cache/uv/archive-v0/DFvaTiCxwwpRrXxdQNHhh/lib/python3.12/site-packages/xprocess/xprocess.py:446: TimeoutError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1238
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mNo matching export in "node_modules/@trigger.dev/sdk/dist/esm/v3/index.js" for import "client"[0m
+
+    src/trigger/progress.ts:1:9:
+
+[37m      1 │ import { [32mclient[37m, task } from "@trigger.dev/sdk/v3";
+
+        ╵          [32m~~~~~~[0m
+
+│
+
+│  💡 Get a fix for this error using AI https://cloud.trigger.dev/projects/proj_qmjtfxoknmfupeecpjod/ai-help?q=Build+failed%3A%0A+Failed+to+build%0ANo+matching+export+in+%22node_modules%2F%40trigger.dev%2Fsdk%2Fdist%2Fesm%2Fv3%2Findex.js%22+for+import+%22client%22+%28src%2Ftrigger%2Fprogress.ts%29%0AError%3A+Failed+to+build%0A++++at+bundleWorker+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fbuild%2Fbundle.js%3A77%3A19%29%0A++++at+process.processTicksAndRejections+%28node%3Ainternal%2Fprocess%2Ftask_queues%3A104%3A5%29%0A++++at+async+runBundle+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fdev%2FdevSession.js%3A119%3A34%29%0A++++at+async+startDevSession+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fdev%2FdevSession.js%3A144%3A26%29%0A++++at+async+startDev+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fcommands%2Fdev.js%3A191%3A23%29%0A++++at+async+devCommand+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fcommands%2Fdev.js%3A119%3A29%29%0A++++at+async+file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fcommands%2Fdev.js%3A62%3A13%0A++++at+async+wrapCommandAction+%28file%3A%2F%2F%2Froot%2F.npm%2F_npx%2Ff51a09bd0abf5f10%2Fnode_modules%2Ftrigger.dev%2Fdist%2Fesm%2Fcli%2Fcommon.js%3A47%3A24%29
+
+=========================== short test summary info ============================
+ERROR tests/test_final_state.py::test_realtime_dashboard - TimeoutError: The ...
+========================= 1 error in 198.58s (0:03:18) =========================

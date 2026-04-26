@@ -1,0 +1,26 @@
+{
+  "name": "trigger-approval",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\\\" && exit 1",
+    "trigger-workflow": "ts-node --project tsconfig.json trigger-workflow.ts",
+    "complete-approval": "ts-node --project tsconfig.json complete-approval.ts",
+    "deploy": "npx trigger.dev@latest deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.4.4",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.4.4",
+    "@types/node": "^25.6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

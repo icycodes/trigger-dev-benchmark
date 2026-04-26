@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777145348.12673,
+            "stop": 1777145406.6047616
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_trigger_dev_retry_and_logging",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 58.46431023100013,
+                "start": 1777145348.1322641,
+                "stop": 1777145406.6045053,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_trigger_dev_retry_and_logging(start_trigger_dev):\n        # Trigger the task\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n        assert result.returncode == 0, f\"Failed to trigger task: {result.stderr}\"\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}\"\n        run_id = run_id_match.group(1)\n    \n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n    \n        # Poll for completion\n        max_checks = 30\n        check_interval = 10\n    \n        for i in range(max_checks):\n            run_result = subprocess.run(\n              [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n              capture_output=True,\n              text=True\n            )\n            assert run_result.returncode == 0, f\"Retrieve run result failed with code {run_result.returncode}\"\n    \n            try:\n                run_result_json = json.loads(run_result.stdout)\n            except json.JSONDecodeError:\n                pytest.fail(f\"Failed to parse API response: {run_result.stdout}\")\n    \n            assert \"status\" in run_result_json, f\"Run status is missing in {run_result_json}\"\n            run_status = run_result_json[\"status\"]\n    \n            if run_status == \"COMPLETED\":\n                output = run_result_json.get(\"output\")\n                assert output is not None, \"Run completed but output is missing\"\n                assert output.get(\"status\") == \"success\", f\"Expected status 'success', got {output.get('status')}\"\n                assert output.get(\"userId\") == \"user_123\", f\"Expected userId 'user_123', got {output.get('userId')}\"\n                assert output.get(\"attempt\") == 3, f\"Expected task to succeed on attempt 3, but got attempt {output.get('attempt')}\"\n                return\n            elif run_status in [\"FAILED\", \"CRASHED\", \"CANCELED\", \"EXPIRED\", \"TIMED_OUT\", \"SYSTEM_FAILURE\"]:\n>               pytest.fail(f\"Run failed with status: {run_status}. Response: {run_result.stdout}\")\nE               Failed: Run failed with status: FAILED. Response: {\"id\":\"run_cmoeqgqa36aqt0uohexowblma\",\"taskIdentifier\":\"retry-logic-task-custom_retry_and_logging__RSxMie9\",\"version\":\"20260425.5\",\"status\":\"FAILED\",\"createdAt\":\"2026-04-25T19:29:23.221Z\",\"startedAt\":\"2026-04-25T19:29:24.159Z\",\"updatedAt\":\"2026-04-25T19:29:59.797Z\",\"finishedAt\":\"2026-04-25T19:29:59.790Z\",\"ttl\":\"10m\",\"costInCents\":0,\"baseCostInCents\":0.0025,\"durationMs\":697,\"isTest\":false,\"depth\":0,\"tags\":[],\"isQueued\":false,\"isExecuting\":false,\"isCompleted\":true,\"isFailed\":true,\"isSuccess\":false,\"isCancelled\":false,\"isWaiting\":false,\"triggerFunction\":\"trigger\",\"payload\":{\"userId\":\"user_123\"},\"error\":{\"name\":\"TypeError\",\"message\":\"Cannot read properties of undefined (reading 'number')\",\"stackTrace\":\"TypeError: Cannot read properties of undefined (reading 'number')\\n    at run (file:///home/user/trigger-retry-lab/src/trigger/retry-task.ts:14:52)\\n    at _tracer.startActiveSpan.attributes (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/workers/taskExecutor.ts:430:24)\\n    at file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/tracer.ts:137:24\\n    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)\\n    at AsyncLocalStorageContextManager.with (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@opentelemetry/context-async-hooks/src/AsyncLocalStorageContextManager.ts:40:36)\\n    at ContextAPI2.with (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@opentelemetry/api/src/api/context.ts:77:42)\\n    at Tracer.startActiveSpan (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@opentelemetry/sdk-trace-base/src/Tracer.ts:246:24)\\n    at TriggerTracer.startActiveSpan (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/tracer.ts:81:24)\\n    at file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/workers/taskExecutor.ts:425:33\\n    at _RunTimelineMetricsAPI.measureMetric (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/runTimelineMetrics/index.ts:67:28)\"},\"attemptCount\":4,\"attempts\":[],\"relatedRuns\":{\"children\":[]}}\n\ntests/test_final_state.py:96: Failed",
+                "message": "The test failed in the call phase"
+            }
+        ]
+    }
+}
