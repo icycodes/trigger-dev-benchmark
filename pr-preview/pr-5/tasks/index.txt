@@ -1,0 +1,1262 @@
+1:"$Sreact.fragment"
+2:I[47618,["/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/ca023ad85cd7aeee.js","/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/2ad5122eae704b1a.js"],"AppQueryProvider"]
+3:I[20416,["/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/ca023ad85cd7aeee.js","/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/2ad5122eae704b1a.js"],"ThemeProvider"]
+4:I[63155,["/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/ca023ad85cd7aeee.js","/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/2ad5122eae704b1a.js"],"ThemeToggle"]
+5:I[36064,["/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/d2c13bb33c4fcd54.js","/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/c21188132e0e0d48.js"],"default"]
+6:I[81497,["/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/d2c13bb33c4fcd54.js","/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/c21188132e0e0d48.js"],"default"]
+7:I[42654,["/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/ca023ad85cd7aeee.js","/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/2ad5122eae704b1a.js","/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/48547b8d75eca4d1.js","/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/be08138953094657.js"],"TasksPageClient"]
+1e:I[9986,["/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/d2c13bb33c4fcd54.js","/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/c21188132e0e0d48.js"],"default"]
+:HL["/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/c724b7af1fc0560f.css","style"]
+:HL["/trigger-dev-benchmark/pr-preview/pr-5/_next/static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+8:Tc7b,# AI Agent with Human-in-the-Loop Approval
+
+## Background
+Trigger.dev is an open-source background jobs framework that allows developers to write reliable, long-running workflows. One of its powerful features is `wait.forToken()`, which enables human-in-the-loop patterns. In this task, you will build an AI content generation workflow that pauses for human approval before finalization.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/ai-approval-task`.
+- Implement a task named `ai-content-generator-${trial_id}`.
+- The task should:
+  1. Simulate generating content (e.g., a blog post title and summary).
+  2. Use `wait.forToken()` to pause execution and wait for a human approval.
+  3. Once approved, return the content with an `approved: true` flag.
+- Provide an npm script `npm run trigger-task` that triggers the task with a sample payload and prints the `run_id` and `waitpoint_token` to the console.
+- Provide an npm script `npm run approve-task <token>` that completes the waitpoint using the provided token.
+
+## Implementation Guide
+
+### Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node ts-node
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration**: Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check the `trigger.config.ts` file.
+
+### Task Implementation
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create `src/trigger/ai-generator.ts` and define the task using `task` and `wait.forToken()`.
+3. Suffix the task ID with `${trial_id}`.
+4. Implement `npm run trigger-task` in `package.json` to trigger the task and output `Run ID: <run_id>` and `Token: <token>`.
+5. Implement `npm run approve-task <token>` to complete the waitpoint using the Trigger.dev API or SDK.
+
+## Constraints
+- Project path: `/home/user/ai-approval-task`
+- Trigger command: `npm run trigger-task`
+- Approval command: `npm run approve-task <token>`
+- Use `trial_id` to isolate task IDs.
+
+## Integrations
+- Trigger.dev
+9:Tead,# AI Agent with Tool and Streaming
+
+## Background
+Trigger.dev v4 provides powerful primitives for building AI agents. You can convert Trigger.dev tasks into tools for the Vercel AI SDK using `ai.tool`, and you can stream data back to clients using `streams.pipe`. This combination allows for building complex, long-running AI workflows with real-time feedback.
+
+## Requirements
+- Create a Trigger.dev task that acts as a weather tool. It should take a `city` as input and return a dummy weather string.
+- Create a main Trigger.dev task that uses the Vercel AI SDK and the weather tool to generate a clothing recommendation based on the weather in a given city.
+- The main task should stream the AI response token by token using Trigger.dev's `streams.pipe` mechanism.
+- Use `trial_id` from `/logs/trial_id` to suffix all Trigger.dev task IDs and to isolate resources.
+- Implement a script to trigger the main task and print the run ID and the streamed parts.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest ai @ai-sdk/openai zod
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. In `src/trigger/weather.ts`, define a `schemaTask` named `weatherTask-${trial_id}` that takes a `city: z.string()` and returns `{ weather: "Sunny and 25°C" }` (you can make it more dynamic if you want, but a dummy response is fine).
+3. In `src/trigger/agent.ts`, define a `schemaTask` named `agentTask-${trial_id}` that:
+    - Uses `ai.tool(weatherTask)` to create a tool.
+    - Uses `streamText` from `ai` with `openai('gpt-4o')` and the weather tool.
+    - Uses `streams.define({ id: "ai-output" })` to define a stream.
+    - Pipes the `textStream` from `streamText` to the defined stream using `.pipe()`.
+    - Awaits `waitUntilComplete()` from the pipe result.
+4. Create a trigger script `trigger.ts` that:
+    - Triggers `agentTask-${trial_id}` with a city (e.g., "Paris").
+    - Subscribes to the `ai-output` stream using `streams.read(run.id, "ai-output")`.
+    - Prints each chunk as it arrives.
+    - Prints "Run ID: ${run.id}" at the end.
+5. Add an `npm run run-task` command in `package.json` that runs the trigger script using `npx tsx trigger.ts`.
+
+## Constraints
+- Project path: /home/user/ai-agent-task
+- Start task: `npm run run-task`
+- Use `trial_id` for task ID isolation.
+- Use `@trigger.dev/sdk` for all Trigger.dev imports.
+
+## Integrations
+- Trigger.dev
+- OpenAI
+a:Tf01,# AI Workflow with Cancellation Handler
+
+## Background
+Trigger.dev is an open-source background jobs framework that allows developers to write reliable, long-running workflows. In AI workflows, it's common to have tasks that might take a long time (like generating content via an LLM) and may need to be cancelled if the user changes their mind or a timeout occurs. Handling cancellation gracefully via the `onCancel` hook is crucial to avoid orphaned processes or unnecessary API usage.
+
+## Requirements
+- Implement a Trigger.dev task named `ai-content-generator` (suffixed with `trial_id`).
+- The task should simulate a long-running AI content generation process.
+- Implement an `onCancel` hook that handles the cancellation of the task.
+- Use an `AbortController` to signal cancellation to the simulated AI process.
+- The task should write its status (e.g., 'started', 'cancelled', 'completed') to a JSON file at `/home/user/ai-workflow/status.json`.
+- Provide an npm script `run-task` to trigger the task and print the `runId`.
+- Provide an npm script `cancel-task` that takes a `runId` and cancels the task using the Trigger.dev CLI or SDK.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      // (Required) Your project ref from the Trigger.dev dashboard
+      project: process.env.TRIGGER_PROJECT_REF,
+      // (Required) Directories containing your tasks
+      dirs: ["./src/trigger"],
+      // (Required) Max duration of a task in seconds
+      maxDuration: 3600,
+      // (Optional) Retries config
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Define the task in `src/trigger/ai-generator.ts`. The task ID must be `ai-content-generator-${trial_id}`.
+3. Use `AbortController` inside the `run` function. Pass the `signal` to a simulated async function that waits for 20 seconds.
+4. In the `onCancel` hook, log the cancellation and update `/home/user/ai-workflow/status.json` with `{"status": "cancelled"}`.
+5. If the task completes without cancellation, update `/home/user/ai-workflow/status.json` with `{"status": "completed"}`.
+6. Ensure `package.json` has:
+   - `"run-task": "ts-node scripts/trigger.ts"` (triggers the task and prints `Run ID: <id>`)
+   - `"cancel-task": "ts-node scripts/cancel.ts"` (cancels the task given a run ID)
+
+## Constraints
+- Project path: `/home/user/ai-workflow`
+- Status file: `/home/user/ai-workflow/status.json`
+- Trigger command: `npm run run-task`
+- Cancel command: `npm run cancel-task -- <runId>`
+- Must use `onCancel` lifecycle hook.
+- Task ID must include `trial_id`.
+
+## Integrations
+- Trigger.dev
+b:T1146,# Multi-Step Background Workflow with Human-in-the-Loop Approval
+
+## Background
+Trigger.dev is designed for long-running workflows that can span across multiple steps and even wait for external events or human approvals without consuming compute resources during the wait period. This task demonstrates how to create a multi-step workflow that uses `wait.forToken` to pause execution until a human provides an approval via an external trigger.
+
+## Requirements
+- Create a Trigger.dev task named `human-approval-workflow`.
+- The task should:
+    1. Log an initial message indicating the workflow has started.
+    2. Create a waitpoint token using `wait.createToken` with a timeout of 10 minutes.
+    3. Log the token ID and the callback URL.
+    4. Pause execution using `wait.forToken` until the token is completed.
+    5. Based on the output of the token completion (`{ approved: boolean }`), log whether the workflow was approved or rejected.
+    6. Return a final status object.
+- Implement a script to trigger the task and another script to complete the token (simulating human approval).
+
+## Implementation Guide
+
+### Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node ts-node
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration**: Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+### Task Implementation
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create `src/trigger/workflow.ts`:
+    ```ts
+    import { task, wait, logger } from "@trigger.dev/sdk";
+    import fs from "fs";
+
+    const trial_id = fs.readFileSync("/logs/trial_id", "utf-8").trim();
+
+    export const humanApprovalWorkflow = task({
+      id: `human-approval-workflow-${trial_id}`,
+      run: async (payload: { name: string }) => {
+        logger.info("Workflow started", { payload });
+
+        const token = await wait.createToken({
+          timeout: "10m",
+        });
+
+        logger.info("Waitpoint created", { tokenId: token.id, url: token.url });
+
+        const result = await wait.forToken<{ approved: boolean }>(token.id);
+
+        if (result.ok) {
+          logger.info("Result received", { approved: result.output.approved });
+          return { status: "completed", approved: result.output.approved };
+        } else {
+          logger.error("Waitpoint timed out or failed", { error: result.error });
+          return { status: "failed", error: result.error };
+        }
+      },
+    });
+    ```
+3. Create a trigger script `trigger-workflow.ts` that triggers the task and prints the `runId` and `tokenId`. Since the `tokenId` is logged by the task, you might need to fetch the run details to get the `tokenId` from logs or just design the task to be easily verifiable.
+4. Create a completion script `complete-approval.ts` that takes a `tokenId` and completes it with `{ approved: true }`.
+5. Add `scripts` to `package.json` to run these via `npm run`.
+
+## Constraints
+- Project path: /home/user/trigger-approval
+- Implementation must use `@trigger.dev/sdk` v4 (latest).
+- Must use `trial_id` for task ID isolation.
+- The trigger script must print `Run ID: <run_id>` and `Token ID: <token_id>` to stdout.
+
+## Integrations
+- Trigger.dev
+c:Tcdf,# Batch Processing with Results Aggregation in Trigger.dev
+
+## Background
+Trigger.dev is a background job platform that allows for durable execution of workflows. A common pattern is to process a large number of items by triggering child tasks and then aggregating their results. This task involves implementing a parent task that triggers multiple child tasks in parallel and waits for all of them to complete before returning a summary.
+
+## Requirements
+- Implement a child task `process-item` that simulates processing an item (e.g., squaring a number) with a small delay.
+- Implement a parent task `batch-process` that takes an array of numbers, triggers the `process-item` task for each number using `batchTriggerAndWait`, and returns the sum of all processed results.
+- Use `trial_id` from `/logs/trial_id` to suffix task IDs to avoid collisions.
+- Ensure the project is correctly configured using `trigger.config.ts`.
+- Provide an entry point to trigger the `batch-process` task and log the `run_id`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Initialize a Node.js project in `/home/user/batch-task`.
+2. Read `trial_id` from `/logs/trial_id`.
+3. Create `src/trigger/tasks.ts` and define:
+    - `processItemTask`: A task that takes a number, waits for 1 second, and returns the square of the number. Suffix ID with `trial_id`.
+    - `batchProcessTask`: A task that takes an array of numbers, uses `batchTriggerAndWait` to run `processItemTask` for each, and returns the sum of the results. Suffix ID with `trial_id`.
+4. Add an `npm run run-task` script in `package.json` that triggers `batchProcessTask` with the input `[1, 2, 3, 4, 5]` and prints `Run ID: <run_id>`.
+
+## Constraints
+- Project path: /home/user/batch-task
+- Start task: `npm run run-task`
+- Must use `batchTriggerAndWait` for parallel processing.
+- Must suffix task IDs with `trial_id`.
+
+## Integrations
+- Trigger.dev
+d:Td02,# Trigger.dev Concurrency-Limited Task Queue
+
+## Background
+Trigger.dev allows you to control the concurrency of your tasks using Queues. This is essential when interacting with rate-limited APIs or resources with limited capacity. By defining a Queue with a `concurrencyLimit`, you can ensure that only a specific number of task instances run at the same time, regardless of how many are triggered.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/concurrency-task`.
+- Define a Trigger.dev **Queue** with the ID `exclusive-queue-${trial_id}` and a `concurrencyLimit` of 1.
+- Implement a task named `exclusive-task-${trial_id}` that:
+    - Uses the defined queue.
+    - Accepts a payload with an `id` (string).
+    - Sleeps for 3 seconds to simulate work.
+    - Returns the input `id` and the `startedAt` / `finishedAt` timestamps from the task context.
+- Suffix all IDs (Queue ID and Task ID) with the `trial_id` read from `/logs/trial_id`.
+- Add an `npm run run-task` command in `package.json` that triggers 3 instances of `exclusive-task-${trial_id}` simultaneously with IDs `"1"`, `"2"`, and `"3"`, and prints the 3 resulting Run IDs in the format `Run IDs: <id1>, <id2>, <id3>`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node
+    npx tsc --init
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. In `src/trigger/queue.ts`, define the `Queue` and the `task`. Use the `queue` property in the `task` definition.
+3. Use `await new Promise(resolve => setTimeout(resolve, 3000))` for the sleep.
+4. Ensure the task is exported as a named export.
+5. Implement a script `scripts/trigger.ts` that uses the Trigger.dev SDK to trigger the task 3 times and logs the Run IDs.
+
+## Constraints
+- Project path: /home/user/concurrency-task
+- Start task: `npm run run-task`
+- Queue Concurrency: 1
+- Task ID: `exclusive-task-${trial_id}`
+- Queue ID: `exclusive-queue-${trial_id}`
+
+## Integrations
+- Trigger.dev
+e:Td47,# Trigger.dev Custom Retry and Logging
+
+## Background
+Trigger.dev is a platform for building long-running background jobs in TypeScript. It provides built-in observability and powerful retry mechanisms. In this task, you will implement a task that uses custom retry logic and advanced logging to track task attempts.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/trigger-retry-lab`.
+- Create a task named `retry-logic-task` in `src/trigger/retry-task.ts`.
+- The task should accept a payload with a `userId` (string).
+- Implement custom retry logic:
+    - `maxAttempts`: 4
+    - `minTimeoutInMs`: 2000
+    - `maxTimeoutInMs`: 10000
+    - `factor`: 2
+- In the `run` function:
+    - Use `logger.info` to log the current attempt number (available in `ctx.run.attempt.number`). Format: `"Attempt number: ${ctx.run.attempt.number}"`.
+    - Simulate a transient failure: throw an error on the first 2 attempts. The error message should be `"Transient failure on attempt ${ctx.run.attempt.number}"`.
+    - On the 3rd attempt, succeed and return an object: `{ status: "success", userId: payload.userId, attempt: ctx.run.attempt.number }`.
+- Add an `npm run run-task` command in `package.json` that triggers the task with `userId: "user_123"` and prints the run_id with format `Run ID: ${run_id}`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Awareness of Parallel Trials Running
+
+Be aware that multiple trials for one task may run concurrently against the same Trigger.dev project referenced by `TRIGGER_PROJECT_REF`. To avoid collisions, you must use `trial_id` to isolate each trial's resources.
+
+In the task running environment, there is a `trial_id` saved in the `/logs/trial_id` text file.
+
+Whenever you create a Trigger.dev task, suffix the task ID with the `trial_id`.
+
+## Constraints
+- Project path: /home/user/trigger-retry-lab
+- Start task: `npm run run-task`
+- Use `trial_id` from `/logs/trial_id` as a suffix for the task ID (e.g., `retry-logic-task-${trial_id}`).
+
+## Integrations
+- Trigger.dev
+f:Tc6f,# Video Processing with FFmpeg Extension
+
+## Background
+Trigger.dev allows you to use build extensions to install system-level dependencies like FFmpeg in your serverless environment. This task involves setting up a Trigger.dev project with the FFmpeg extension and creating a task that processes a video file.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/ffmpeg-task`.
+- Configure the `ffmpeg` build extension in `trigger.config.ts`.
+- Implement a Trigger.dev task named `ffmpeg-extract-audio-${trial_id}` (where `${trial_id}` is read from `/logs/trial_id`) that:
+    - Accepts a `videoUrl` in its payload.
+    - Downloads the video.
+    - Uses `fluent-ffmpeg` to extract the audio and convert it to WAV format (mono, 44.1kHz).
+    - Saves the resulting audio file to `/home/user/ffmpeg-task/output/audio.wav`.
+- Create an `npm run run-task` command that triggers the task with a sample video URL and prints the Run ID.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    npm add fluent-ffmpeg node-fetch
+    npm add -D @types/fluent-ffmpeg @types/node-fetch
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF` and add the `ffmpeg` extension.
+    ```ts
+    import { ffmpeg } from "@trigger.dev/build/extensions/core";
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      build: {
+        extensions: [ffmpeg()],
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create the directory `/home/user/ffmpeg-task/output` and ensure it is writable.
+3. Define the task in `src/trigger/ffmpeg-task.ts`. Use `fluent-ffmpeg` and `node-fetch` to process the video stream.
+4. Ensure you use the `ffmpeg` extension in `trigger.config.ts` as shown in the setup guide.
+5. Implement the `npm run run-task` script in `package.json` to trigger the task using `helloWorld.trigger()` (or equivalent for your task) and log `Run ID: <id>`.
+
+## Constraints
+- Project path: /home/user/ffmpeg-task
+- Log file: /home/user/ffmpeg-task/output/audio.wav
+- Start task: `npm run run-task`
+- Use `trial_id` for the task ID suffix.
+- Do not use external storage like S3/R2; save files locally to the `output` directory.
+
+## Integrations
+- Trigger.dev
+10:Tba8,# Human Approval Workflow with Trigger.dev Waitpoints
+
+## Background
+Trigger.dev allows pausing a run until an external event occurs using **Waitpoints**. This is useful for human-in-the-loop approvals, where a workflow should only proceed after a manual check.
+
+## Requirements
+Implement a deployment approval workflow in a Trigger.dev task.
+- The task should be named `deploy-approval-${trial_id}`.
+- It should accept a payload with a `version` (string).
+- It should create a waitpoint token using `wait.createToken()` with a timeout of 1 hour.
+- It should write the waitpoint token URL to `/home/user/approval-workflow/approval_url.txt`.
+- It should wait for the token using `wait.forToken()`.
+- The token completion payload will be an object: `{ approved: boolean }`.
+- If `approved` is true, the task should return `{ status: "deployed", version: payload.version }`.
+- If `approved` is false, it should return `{ status: "rejected", version: payload.version }`.
+- If the waitpoint times out (result not ok), it should throw an error or return a failure status.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk/build";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create a Trigger.dev task in `src/trigger/approval.ts`.
+3. Use `wait.createToken` and `wait.forToken` from `@trigger.dev/sdk`.
+4. Use `fs.writeFileSync` to write the token URL to `/home/user/approval-workflow/approval_url.txt`.
+5. Add an `npm run run-task` command in `package.json` that triggers the task with a version payload (e.g., `v1.0.0`) and prints the Run ID in the format `Run ID: ${run_id}`.
+
+## Constraints
+- Project path: `/home/user/approval-workflow`
+- Task ID: `deploy-approval-${trial_id}`
+- Suffix all task IDs with the `trial_id` found in `/logs/trial_id`.
+- Use `@trigger.dev/sdk` for imports.
+
+## Integrations
+- Trigger.dev
+11:Te8c,# Durable Error Recovery with Human-in-the-Loop
+
+## Background
+Trigger.dev's durable execution allows workflows to pause and wait for external input without consuming compute resources. This is particularly useful for building resilient pipelines that require human intervention when an automated step fails or requires manual correction.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/resilient-pipeline`.
+- Implement a child task `unreliable-task-${trial_id}` that:
+    - Accepts a payload `{ input: string, shouldFail: boolean }`.
+    - If `shouldFail` is true, it throws an error: `"Simulated failure: ${input}"`.
+    - Otherwise, it returns `{ result: `Processed: ${input}` }`.
+- Implement a parent task `resilient-pipeline-${trial_id}` that:
+    - Accepts an initial payload `{ input: string }`.
+    - Triggers `unreliable-task-${trial_id}` with `{ input: payload.input, shouldFail: true }` (forcing an initial failure).
+    - Catches the error from the child task.
+    - Creates a waitpoint token using `wait.createToken()`.
+    - Writes the token ID to `/home/user/resilient-pipeline/waitpoint_token.txt`.
+    - Pauses execution using `wait.forToken()`.
+    - The token completion payload will be `{ correctedInput: string }`.
+    - Once the token is completed, it triggers `unreliable-task-${trial_id}` again with `{ input: completion.output.correctedInput, shouldFail: false }`.
+    - Returns the final result from the second child task call.
+- Suffix all task IDs with the `trial_id` read from `/logs/trial_id`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node
+    npx tsc --init
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. In `src/trigger/tasks.ts`, define the two tasks as described. Use `triggerAndWait` for calling the child task.
+3. Ensure the parent task correctly catches the error from `triggerAndWait` and proceeds to create the waitpoint.
+4. Add an `npm run run-pipeline` command in `package.json` that triggers the parent task with `{ input: "initial data" }` and prints the Run ID with format `Run ID: ${run_id}`.
+5. Add an `npm run complete-waitpoint` command in `package.json` that reads the token from `waitpoint_token.txt` and uses the Trigger.dev SDK to complete it with `{ correctedInput: "fixed data" }`.
+
+## Constraints
+- Project path: /home/user/resilient-pipeline
+- Start task: `npm run run-pipeline` (to start the pipeline) and `npm run complete-waitpoint` (to provide the manual correction).
+- Task ID suffix: `${trial_id}`
+
+## Integrations
+- Trigger.dev
+12:Td18,# Multi-Stage AI Pipeline Orchestration with Trigger.dev
+
+## Background
+Trigger.dev is a durable execution platform for TypeScript. One of its most powerful features is orchestration, which allows a parent task to trigger child tasks and wait for their results without consuming compute resources while waiting.
+
+## Requirements
+Implement a multi-stage AI pipeline that processes a research topic:
+1.  **Parent Task (`research-pipeline`)**: Receives a `topic` and a list of `languages`.
+2.  **Stage 1 (Sequential)**: Triggers a `generate-summary` task to create a 100-word summary of the topic.
+3.  **Stage 2 (Parallel)**: Using `batchTriggerAndWait`, triggers multiple `translate-summary` tasks (one for each language provided) to translate the summary generated in Stage 1.
+4.  **Stage 3 (Aggregation)**: Aggregates all translations and the original summary into a final report object.
+
+## Implementation Guide
+
+### Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+### Task Implementation
+1.  Read `trial_id` from `/logs/trial_id`.
+2.  Define three tasks in `src/trigger/pipeline.ts`:
+    -   `generate-summary-${trial_id}`: Mock a summary generation (returns a string).
+    -   `translate-summary-${trial_id}`: Mock a translation (receives `text` and `language`, returns `{ language, translation }`).
+    -   `research-pipeline-${trial_id}`: The orchestrator task using `triggerAndWait` and `batchTriggerAndWait`.
+3.  **Important**: Do NOT use `Promise.all` for `triggerAndWait` or `batchTriggerAndWait`. Use the built-in orchestration methods.
+4.  Ensure all tasks are named exports.
+5.  Add an `npm run run-task` command in `package.json` that triggers `research-pipeline-${trial_id}` with payload `{"topic": "Artificial Intelligence", "languages": ["Spanish", "French", "German"]}` and prints `Run ID: ${run_id}`.
+
+## Constraints
+- Project path: /home/user/ai-pipeline
+- Start task: `npm run run-task`
+- Use `trial_id` as suffix for all task IDs.
+
+## Integrations
+- Trigger.dev
+13:Te0d,# Multi-tenant Concurrency Control with Trigger.dev
+
+## Background
+Trigger.dev allows you to control the concurrency of your tasks not just globally, but also per-tenant (e.g., per user or per organization). This is essential for SaaS applications where you want to ensure that one user's heavy workload doesn't block other users, while still limiting the resources consumed by any single user.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/multi-tenant-task`.
+- Define a Trigger.dev **Queue** with the ID `multi-tenant-queue-${trial_id}` and a global `concurrencyLimit` of 10.
+- Implement a task named `multi-tenant-task-${trial_id}` that:
+    - Uses the defined queue.
+    - Uses a `concurrencyKey` based on the `userId` in the payload to limit concurrency to **1 per user**.
+    - Accepts a payload with `userId` (string) and `jobId` (string).
+    - Simulates work by sleeping for 5 seconds.
+    - Returns the `userId`, `jobId`, and the `startedAt` / `finishedAt` timestamps from the task context.
+- Suffix all IDs (Queue ID and Task ID) with the `trial_id` read from `/logs/trial_id`.
+- Add an `npm run run-task` command in `package.json` that triggers 4 task instances in parallel:
+    - 2 instances for `user_A` (jobId: `A1`, `A2`)
+    - 2 instances for `user_B` (jobId: `B1`, `B2`)
+- The script should print the 4 resulting Run IDs in the format `Run IDs: <id_A1>, <id_A2>, <id_B1>, <id_B2>`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node
+    npx tsc --init
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. In `src/trigger/multi_tenant.ts`, define the `Queue` with `concurrencyLimit: 10`.
+3. Define the `task` and use the `queue` property. Use the `concurrencyKey` option in the task definition to return `payload.userId`.
+4. Use `await new Promise(resolve => setTimeout(resolve, 5000))` for the sleep.
+5. Implement a script `scripts/trigger.ts` that uses the Trigger.dev SDK to trigger the 4 tasks (A1, A2, B1, B2) and logs the Run IDs.
+
+## Constraints
+- Project path: /home/user/multi-tenant-task
+- Start task: `npm run run-task`
+- Task ID suffix: `${trial_id}`
+- User Concurrency: 1 per user
+- Total Concurrency: 10
+
+## Integrations
+- Trigger.dev
+14:Td07,# Trigger.dev Puppeteer Screenshot Task
+
+## Background
+Trigger.dev is a powerful platform for running long-running background jobs. One common use case is automating browser tasks like taking screenshots of web pages. By using the Puppeteer build extension, you can run a full headless browser within your Trigger.dev tasks.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/screenshot-service`.
+- Configure the project to use the Puppeteer build extension.
+- Implement a task that takes a URL as input, uses Puppeteer to navigate to that URL, and takes a full-page screenshot.
+- The task should save the screenshot to `/home/user/screenshot-service/screenshots/${url_slug}.png`.
+- The task should return the path to the saved screenshot.
+- Add an `npm run run-task` command to trigger the task with a sample URL (e.g., `https://example.com`) and print the `run_id`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest puppeteer
+    npm add -D @trigger.dev/build@latest typescript @types/node
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF` and include the Puppeteer extension.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+    import { puppeteer } from "@trigger.dev/build/extensions/puppeteer";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      build: {
+        extensions: [puppeteer()],
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`;
+2. Create the task in `src/trigger/screenshot.ts`. Suffix the task ID with the `trial_id` (e.g., `id: "puppeteer-screenshot-${trial_id}"`);
+3. Use `puppeteer.launch()` with the following options:
+   ```javascript
+   executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || "/usr/bin/google-chrome-stable",
+   args: ["--no-sandbox", "--disable-setuid-sandbox"]
+   ```
+4. Implement the screenshot logic: navigate to the URL, take a full-page screenshot, and save it to the `screenshots` directory;
+5. Ensure the `screenshots` directory exists before saving;
+6. Add a script `trigger.ts` to trigger the task using `tasks.trigger` and print `Run ID: ${run.id}`;
+7. Add `"run-task": "npx ts-node trigger.ts"` to `package.json` scripts.
+
+## Constraints
+- Project path: `/home/user/screenshot-service`
+- Start task: `npm run run-task`
+- The task ID must be `puppeteer-screenshot-${trial_id}`.
+- Screenshots must be saved in `/home/user/screenshot-service/screenshots/`.
+
+## Integrations
+- Trigger.dev
+15:Td81,# Python Extension Data Processing with Trigger.dev
+
+## Background
+Trigger.dev allows developers to execute Python scripts within their TypeScript tasks using the `pythonExtension`. This enables the use of Python's rich data science ecosystem (like NumPy, Pandas, or Scikit-learn) alongside the reliability and scalability of Trigger.dev's background jobs.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/python-task`.
+- Configure `trigger.config.ts` to include the `pythonExtension` with `numpy` installed via a `requirements.txt` file.
+- Create a Python script `scripts/process.py` that:
+    1. Accepts a list of numbers as command-line arguments.
+    2. Calculates the average of these numbers using `numpy`.
+    3. Prints the result in a specific format: `Average: <value>`.
+- Create a Trigger.dev task named `python-process-${trial_id}` that:
+    1. Receives an array of numbers in its payload.
+    2. Executes the `scripts/process.py` script using `python.runScript`.
+    3. Parses the output and returns the average value.
+- Provide an npm script `npm run run-task` that triggers the task with the payload `[10, 20, 30, 40, 50]` and prints the `Run ID: <run_id>`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest @trigger.dev/python@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node ts-node
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF` and include the `pythonExtension`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+    import { pythonExtension } from "@trigger.dev/python/extension";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      build: {
+        extensions: [
+          pythonExtension({
+            requirementsFile: "./requirements.txt",
+            scripts: ["./scripts/**/*.py"],
+          }),
+        ],
+      },
+    });
+    ```
+4. **Check Project Configuration**: Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check the `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create `requirements.txt` with `numpy`.
+3. Create `scripts/process.py` to calculate the average using `numpy.mean()`.
+4. Create `src/trigger/python-task.ts` and define the task. Suffix the task ID with `${trial_id}`.
+5. Use `python.runScript("./scripts/process.py", payload.map(String))` to execute the script.
+6. Implement `npm run run-task` in `package.json` to trigger the task and print `Run ID: <run_id>`.
+
+## Constraints
+- Project path: /home/user/python-task
+- Start task: `npm run run-task`
+- Must use `pythonExtension` and `python.runScript`.
+- Must suffix task ID with `trial_id`.
+
+## Integrations
+- Trigger.dev
+16:Tdfa,# Real-time Task Streaming Dashboard with Trigger.dev
+
+## Background
+Trigger.dev allows you to build long-running background tasks that can communicate their progress back to your application. In this task, you will build a Next.js dashboard that triggers a background task and displays its real-time progress using Trigger.dev's React hooks.
+
+## Requirements
+- Create a Next.js application in `/home/user/realtime-dashboard`.
+- Set up Trigger.dev in the project (see the Setup Guide below).
+- Implement a Trigger.dev task named `realtime-progress-task` (suffixed with `trial_id`) that:
+    - Runs for approximately 10 seconds.
+    - Updates its progress metadata every second (from 0% to 100%).
+- Create a frontend page at `/` that:
+    - Displays a "Start Task" button.
+    - Uses the `@trigger.dev/react-hooks` hook `useRealtimeRun` to track the task's progress.
+    - Displays a progress bar or text showing the current percentage.
+    - Displays a "Task Completed!" message once the task finishes.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest @trigger.dev/react-hooks@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Initialize a Next.js project in `/home/user/realtime-dashboard` using `npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*"`.
+3. Install `@trigger.dev/sdk` and `@trigger.dev/react-hooks`.
+4. Create a Trigger.dev task in `src/trigger/progress.ts`. The task ID must be `realtime-progress-task-${trial_id}`. Use `metadata.set("progress", { percentage: i * 10 })` in a loop to update progress.
+5. Implement the frontend in `src/app/page.tsx`. Use `useRealtimeRun` to monitor the run. You will need to trigger the task from a Server Action or API route and pass the `runId` and `publicAccessToken` to the client component.
+6. To trigger the task and get a token from a Server Action:
+   ```ts
+   const handle = await progressTask.trigger(payload);
+   // handle.id and handle.publicAccessToken are available
+   ```
+
+## Constraints
+- Project path: /home/user/realtime-dashboard
+- Start command: `npm run dev`
+- Port: 3000
+- Task ID suffix: Must use `trial_id` from `/logs/trial_id`.
+
+## Integrations
+- Trigger.dev
+17:Tde7,# Resilient Webhook Handler with Idempotency
+
+## Background
+In distributed systems, webhooks can be delivered multiple times. Trigger.dev provides idempotency keys to ensure that a task is only executed once for a given unique identifier, even if triggered multiple times. This is critical for operations like payments or data synchronization.
+
+## Requirements
+- Implement a Trigger.dev task that simulates processing a webhook (e.g., a payment notification).
+- The task must use an **idempotency key** provided in the payload to prevent duplicate processing.
+- If the task is triggered multiple times with the same idempotency key, it should return the result of the first successful execution without running the logic again.
+- The task should include a simulated delay (e.g., 2 seconds) to represent work.
+- Implement a script to trigger this task twice in quick succession with the same idempotency key and verify that only one run is actually executed (or that both return the same successful result from the first run).
+- Suffix the task ID with the `trial_id` from `/logs/trial_id` to avoid collisions.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node
+    npx tsc --init
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create a task in `src/trigger/webhook.ts` with ID `webhook-handler-${trial_id}`.
+3. The task should accept a payload with `idempotencyKey` and `amount`.
+4. Use the `idempotencyKey` in the `trigger` call or define it within the task logic if using Trigger.dev's built-in idempotency features (Note: In v3/v4, idempotency is often handled at the trigger level via the `idempotencyKey` option).
+5. The task should return `{ success: true, processedAt: new Date().toISOString(), amount: payload.amount }`.
+6. Add a script `trigger-webhook.ts` that uses the Trigger.dev SDK to trigger the task twice with the same `idempotencyKey`.
+7. Add an `npm run run-task` command in `package.json` that runs the `trigger-webhook.ts` script and prints the Run IDs.
+
+## Constraints
+- Project path: /home/user/webhook-task
+- Start task: `npm run run-task`
+- Task ID suffix: `${trial_id}`
+
+## Integrations
+- Trigger.dev
+18:Taad,# Trigger.dev Scheduled Data Sync
+
+## Background
+Trigger.dev is a background job platform for TypeScript. One common use case is running periodic tasks (cron jobs) to synchronize data between external APIs and internal systems.
+
+## Requirements
+- Create a Trigger.dev task that performs a data synchronization.
+- The task should be triggered on a schedule (e.g., every minute for this exercise).
+- The task should fetch data from a mock external API (you can use a JSON placeholder or a simple mock function).
+- The task should log the number of items processed.
+- The task ID must be suffixed with the `trial_id` read from `/logs/trial_id`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create a task in `src/trigger/sync.ts` using the `schedules.task` (or `task` with a schedule trigger).
+3. Use `https://jsonplaceholder.typicode.com/todos` as the mock API to fetch data.
+4. Log the count of todos fetched.
+5. Ensure the task ID is `scheduled-sync-${trial_id}`.
+6. Add an `npm run run-task` command in `package.json` that triggers the task immediately for testing, and prints the Run ID.
+
+## Constraints
+- Project path: /home/user/trigger-sync
+- Start task: `npm run run-task`
+- Task ID: `scheduled-sync-${trial_id}`
+
+## Integrations
+- Trigger.dev
+19:Tf0f,# Durable Subscription Onboarding with Waitpoints
+
+## Background
+In many SaaS applications, user onboarding involves steps that require human interaction, such as email verification or manual approval. Trigger.dev's **Waitpoints** allow you to pause a workflow indefinitely without consuming compute resources, and resume it once an external event (like a link click) occurs.
+
+## Requirements
+- Build a Next.js web application that handles user sign-up and onboarding.
+- When a user signs up, trigger a Trigger.dev task named `onboarding-workflow-${trial_id}`.
+- The task should:
+    1. Set the run metadata to `{"status": "Waiting for verification"}`.
+    2. Create a waitpoint token using `wait.createToken`.
+    3. Pause execution using `wait.forToken` and wait for the token to be completed.
+    4. Once completed, set the run metadata to `{"status": "Active"}`.
+- The web app should:
+    1. Provide a sign-up form (email input).
+    2. Display the current status of the onboarding process by polling the Trigger.dev run status/metadata.
+    3. Display a "Simulate Email Verification" link which, when clicked, completes the waitpoint token (you can do this via a server action or a simple API route in the web app that calls the Trigger.dev API).
+- Use `trial_id` from `/logs/trial_id` to suffix the Trigger.dev task ID and isolate resources.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create a Next.js project in `/home/user/onboarding-app`.
+3. Implement the `onboarding-workflow-${trial_id}` task in `src/trigger/onboarding.ts`.
+    - Use `runs.metadata.update` to set the status.
+    - Use `wait.createToken({ timeout: "1h" })` to get a token.
+    - Use `await wait.forToken(token)` to pause.
+4. In the web app UI (`app/page.tsx`):
+    - Show a form to start the onboarding.
+    - Once started, show the Run ID and the current status (fetch from `https://api.trigger.dev/api/v3/runs/${runId}`).
+    - If the status is "Waiting for verification", show a button/link that sends a POST request to `/api/verify?token=${tokenId}`.
+5. Implement `app/api/verify/route.ts` to complete the token using `wait.completeToken(tokenId, { data: { verified: true } })` or by calling the Trigger.dev API directly.
+
+## Constraints
+- Project path: /home/user/onboarding-app
+- Start command: `npm run dev` (Ensure it runs on port 3000)
+- Port: 3000
+- Use `trial_id` for task ID isolation.
+
+## Integrations
+- Trigger.dev
+0:{"P":null,"b":"LC-ctLA30JaEpSdfvIwLc","c":["","tasks",""],"q":"","i":false,"f":[[["",{"children":["tasks",{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/c724b7af1fc0560f.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/ca023ad85cd7aeee.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/2ad5122eae704b1a.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"inter_5972bc34-module__OU16Qa__className antialiased","children":["$","$L2",null,{"children":["$","$L3",null,{"defaultTheme":"dark","children":[["$","div",null,{"className":"fixed right-4 top-6 z-50 sm:top-8","children":["$","$L4",null,{}]}],["$","$L5",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}]}]}]}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L5",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["$","$1","c",{"children":[["$","div",null,{"className":"min-h-screen bg-background text-foreground font-sans selection:bg-primary/20","children":[["$","div",null,{"className":"fixed inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#2a2a2a_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20 dark:opacity-40"}],["$","$L7",null,{"tasksData":[{"taskName":"ai_agent_human_in_the_loop_approval","instruction":"$8","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"ai_agent_human_in_the_loop_appro__5NCT3ER","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":673.145,"latency_breakdown":{"env_setup":1.509,"agent_setup":1.483,"agent_exec":600.138,"verifier":57.888},"taskName":"ai_agent_human_in_the_loop_appro","jobId":"5NCT3ER","exec_duration":600.138},{"job_name":"2026-04-26__02-55-08","trial_name":"ai_agent_human_in_the_loop_appro__F79yaDs","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":166.864,"latency_breakdown":{"env_setup":1.267,"agent_setup":1.493,"agent_exec":133.938,"verifier":18.022},"taskName":"ai_agent_human_in_the_loop_appro","jobId":"F79yaDs","exec_duration":133.938},{"job_name":"2026-04-26__02-54-42","trial_name":"ai_agent_human_in_the_loop_appro__yXaamEf","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":210.159,"latency_breakdown":{"env_setup":1.653,"agent_setup":1.487,"agent_exec":175.55,"verifier":18.597},"taskName":"ai_agent_human_in_the_loop_appro","jobId":"yXaamEf","exec_duration":175.55},{"job_name":"2026-04-26__02-53-51","trial_name":"ai_agent_human_in_the_loop_appro__yPRoKci","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":306.799,"latency_breakdown":{"env_setup":1.315,"agent_setup":1.584,"agent_exec":259.487,"verifier":32.336},"taskName":"ai_agent_human_in_the_loop_appro","jobId":"yPRoKci","exec_duration":259.487},{"job_name":"2026-04-26__02-55-37","trial_name":"ai_agent_human_in_the_loop_appro__zMy8pY5","model":"gemini-3.1-pro","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":391.834,"latency_breakdown":{"env_setup":1.747,"agent_setup":1.521,"agent_exec":338.616,"verifier":36.979},"taskName":"ai_agent_human_in_the_loop_appro","jobId":"zMy8pY5","exec_duration":338.616}]},{"taskName":"ai_agent_with_tool_and_streaming","instruction":"$9","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"ai_agent_with_tool_and_streaming__eNsgM8r","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":938.646,"latency_breakdown":{"env_setup":1.551,"agent_setup":1.524,"agent_exec":600.137,"verifier":322.807},"taskName":"ai_agent_with_tool_and_streaming","jobId":"eNsgM8r","exec_duration":600.137},{"job_name":"2026-04-26__02-55-08","trial_name":"ai_agent_with_tool_and_streaming__BhNUS9u","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":696.075,"latency_breakdown":{"env_setup":1.264,"agent_setup":1.589,"agent_exec":600.082,"verifier":80.317},"taskName":"ai_agent_with_tool_and_streaming","jobId":"BhNUS9u","exec_duration":600.082},{"job_name":"2026-04-26__02-54-42","trial_name":"ai_agent_with_tool_and_streaming__GksfxtV","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":307.454,"latency_breakdown":{"env_setup":1.493,"agent_setup":1.546,"agent_exec":77.628,"verifier":215.575},"taskName":"ai_agent_with_tool_and_streaming","jobId":"GksfxtV","exec_duration":77.628},{"job_name":"2026-04-26__02-53-51","trial_name":"ai_agent_with_tool_and_streaming__ZbC7ga3","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":802.281,"latency_breakdown":{"env_setup":1.814,"agent_setup":1.483,"agent_exec":600.062,"verifier":185.545},"taskName":"ai_agent_with_tool_and_streaming","jobId":"ZbC7ga3","exec_duration":600.062},{"job_name":"2026-04-26__02-55-37","trial_name":"ai_agent_with_tool_and_streaming__eSQh3nF","model":"gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":448.427,"latency_breakdown":{"env_setup":1.594,"agent_setup":1.497,"agent_exec":353.382,"verifier":79.43},"taskName":"ai_agent_with_tool_and_streaming","jobId":"eSQh3nF","exec_duration":353.382}]},{"taskName":"ai_workflow_cancellation_handler","instruction":"$a","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"ai_workflow_cancellation_handler__GysGko8","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":576.35,"latency_breakdown":{"env_setup":1.267,"agent_setup":1.511,"agent_exec":494.481,"verifier":66.734},"taskName":"ai_workflow_cancellation_handler","jobId":"GysGko8","exec_duration":494.481},{"job_name":"2026-04-26__02-55-08","trial_name":"ai_workflow_cancellation_handler__GrZE2b9","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":194.187,"latency_breakdown":{"env_setup":1.276,"agent_setup":1.657,"agent_exec":163.105,"verifier":15.977},"taskName":"ai_workflow_cancellation_handler","jobId":"GrZE2b9","exec_duration":163.105},{"job_name":"2026-04-26__02-54-42","trial_name":"ai_workflow_cancellation_handler__goqHe9L","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":312.7,"latency_breakdown":{"env_setup":1.346,"agent_setup":1.581,"agent_exec":85.197,"verifier":213.476},"taskName":"ai_workflow_cancellation_handler","jobId":"goqHe9L","exec_duration":85.197},{"job_name":"2026-04-26__02-53-51","trial_name":"ai_workflow_cancellation_handler__88RkZKH","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":600.577,"latency_breakdown":{"env_setup":1.49,"agent_setup":1.597,"agent_exec":376.946,"verifier":209.361},"taskName":"ai_workflow_cancellation_handler","jobId":"88RkZKH","exec_duration":376.946},{"job_name":"2026-04-26__02-55-37","trial_name":"ai_workflow_cancellation_handler__nnBXTy4","model":"gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":670.982,"latency_breakdown":{"env_setup":1.517,"agent_setup":1.452,"agent_exec":600.055,"verifier":55.339},"taskName":"ai_workflow_cancellation_handler","jobId":"nnBXTy4","exec_duration":600.055}]},{"taskName":"background_workflow_with_human_waitpoint","instruction":"$b","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"background_workflow_with_human_w__92oQZ4X","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":736.633,"latency_breakdown":{"env_setup":1.521,"agent_setup":1.519,"agent_exec":600.186,"verifier":120.814},"taskName":"background_workflow_with_human_w","jobId":"92oQZ4X","exec_duration":600.186},{"job_name":"2026-04-26__02-55-08","trial_name":"background_workflow_with_human_w__yPfNwjr","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":801.915,"latency_breakdown":{"env_setup":1.392,"agent_setup":1.573,"agent_exec":600.048,"verifier":186.389},"taskName":"background_workflow_with_human_w","jobId":"yPfNwjr","exec_duration":600.048},{"job_name":"2026-04-26__02-54-42","trial_name":"background_workflow_with_human_w__9sKDmJZ","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":211.551,"latency_breakdown":{"env_setup":1.299,"agent_setup":1.599,"agent_exec":171.092,"verifier":25.328},"taskName":"background_workflow_with_human_w","jobId":"9sKDmJZ","exec_duration":171.092},{"job_name":"2026-04-26__02-53-51","trial_name":"background_workflow_with_human_w__TiRcr6U","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":202.819,"latency_breakdown":{"env_setup":1.527,"agent_setup":1.546,"agent_exec":157.264,"verifier":30.114},"taskName":"background_workflow_with_human_w","jobId":"TiRcr6U","exec_duration":157.264},{"job_name":"2026-04-26__02-55-37","trial_name":"background_workflow_with_human_w__XkwDrvW","model":"gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":510.693,"latency_breakdown":{"env_setup":1.457,"agent_setup":1.464,"agent_exec":481.143,"verifier":13.966},"taskName":"background_workflow_with_human_w","jobId":"XkwDrvW","exec_duration":481.143}]},{"taskName":"batch_processing_with_results_aggregation","instruction":"$c","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"batch_processing_with_results_ag__dfPGgo9","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":231.405,"latency_breakdown":{"env_setup":1.417,"agent_setup":1.577,"agent_exec":173.216,"verifier":40.77},"taskName":"batch_processing_with_results_ag","jobId":"dfPGgo9","exec_duration":173.216},{"job_name":"2026-04-26__02-55-08","trial_name":"batch_processing_with_results_ag__9gcMejt","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":413.3,"latency_breakdown":{"env_setup":1.416,"agent_setup":1.495,"agent_exec":213.243,"verifier":184.616},"taskName":"batch_processing_with_results_ag","jobId":"9gcMejt","exec_duration":213.243},{"job_name":"2026-04-26__02-54-42","trial_name":"batch_processing_with_results_ag__sVmG8gC","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":378.771,"latency_breakdown":{"env_setup":1.326,"agent_setup":1.562,"agent_exec":164.784,"verifier":199.012},"taskName":"batch_processing_with_results_ag","jobId":"sVmG8gC","exec_duration":164.784},{"job_name":"2026-04-26__02-53-51","trial_name":"batch_processing_with_results_ag__hRKqwjH","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":509.213,"latency_breakdown":{"env_setup":1.698,"agent_setup":1.493,"agent_exec":290.301,"verifier":202.492},"taskName":"batch_processing_with_results_ag","jobId":"hRKqwjH","exec_duration":290.301},{"job_name":"2026-04-26__02-55-37","trial_name":"batch_processing_with_results_ag__rrFmw5k","model":"gemini-3.1-pro","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":356.94,"latency_breakdown":{"env_setup":1.606,"agent_setup":1.522,"agent_exec":296.018,"verifier":45.42},"taskName":"batch_processing_with_results_ag","jobId":"rrFmw5k","exec_duration":296.018}]},{"taskName":"concurrency_limited_queue","instruction":"$d","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"concurrency_limited_queue__q2CLLKH","model":"claude-4-6-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":396.294,"latency_breakdown":{"env_setup":1.456,"agent_setup":1.458,"agent_exec":315.551,"verifier":64.656},"taskName":"concurrency_limited_queue","jobId":"q2CLLKH","exec_duration":315.551},{"job_name":"2026-04-26__02-55-08","trial_name":"concurrency_limited_queue__6BMGHHa","model":"gemini-3-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":252.327,"latency_breakdown":{"env_setup":1.325,"agent_setup":1.545,"agent_exec":182.13,"verifier":55.182},"taskName":"concurrency_limited_queue","jobId":"6BMGHHa","exec_duration":182.13},{"job_name":"2026-04-26__02-54-42","trial_name":"concurrency_limited_queue__3mF8A53","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":350.07,"latency_breakdown":{"env_setup":1.62,"agent_setup":1.606,"agent_exec":137.901,"verifier":196.794},"taskName":"concurrency_limited_queue","jobId":"3mF8A53","exec_duration":137.901},{"job_name":"2026-04-26__02-53-51","trial_name":"concurrency_limited_queue__WnMbgyE","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":463.518,"latency_breakdown":{"env_setup":1.614,"agent_setup":1.521,"agent_exec":255.928,"verifier":192.062},"taskName":"concurrency_limited_queue","jobId":"WnMbgyE","exec_duration":255.928},{"job_name":"2026-04-26__02-55-37","trial_name":"concurrency_limited_queue__ktRnQfw","model":"gemini-3.1-pro","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":519.769,"latency_breakdown":{"env_setup":1.697,"agent_setup":1.506,"agent_exec":450.574,"verifier":52.997},"taskName":"concurrency_limited_queue","jobId":"ktRnQfw","exec_duration":450.574}]},{"taskName":"custom_retry_and_logging","instruction":"$e","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"custom_retry_and_logging__RSxMie9","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":460.05,"latency_breakdown":{"env_setup":1.278,"agent_setup":1.628,"agent_exec":385.447,"verifier":59.453},"taskName":"custom_retry_and_logging","jobId":"RSxMie9","exec_duration":385.447},{"job_name":"2026-04-26__02-55-08","trial_name":"custom_retry_and_logging__Fr2oJVE","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":677.434,"latency_breakdown":{"env_setup":1.308,"agent_setup":1.553,"agent_exec":600.099,"verifier":62.288},"taskName":"custom_retry_and_logging","jobId":"Fr2oJVE","exec_duration":600.099},{"job_name":"2026-04-26__02-54-42","trial_name":"custom_retry_and_logging__uEqEMna","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":368.422,"latency_breakdown":{"env_setup":1.491,"agent_setup":1.492,"agent_exec":213.465,"verifier":139.923},"taskName":"custom_retry_and_logging","jobId":"uEqEMna","exec_duration":213.465},{"job_name":"2026-04-26__02-53-51","trial_name":"custom_retry_and_logging__pg8gKDP","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":551.506,"latency_breakdown":{"env_setup":1.693,"agent_setup":1.524,"agent_exec":226.701,"verifier":308.526},"taskName":"custom_retry_and_logging","jobId":"pg8gKDP","exec_duration":226.701},{"job_name":"2026-04-26__02-55-37","trial_name":"custom_retry_and_logging__cSe89Fj","model":"gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":571.785,"latency_breakdown":{"env_setup":1.4,"agent_setup":1.457,"agent_exec":492.289,"verifier":63.967},"taskName":"custom_retry_and_logging","jobId":"cSe89Fj","exec_duration":492.289}]},{"taskName":"ffmpeg_video_processing_extension","instruction":"$f","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"ffmpeg_video_processing_extensio__NMsoPLs","model":"claude-4-6-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":270.517,"latency_breakdown":{"env_setup":1.741,"agent_setup":1.59,"agent_exec":226.328,"verifier":28.371},"taskName":"ffmpeg_video_processing_extensio","jobId":"NMsoPLs","exec_duration":226.328},{"job_name":"2026-04-26__02-55-08","trial_name":"ffmpeg_video_processing_extensio__3bTJA6m","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":226.325,"latency_breakdown":{"env_setup":1.652,"agent_setup":1.525,"agent_exec":170.05,"verifier":40.682},"taskName":"ffmpeg_video_processing_extensio","jobId":"3bTJA6m","exec_duration":170.05},{"job_name":"2026-04-26__02-54-42","trial_name":"ffmpeg_video_processing_extensio__op6gYS9","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":211.16,"latency_breakdown":{"env_setup":1.586,"agent_setup":1.526,"agent_exec":166.58,"verifier":29.127},"taskName":"ffmpeg_video_processing_extensio","jobId":"op6gYS9","exec_duration":166.58},{"job_name":"2026-04-26__02-53-51","trial_name":"ffmpeg_video_processing_extensio__4L6qy8U","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":582.165,"latency_breakdown":{"env_setup":1.765,"agent_setup":1.516,"agent_exec":508.728,"verifier":57.987},"taskName":"ffmpeg_video_processing_extensio","jobId":"4L6qy8U","exec_duration":508.728},{"job_name":"2026-04-26__02-55-37","trial_name":"ffmpeg_video_processing_extensio__3ukZrSa","model":"gemini-3.1-pro","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":351.151,"latency_breakdown":{"env_setup":3.495,"agent_setup":1.474,"agent_exec":299.101,"verifier":35.016},"taskName":"ffmpeg_video_processing_extensio","jobId":"3ukZrSa","exec_duration":299.101}]},{"taskName":"human_approval_workflow","instruction":"$10","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"human_approval_workflow__bF6pPz6","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":420.902,"latency_breakdown":{"env_setup":1.295,"agent_setup":1.615,"agent_exec":329.239,"verifier":76.627},"taskName":"human_approval_workflow","jobId":"bF6pPz6","exec_duration":329.239},{"job_name":"2026-04-26__02-55-08","trial_name":"human_approval_workflow__BRoa77H","model":"gemini-3-flash","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":646.224,"latency_breakdown":{"env_setup":1.377,"agent_setup":1.433,"agent_exec":600.128,"verifier":30.585},"taskName":"human_approval_workflow","jobId":"BRoa77H","exec_duration":600.128},{"job_name":"2026-04-26__02-54-42","trial_name":"human_approval_workflow__vphmjct","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":310.572,"latency_breakdown":{"env_setup":1.537,"agent_setup":1.44,"agent_exec":86.394,"verifier":210.006},"taskName":"human_approval_workflow","jobId":"vphmjct","exec_duration":86.394},{"job_name":"2026-04-26__02-53-51","trial_name":"human_approval_workflow__qYnAe9f","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":386.691,"latency_breakdown":{"env_setup":1.267,"agent_setup":1.602,"agent_exec":173.364,"verifier":198.363},"taskName":"human_approval_workflow","jobId":"qYnAe9f","exec_duration":173.364},{"job_name":"2026-04-26__02-55-37","trial_name":"human_approval_workflow__8f9EXXb","model":"gemini-3.1-pro","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":373.702,"latency_breakdown":{"env_setup":1.343,"agent_setup":1.503,"agent_exec":325.775,"verifier":32.367},"taskName":"human_approval_workflow","jobId":"8f9EXXb","exec_duration":325.775}]},{"taskName":"human_in_the_loop_error_correction","instruction":"$11","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"human_in_the_loop_error_correcti__MHBKCNE","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":389.649,"latency_breakdown":{"env_setup":1.604,"agent_setup":1.503,"agent_exec":351.801,"verifier":22.086},"taskName":"human_in_the_loop_error_correcti","jobId":"MHBKCNE","exec_duration":351.801},{"job_name":"2026-04-26__02-55-08","trial_name":"human_in_the_loop_error_correcti__dBdSiJ4","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":642.439,"latency_breakdown":{"env_setup":1.556,"agent_setup":1.505,"agent_exec":428.317,"verifier":198.397},"taskName":"human_in_the_loop_error_correcti","jobId":"dBdSiJ4","exec_duration":428.317},{"job_name":"2026-04-26__02-54-42","trial_name":"human_in_the_loop_error_correcti__URkKohG","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":404.448,"latency_breakdown":{"env_setup":1.392,"agent_setup":1.511,"agent_exec":203.651,"verifier":185.589},"taskName":"human_in_the_loop_error_correcti","jobId":"URkKohG","exec_duration":203.651},{"job_name":"2026-04-26__02-53-51","trial_name":"human_in_the_loop_error_correcti__hSmEM5k","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":596.669,"latency_breakdown":{"env_setup":1.5,"agent_setup":1.508,"agent_exec":499.785,"verifier":79.663},"taskName":"human_in_the_loop_error_correcti","jobId":"hSmEM5k","exec_duration":499.785},{"job_name":"2026-04-26__02-55-37","trial_name":"human_in_the_loop_error_correcti__ASg3JsZ","model":"gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":328.436,"latency_breakdown":{"env_setup":1.49,"agent_setup":1.537,"agent_exec":234.706,"verifier":78.066},"taskName":"human_in_the_loop_error_correcti","jobId":"ASg3JsZ","exec_duration":234.706}]},{"taskName":"multi_stage_ai_pipeline_orchestration","instruction":"$12","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"multi_stage_ai_pipeline_orchestr__wRzNnZZ","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":629.645,"latency_breakdown":{"env_setup":1.666,"agent_setup":1.627,"agent_exec":600.119,"verifier":13.493},"taskName":"multi_stage_ai_pipeline_orchestr","jobId":"wRzNnZZ","exec_duration":600.119},{"job_name":"2026-04-26__02-55-08","trial_name":"multi_stage_ai_pipeline_orchestr__hDBM3jG","model":"gemini-3-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":324.172,"latency_breakdown":{"env_setup":1.611,"agent_setup":1.463,"agent_exec":269.884,"verifier":37.886},"taskName":"multi_stage_ai_pipeline_orchestr","jobId":"hDBM3jG","exec_duration":269.884},{"job_name":"2026-04-26__02-54-42","trial_name":"multi_stage_ai_pipeline_orchestr__atrtnGL","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":275.721,"latency_breakdown":{"env_setup":1.265,"agent_setup":1.611,"agent_exec":80.467,"verifier":181.31},"taskName":"multi_stage_ai_pipeline_orchestr","jobId":"atrtnGL","exec_duration":80.467},{"job_name":"2026-04-26__02-53-51","trial_name":"multi_stage_ai_pipeline_orchestr__ejsY77L","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":434.42,"latency_breakdown":{"env_setup":1.582,"agent_setup":1.518,"agent_exec":238.666,"verifier":181.336},"taskName":"multi_stage_ai_pipeline_orchestr","jobId":"ejsY77L","exec_duration":238.666},{"job_name":"2026-04-26__02-55-37","trial_name":"multi_stage_ai_pipeline_orchestr__tgA4zvA","model":"gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":200.364,"latency_breakdown":{"env_setup":1.725,"agent_setup":1.509,"agent_exec":4.526,"verifier":181.354},"taskName":"multi_stage_ai_pipeline_orchestr","jobId":"tgA4zvA","exec_duration":4.526}]},{"taskName":"multi_tenant_concurrency_control","instruction":"$13","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"multi_tenant_concurrency_control__d7ZKH8v","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":431.02,"latency_breakdown":{"env_setup":1.602,"agent_setup":1.511,"agent_exec":373.183,"verifier":41.708},"taskName":"multi_tenant_concurrency_control","jobId":"d7ZKH8v","exec_duration":373.183},{"job_name":"2026-04-26__02-55-08","trial_name":"multi_tenant_concurrency_control__PtK9n4V","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":353.202,"latency_breakdown":{"env_setup":1.299,"agent_setup":1.615,"agent_exec":151.632,"verifier":186.504},"taskName":"multi_tenant_concurrency_control","jobId":"PtK9n4V","exec_duration":151.632},{"job_name":"2026-04-26__02-54-42","trial_name":"multi_tenant_concurrency_control__LWjoPVq","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":388.696,"latency_breakdown":{"env_setup":1.654,"agent_setup":1.501,"agent_exec":335.211,"verifier":37.239},"taskName":"multi_tenant_concurrency_control","jobId":"LWjoPVq","exec_duration":335.211},{"job_name":"2026-04-26__02-53-51","trial_name":"multi_tenant_concurrency_control__QkkBc3M","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":761.03,"latency_breakdown":{"env_setup":1.414,"agent_setup":1.472,"agent_exec":558.516,"verifier":186.98},"taskName":"multi_tenant_concurrency_control","jobId":"QkkBc3M","exec_duration":558.516},{"job_name":"2026-04-26__02-55-37","trial_name":"multi_tenant_concurrency_control__8ZxofZB","model":"gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":636.147,"latency_breakdown":{"env_setup":1.538,"agent_setup":1.618,"agent_exec":600.041,"verifier":17.516},"taskName":"multi_tenant_concurrency_control","jobId":"8ZxofZB","exec_duration":600.041}]},{"taskName":"puppeteer_screenshot_task","instruction":"$14","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"puppeteer_screenshot_task__PZwjwuE","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":249.091,"latency_breakdown":{"env_setup":1.258,"agent_setup":1.529,"agent_exec":200.109,"verifier":33.102},"taskName":"puppeteer_screenshot_task","jobId":"PZwjwuE","exec_duration":200.109},{"job_name":"2026-04-26__02-55-08","trial_name":"puppeteer_screenshot_task__ByCn3JK","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":408.208,"latency_breakdown":{"env_setup":1.584,"agent_setup":1.574,"agent_exec":207.25,"verifier":185.415},"taskName":"puppeteer_screenshot_task","jobId":"ByCn3JK","exec_duration":207.25},{"job_name":"2026-04-26__02-54-42","trial_name":"puppeteer_screenshot_task__7XMX2aj","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":172.041,"latency_breakdown":{"env_setup":1.538,"agent_setup":1.579,"agent_exec":137.511,"verifier":18.055},"taskName":"puppeteer_screenshot_task","jobId":"7XMX2aj","exec_duration":137.511},{"job_name":"2026-04-26__02-53-51","trial_name":"puppeteer_screenshot_task__ag8UHAt","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":272.046,"latency_breakdown":{"env_setup":1.3,"agent_setup":1.652,"agent_exec":228.991,"verifier":27.615},"taskName":"puppeteer_screenshot_task","jobId":"ag8UHAt","exec_duration":228.991},{"job_name":"2026-04-26__02-55-37","trial_name":"puppeteer_screenshot_task__MSZro9z","model":"gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":403.777,"latency_breakdown":{"env_setup":1.712,"agent_setup":1.511,"agent_exec":201.065,"verifier":187.046},"taskName":"puppeteer_screenshot_task","jobId":"MSZro9z","exec_duration":201.065}]},{"taskName":"python_extension_data_processing","instruction":"$15","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"python_extension_data_processing__QnueCk9","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":354.542,"latency_breakdown":{"env_setup":1.618,"agent_setup":1.488,"agent_exec":307.86,"verifier":31.282},"taskName":"python_extension_data_processing","jobId":"QnueCk9","exec_duration":307.86},{"job_name":"2026-04-26__02-55-08","trial_name":"python_extension_data_processing__jwM8dXa","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":185.879,"latency_breakdown":{"env_setup":1.277,"agent_setup":1.516,"agent_exec":141.334,"verifier":29.875},"taskName":"python_extension_data_processing","jobId":"jwM8dXa","exec_duration":141.334},{"job_name":"2026-04-26__02-54-42","trial_name":"python_extension_data_processing__X8LB9aU","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":294.127,"latency_breakdown":{"env_setup":1.52,"agent_setup":1.487,"agent_exec":69.025,"verifier":210.835},"taskName":"python_extension_data_processing","jobId":"X8LB9aU","exec_duration":69.025},{"job_name":"2026-04-26__02-53-51","trial_name":"python_extension_data_processing__LNvd5dG","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":442.132,"latency_breakdown":{"env_setup":1.31,"agent_setup":1.548,"agent_exec":226.761,"verifier":200.39},"taskName":"python_extension_data_processing","jobId":"LNvd5dG","exec_duration":226.761},{"job_name":"2026-04-26__02-55-37","trial_name":"python_extension_data_processing__fGAZgX3","model":"gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":213.39,"latency_breakdown":{"env_setup":1.555,"agent_setup":1.486,"agent_exec":162.819,"verifier":34.589},"taskName":"python_extension_data_processing","jobId":"fGAZgX3","exec_duration":162.819}]},{"taskName":"realtime_task_streaming_dashboard","instruction":"$16","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"realtime_task_streaming_dashboar__pvxx6SM","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":755.145,"latency_breakdown":{"env_setup":1.318,"agent_setup":1.503,"agent_exec":600.059,"verifier":136.753},"taskName":"realtime_task_streaming_dashboar","jobId":"pvxx6SM","exec_duration":600.059},{"job_name":"2026-04-26__02-55-08","trial_name":"realtime_task_streaming_dashboar__zZa8BZL","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":417.516,"latency_breakdown":{"env_setup":1.609,"agent_setup":1.598,"agent_exec":264.778,"verifier":135.62},"taskName":"realtime_task_streaming_dashboar","jobId":"zZa8BZL","exec_duration":264.778},{"job_name":"2026-04-26__02-54-42","trial_name":"realtime_task_streaming_dashboar__6W7CZji","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":441.672,"latency_breakdown":{"env_setup":1.56,"agent_setup":1.476,"agent_exec":176.614,"verifier":247.905},"taskName":"realtime_task_streaming_dashboar","jobId":"6W7CZji","exec_duration":176.614},{"job_name":"2026-04-26__02-53-51","trial_name":"realtime_task_streaming_dashboar__DUnywdo","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":709.598,"latency_breakdown":{"env_setup":1.293,"agent_setup":1.585,"agent_exec":493.135,"verifier":199.681},"taskName":"realtime_task_streaming_dashboar","jobId":"DUnywdo","exec_duration":493.135},{"job_name":"2026-04-26__02-55-37","trial_name":"realtime_task_streaming_dashboar__VaW3wTb","model":"gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":1476.75,"latency_breakdown":{"env_setup":1.488,"agent_setup":1.492,"agent_exec":391.294,"verifier":1068.095},"taskName":"realtime_task_streaming_dashboar","jobId":"VaW3wTb","exec_duration":391.294}]},{"taskName":"resilient_webhook_idempotency","instruction":"$17","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"resilient_webhook_idempotency__Nd3NVDV","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":438.833,"latency_breakdown":{"env_setup":1.324,"agent_setup":1.521,"agent_exec":392.567,"verifier":31.393},"taskName":"resilient_webhook_idempotency","jobId":"Nd3NVDV","exec_duration":392.567},{"job_name":"2026-04-26__02-55-08","trial_name":"resilient_webhook_idempotency__xpSF8ko","model":"gemini-3-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":139.626,"latency_breakdown":{"env_setup":1.459,"agent_setup":1.529,"agent_exec":100.008,"verifier":23.63},"taskName":"resilient_webhook_idempotency","jobId":"xpSF8ko","exec_duration":100.008},{"job_name":"2026-04-26__02-54-42","trial_name":"resilient_webhook_idempotency__DwRWB55","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":171.697,"latency_breakdown":{"env_setup":1.304,"agent_setup":1.658,"agent_exec":126.998,"verifier":29.303},"taskName":"resilient_webhook_idempotency","jobId":"DwRWB55","exec_duration":126.998},{"job_name":"2026-04-26__02-53-51","trial_name":"resilient_webhook_idempotency__DeKv5wH","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":690.23,"latency_breakdown":{"env_setup":1.347,"agent_setup":1.77,"agent_exec":471.501,"verifier":203.163},"taskName":"resilient_webhook_idempotency","jobId":"DeKv5wH","exec_duration":471.501},{"job_name":"2026-04-26__02-55-37","trial_name":"resilient_webhook_idempotency__n38dz3u","model":"gemini-3.1-pro","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":278.123,"latency_breakdown":{"env_setup":1.472,"agent_setup":1.581,"agent_exec":235.337,"verifier":26.825},"taskName":"resilient_webhook_idempotency","jobId":"n38dz3u","exec_duration":235.337}]},{"taskName":"scheduled_sync","instruction":"$18","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"scheduled_sync__nnPoQ5K","model":"claude-4-6-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":465.698,"latency_breakdown":{"env_setup":1.433,"agent_setup":1.542,"agent_exec":419.164,"verifier":30.965},"taskName":"scheduled_sync","jobId":"nnPoQ5K","exec_duration":419.164},{"job_name":"2026-04-26__02-55-08","trial_name":"scheduled_sync__n66mBp7","model":"gemini-3-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":221.28,"latency_breakdown":{"env_setup":1.654,"agent_setup":1.532,"agent_exec":173.561,"verifier":31.663},"taskName":"scheduled_sync","jobId":"n66mBp7","exec_duration":173.561},{"job_name":"2026-04-26__02-54-42","trial_name":"scheduled_sync__PC84aH5","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":195.022,"latency_breakdown":{"env_setup":1.292,"agent_setup":1.575,"agent_exec":163.714,"verifier":16.189},"taskName":"scheduled_sync","jobId":"PC84aH5","exec_duration":163.714},{"job_name":"2026-04-26__02-53-51","trial_name":"scheduled_sync__qqxXoTS","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":562.065,"latency_breakdown":{"env_setup":1.589,"agent_setup":1.472,"agent_exec":527.429,"verifier":19.129},"taskName":"scheduled_sync","jobId":"qqxXoTS","exec_duration":527.429},{"job_name":"2026-04-26__02-55-37","trial_name":"scheduled_sync__AhEGSL8","model":"gemini-3.1-pro","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":357.703,"latency_breakdown":{"env_setup":1.717,"agent_setup":1.463,"agent_exec":307.975,"verifier":34.148},"taskName":"scheduled_sync","jobId":"AhEGSL8","exec_duration":307.975}]},{"taskName":"subscription_onboarding_with_waitpoints","instruction":"$19","trials":[{"job_name":"2026-04-26__02-54-20","trial_name":"subscription_onboarding_with_wai__8SyaU3w","model":"claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":null,"error":true,"latency_sec":1818.559,"latency_breakdown":{"env_setup":1.431,"agent_setup":1.488,"agent_exec":600.044,"verifier":1201.198},"taskName":"subscription_onboarding_with_wai","jobId":"8SyaU3w","exec_duration":600.044},{"job_name":"2026-04-26__02-55-08","trial_name":"subscription_onboarding_with_wai__fxrS7Bw","model":"gemini-3-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":446.926,"latency_breakdown":{"env_setup":1.722,"agent_setup":1.471,"agent_exec":241.367,"verifier":188.491},"taskName":"subscription_onboarding_with_wai","jobId":"fxrS7Bw","exec_duration":241.367},{"job_name":"2026-04-26__02-54-42","trial_name":"subscription_onboarding_with_wai__Aet5TxE","model":"gpt-5.2-codex","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":464.147,"latency_breakdown":{"env_setup":1.385,"agent_setup":1.521,"agent_exec":171.644,"verifier":274.206},"taskName":"subscription_onboarding_with_wai","jobId":"Aet5TxE","exec_duration":171.644},{"job_name":"2026-04-26__02-53-51","trial_name":"subscription_onboarding_with_wai__FJ64LJJ","model":"glm-4.7","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":600.411,"latency_breakdown":{"env_setup":1.45,"agent_setup":1.538,"agent_exec":395.588,"verifier":188.398},"taskName":"subscription_onboarding_with_wai","jobId":"FJ64LJJ","exec_duration":395.588},{"job_name":"2026-04-26__02-55-37","trial_name":"subscription_onboarding_with_wai__ZEhAh5D","model":"gemini-3.1-pro","agent":"Pochi","passed":false,"reward":null,"error":true,"latency_sec":1737.308,"latency_breakdown":{"env_setup":1.518,"agent_setup":1.51,"agent_exec":518.912,"verifier":1201.135},"taskName":"subscription_onboarding_with_wai","jobId":"ZEhAh5D","exec_duration":518.912}]}]}]]}],["$L1a","$L1b"],"$L1c"]}],{},null,false,false]},null,false,false]},null,false,false],"$L1d",false]],"m":"$undefined","G":["$1e",[]],"S":true}
+1f:I[75049,["/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/d2c13bb33c4fcd54.js","/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/c21188132e0e0d48.js"],"OutletBoundary"]
+20:"$Sreact.suspense"
+22:I[75049,["/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/d2c13bb33c4fcd54.js","/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/c21188132e0e0d48.js"],"ViewportBoundary"]
+24:I[75049,["/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/d2c13bb33c4fcd54.js","/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/c21188132e0e0d48.js"],"MetadataBoundary"]
+1a:["$","script","script-0",{"src":"/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/48547b8d75eca4d1.js","async":true,"nonce":"$undefined"}]
+1b:["$","script","script-1",{"src":"/trigger-dev-benchmark/pr-preview/pr-5/_next/static/chunks/be08138953094657.js","async":true,"nonce":"$undefined"}]
+1c:["$","$L1f",null,{"children":["$","$20",null,{"name":"Next.MetadataOutlet","children":"$@21"}]}]
+1d:["$","$1","h",{"children":[null,["$","$L22",null,{"children":"$L23"}],["$","div",null,{"hidden":true,"children":["$","$L24",null,{"children":["$","$20",null,{"name":"Next.Metadata","children":"$L25"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}]
+23:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+21:null
+25:[["$","title","0",{"children":"Trigger.dev Benchmark"}],["$","meta","1",{"name":"description","content":"Performance results of AI coding models on Trigger.dev tasks, measuring success rate and execution time with high precision."}]]
