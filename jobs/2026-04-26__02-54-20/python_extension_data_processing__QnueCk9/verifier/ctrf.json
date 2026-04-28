@@ -1,0 +1,50 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 3,
+            "passed": 2,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777150387.842515,
+            "stop": 1777150418.0162623
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_python_extension_task",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 30.117598926997744,
+                "start": 1777150387.8485355,
+                "stop": 1777150417.9865909,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_python_extension_task(start_trigger_dev):\n        # Trigger the task\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}, stderr: {result.stderr}\"\n        run_id = run_id_match.group(1)\n    \n        # Example of checking run result logic\n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n        for _ in range(20): # Increase range to 20 for potentially slower python builds\n            run_result = subprocess.run(\n              [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n              capture_output=True,\n              text=True\n            )\n            assert run_result.returncode == 0, f\"Retrieve run result failed with code {run_result.returncode}\"\n            run_result_json = json.loads(run_result.stdout)\n            assert \"status\" in run_result_json, f\"Run status is missing in {run_result_json}\"\n            run_status = run_result_json[\"status\"]\n    \n            if run_status == \"COMPLETED\":\n                assert \"output\" in run_result_json, f\"Run output is missing in {run_result_json}\"\n                output = run_result_json[\"output\"]\n                # The output should be the average of [10, 20, 30, 40, 50] which is 30\n                # Depending on how the user implements it, it might be a number or a string or an object\n                # Our truth says \"contains the correct average: 30\"\n                output_str = str(output)\n                assert \"30\" in output_str, f\"The output average is not correct, output: {output}\"\n                break\n            elif run_status in [\"FAILED\", \"CRASHED\", \"CANCELED\", \"EXPIRED\", \"TIMED_OUT\", \"SYSTEM_FAILURE\"]:\n>               assert False, f\"Run failed with status: {run_status}. Response: {run_result_json}\"\nE               AssertionError: Run failed with status: FAILED. Response: {'id': 'run_cmoetgt2p70a50hokuub4v7if', 'taskIdentifier': 'python-process-python_extension_data_processing__QnueCk9', 'version': '20260425.13', 'status': 'FAILED', 'createdAt': '2026-04-25T20:53:25.691Z', 'startedAt': '2026-04-25T20:53:30.397Z', 'updatedAt': '2026-04-25T20:53:35.976Z', 'finishedAt': '2026-04-25T20:53:35.959Z', 'ttl': '10m', 'costInCents': 0, 'baseCostInCents': 0.0025, 'durationMs': 187, 'isTest': False, 'depth': 0, 'tags': [], 'isQueued': False, 'isExecuting': False, 'isCompleted': True, 'isFailed': True, 'isSuccess': False, 'isCancelled': False, 'isWaiting': False, 'triggerFunction': 'trigger', 'payload': [10, 20, 30, 40, 50], 'error': {'name': 'Error', 'message': './scripts/process.py 10 20 30 40 50 exited with a non-zero code 1:\\n\\nTraceback (most recent call last):\\n  File \"/home/user/python-task/./scripts/process.py\", line 2, in <module>\\n    import numpy as np\\nModuleNotFoundError: No module named \\'numpy\\'\\n', 'stackTrace': 'Error: ./scripts/process.py 10 20 30 40 50 exited with a non-zero code 1:\\n\\nTraceback (most recent call last):\\n  File \"/home/user/python-task/./scripts/process.py\", line 2, in <module>\\n    import numpy as np\\nModuleNotFoundError: No module named \\'numpy\\'\\n\\n    at logger.trace.attributes.pythonBin (file:///home/user/python-task/node_modules/@trigger.dev/python/src/index.ts:112:17)\\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\\n    at file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/tracer.ts:137:18\\n    at Object.runScript (file:///home/user/python-task/node_modules/@trigger.dev/python/src/index.ts:77:12)\\n    at run (file:///home/user/python-task/src/trigger/python-task.ts:10:20)\\n    at _tracer.startActiveSpan.attributes (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/workers/taskExecutor.ts:430:18)\\n    at file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/tracer.ts:137:18\\n    at file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/workers/taskExecutor.ts:425:14\\n    at _RunTimelineMetricsAPI.measureMetric (file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/runTimelineMetrics/index.ts:67:22)\\n    at file:///root/.npm/_npx/f51a09bd0abf5f10/node_modules/@trigger.dev/core/src/v3/workers/taskExecutor.ts:189:26'}, 'attemptCount': 1, 'attempts': [], 'relatedRuns': {'children': []}}\nE               assert False\n\ntests/test_final_state.py:93: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_requirements_file_exists",
+                "status": "passed",
+                "duration": 0.0001982890025828965,
+                "start": 1777150417.986778,
+                "stop": 1777150417.9870565,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_python_script_exists",
+                "status": "passed",
+                "duration": 0.02887147499859566,
+                "start": 1777150417.9871447,
+                "stop": 1777150418.016077,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

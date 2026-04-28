@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777144916.753241,
+            "stop": 1777144946.7611315
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_webhook_idempotency",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 29.994752824000898,
+                "start": 1777144916.7586668,
+                "stop": 1777144946.7609432,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_webhook_idempotency(start_trigger_dev):\n        # Trigger the task twice via the npm script\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n    \n        # Find run ids in result.stdout\n        # Expecting output like \"Run ID 1: run_abc123\" and \"Run ID 2: run_def456\"\n        # or like \"Run 1 ID: run_abc123\" and \"Run 2 ID: run_def456\"\n        run_ids = re.findall(r\"Run\\s*(?:\\d*\\s*)?ID\\s*(?:\\d*)?:\\s*([a-zA-Z0-9_]+)\", result.stdout)\n        assert len(run_ids) >= 2, f\"Expected at least 2 Run IDs in output, got: {result.stdout}\"\n    \n        run_id1 = run_ids[0]\n        run_id2 = run_ids[1]\n    \n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n    \n        def get_run_details(run_id):\n            for _ in range(20): # Increased wait time for background jobs\n                run_result = subprocess.run(\n                  [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n                  capture_output=True,\n                  text=True\n                )\n                assert run_result.returncode == 0\n                data = json.loads(run_result.stdout)\n                if data.get(\"status\") == \"COMPLETED\":\n                    return data\n                if data.get(\"status\") in [\"FAILED\", \"CRASHED\", \"CANCELED\", \"EXPIRED\", \"TIMED_OUT\", \"SYSTEM_FAILURE\"]:\n                    pytest.fail(f\"Run {run_id} failed with status: {data.get('status')}\")\n                sleep(5)\n            pytest.fail(f\"Run {run_id} did not complete in time\")\n    \n        run1_data = get_run_details(run_id1)\n        run2_data = get_run_details(run_id2)\n    \n        assert run1_data[\"output\"] is not None, \"Run 1 output is empty\"\n        assert run2_data[\"output\"] is not None, \"Run 2 output is empty\"\n    \n        # Verify idempotency: both should have the exact same processedAt timestamp\n        # because the second run should have returned the cached result of the first.\n        processed_at1 = run1_data[\"output\"][\"processedAt\"]\n        processed_at2 = run2_data[\"output\"][\"processedAt\"]\n    \n        assert processed_at1 == processed_at2, \\\n            f\"Idempotency failed: Run 1 processed at {processed_at1}, Run 2 processed at {processed_at2}. They should be identical.\"\n    \n>       assert run1_data[\"output\"][\"amount\"] == 100, f\"Expected amount 100, got {run1_data['output']['amount']}\"\nE       AssertionError: Expected amount 100, got 99.99\nE       assert 99.99 == 100\n\ntests/test_final_state.py:104: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

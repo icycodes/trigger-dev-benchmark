@@ -1,0 +1,65 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 4,
+            "passed": 1,
+            "failed": 3,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777143485.064853,
+            "stop": 1777143524.5284917
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_ffmpeg_task_execution",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 39.387711290999505,
+                "start": 1777143485.0713139,
+                "stop": 1777143524.4811316,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_ffmpeg_task_execution(start_trigger_dev):\n        # Trigger the task\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in the trigger result. stdout: {result.stdout}, stderr: {result.stderr}\"\n        run_id = run_id_match.group(1)\n    \n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n    \n        # Poll for completion\n        completed = False\n        for _ in range(24): # 2 minutes total (24 * 5s)\n            run_result = subprocess.run(\n              [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n              capture_output=True,\n              text=True\n            )\n            assert run_result.returncode == 0, f\"Retrieve run result failed with code {run_result.returncode}\"\n    \n            try:\n                run_result_json = json.loads(run_result.stdout)\n            except json.JSONDecodeError:\n                pytest.fail(f\"Failed to parse API response: {run_result.stdout}\")\n    \n            assert \"status\" in run_result_json, f\"Run status is missing in {run_result_json}\"\n            run_status = run_result_json[\"status\"]\n    \n            if run_status == \"COMPLETED\":\n                completed = True\n                break\n            elif run_status in [\"FAILED\", \"CRASHED\", \"CANCELED\", \"EXPIRED\", \"TIMED_OUT\", \"SYSTEM_FAILURE\"]:\n>               pytest.fail(f\"Run failed with status: {run_status}. Response: {run_result_json}\")\nE               Failed: Run failed with status: FAILED. Response: {'id': 'run_cmoepd21660fd0uoh0wzltw0o', 'taskIdentifier': 'ffmpeg-extract-audio-ffmpeg_video_processing_extensio__3bTJA6m', 'version': '20260425.1', 'status': 'FAILED', 'createdAt': '2026-04-25T18:58:32.210Z', 'startedAt': '2026-04-25T18:58:32.635Z', 'updatedAt': '2026-04-25T18:58:39.832Z', 'finishedAt': '2026-04-25T18:58:39.824Z', 'ttl': '10m', 'costInCents': 0, 'baseCostInCents': 0.0025, 'durationMs': 2691, 'isTest': False, 'depth': 0, 'tags': [], 'isQueued': False, 'isExecuting': False, 'isCompleted': True, 'isFailed': True, 'isSuccess': False, 'isCancelled': False, 'isWaiting': False, 'triggerFunction': 'trigger', 'payload': {'videoUrl': 'https://github.com/intel-iot-devkit/sample-videos/raw/master/bottle-detection.mp4'}, 'error': {'name': 'Error', 'message': 'ffmpeg exited with code 234: Error opening output file /home/user/ffmpeg-task/output/audio.wav.\\nError opening output files: Invalid argument\\n', 'stackTrace': 'Error: ffmpeg exited with code 234: Error opening output file /home/user/ffmpeg-task/output/audio.wav.\\nError opening output files: Invalid argument\\n\\n    at ChildProcess.<anonymous> (file:///home/user/ffmpeg-task/node_modules/fluent-ffmpeg/lib/processor.js:180:22)\\n    at ChildProcess.emit (node:events:508:28)\\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:294:12)'}, 'attemptCount': 1, 'attempts': [], 'relatedRuns': {'children': []}}\n\ntests/test_final_state.py:89: Failed",
+                "message": "The test failed in the call phase"
+            },
+            {
+                "name": "test_final_state.py::test_output_file_exists",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.0003201179988536751,
+                "start": 1777143524.481327,
+                "stop": 1777143524.4830182,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_output_file_exists():\n        output_file = os.path.join(PROJECT_DIR, \"output/audio.wav\")\n>       assert os.path.isfile(output_file), f\"Output file {output_file} was not created.\"\nE       AssertionError: Output file /home/user/ffmpeg-task/output/audio.wav was not created.\nE       assert False\nE        +  where False = <function isfile at 0x7f8b60c30220>('/home/user/ffmpeg-task/output/audio.wav')\nE        +    where <function isfile at 0x7f8b60c30220> = <module 'posixpath' (frozen)>.isfile\nE        +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:97: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_output_file_format",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.02295566599968879,
+                "start": 1777143524.4831216,
+                "stop": 1777143524.50753,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_output_file_format():\n        output_file = os.path.join(PROJECT_DIR, \"output/audio.wav\")\n        # Use ffprobe to check format\n        result = subprocess.run(\n            [\"ffprobe\", \"-v\", \"error\", \"-show_entries\", \"stream=channels,sample_rate\", \"-of\", \"json\", output_file],\n            capture_output=True,\n            text=True\n        )\n>       assert result.returncode == 0, f\"ffprobe failed: {result.stderr}\"\nE       AssertionError: ffprobe failed: /home/user/ffmpeg-task/output/audio.wav: No such file or directory\nE         \nE       assert 1 == 0\nE        +  where 1 = CompletedProcess(args=['ffprobe', '-v', 'error', '-show_entries', 'stream=channels,sample_rate', '-of', 'json', '/home....wav'], returncode=1, stdout='{\\n\\n}\\n', stderr='/home/user/ffmpeg-task/output/audio.wav: No such file or directory\\n').returncode\n\ntests/test_final_state.py:108: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_trigger_config_contains_ffmpeg",
+                "status": "passed",
+                "duration": 0.020608073000403238,
+                "start": 1777143524.5076516,
+                "stop": 1777143524.5283308,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

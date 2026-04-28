@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777153474.2624874,
+            "stop": 1777153486.3445005
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_pipeline_execution",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 12.063617025003623,
+                "start": 1777153474.2687912,
+                "stop": 1777153486.3442776,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_pipeline_execution(start_trigger_dev):\n        # 1. Trigger the task\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n>       assert result.returncode == 0, f\"Failed to trigger task: {result.stderr}\"\nE       AssertionError: Failed to trigger task: AuthenticationError [TriggerApiError]: Invalid API Key\nE             at ApiError.generate (/home/user/ai-pipeline/node_modules/@trigger.dev/core/dist/commonjs/v3/apiClient/errors.js:55:20)\nE             at _doZodFetchWithRetries (/home/user/ai-pipeline/node_modules/@trigger.dev/core/dist/commonjs/v3/apiClient/core.js:136:44)\nE             at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\nE             at async /home/user/ai-pipeline/node_modules/@trigger.dev/core/dist/commonjs/v3/apiClient/core.js:112:24\nE             at async params.options.tracer.startActiveSpan.attributes (/home/user/ai-pipeline/node_modules/@trigger.dev/core/dist/commonjs/v3/apiClient/core.js:98:16)\nE             at async /home/user/ai-pipeline/node_modules/@trigger.dev/core/dist/commonjs/v3/tracer.js:82:24\nE             at async traceZodFetch (/home/user/ai-pipeline/node_modules/@trigger.dev/core/dist/commonjs/v3/apiClient/core.js:97:12) {\nE           status: 401,\nE           headers: {\nE             'access-control-expose-headers': 'x-trigger-jwt,x-trigger-jwt-claims',\nE             connection: 'keep-alive',\nE             'content-type': 'application/json; charset=utf-8',\nE             date: 'Sat, 25 Apr 2026 21:44:45 GMT',\nE             'strict-transport-security': 'max-age=3153600000',\nE             'transfer-encoding': 'chunked',\nE             'x-ratelimit-limit': '1500',\nE             'x-ratelimit-remaining': '1492',\nE             'x-ratelimit-reset': '1777153486177',\nE             'x-robots-tag': 'noindex, nofollow'\nE           },\nE           error: 'Invalid API Key',\nE           code: undefined,\nE           param: undefined,\nE           type: undefined\nE         }\nE         \nE       assert 1 == 0\nE        +  where 1 = CompletedProcess(args=['npm', 'run', 'run-task'], returncode=1, stdout='\\n> ai-pipeline@1.0.0 run-task\\n> TRIGGER_SECR...oindex, nofollow'\\n  },\\n  error: 'Invalid API Key',\\n  code: undefined,\\n  param: undefined,\\n  type: undefined\\n}\\n\").returncode\n\ntests/test_final_state.py:51: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

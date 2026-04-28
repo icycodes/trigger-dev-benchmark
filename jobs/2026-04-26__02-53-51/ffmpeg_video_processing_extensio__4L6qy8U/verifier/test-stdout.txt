@@ -1,0 +1,110 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 14ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 4 items
+
+tests/test_final_state.py FFF.                                           [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_ffmpeg_task_execution __________________________
+
+start_trigger_dev = None
+
+    def test_ffmpeg_task_execution(start_trigger_dev):
+        # Trigger the task
+        result = subprocess.run(
+          ["npm", "run", "run-task"],
+          cwd=PROJECT_DIR,
+          capture_output=True,
+          text=True
+        )
+    
+        # Find run id in result.stdout
+        run_id_match = re.search(r"Run ID: ([a-zA-Z0-9_]+)", result.stdout)
+        assert run_id_match, f"Run ID not found in the trigger result. stdout: {result.stdout}, stderr: {result.stderr}"
+        run_id = run_id_match.group(1)
+    
+        trigger_secret_key = os.environ.get("TRIGGER_SECRET_KEY")
+    
+        # Poll for completion
+        completed = False
+        for _ in range(24): # 2 minutes total (24 * 5s)
+            run_result = subprocess.run(
+              ["curl", "-s", "-H", f"Authorization: Bearer {trigger_secret_key}", f"https://api.trigger.dev/api/v3/runs/{run_id}"],
+              capture_output=True,
+              text=True
+            )
+            assert run_result.returncode == 0, f"Retrieve run result failed with code {run_result.returncode}"
+    
+            try:
+                run_result_json = json.loads(run_result.stdout)
+            except json.JSONDecodeError:
+                pytest.fail(f"Failed to parse API response: {run_result.stdout}")
+    
+            assert "status" in run_result_json, f"Run status is missing in {run_result_json}"
+            run_status = run_result_json["status"]
+    
+            if run_status == "COMPLETED":
+                completed = True
+                break
+            elif run_status in ["FAILED", "CRASHED", "CANCELED", "EXPIRED", "TIMED_OUT", "SYSTEM_FAILURE"]:
+>               pytest.fail(f"Run failed with status: {run_status}. Response: {run_result_json}")
+E               Failed: Run failed with status: FAILED. Response: {'id': 'run_cmoepisp35z3q0ioejoz6oh2i', 'taskIdentifier': 'ffmpeg-extract-audio-ffmpeg_video_processing_extensio__4L6qy8U', 'version': '20260425.1', 'status': 'FAILED', 'createdAt': '2026-04-25T19:03:00.047Z', 'startedAt': '2026-04-25T19:03:02.470Z', 'updatedAt': '2026-04-25T19:03:17.701Z', 'finishedAt': '2026-04-25T19:03:17.682Z', 'ttl': '10m', 'costInCents': 0, 'baseCostInCents': 0.0025, 'durationMs': 8440, 'isTest': False, 'depth': 0, 'tags': [], 'isQueued': False, 'isExecuting': False, 'isCompleted': True, 'isFailed': True, 'isSuccess': False, 'isCancelled': False, 'isWaiting': False, 'triggerFunction': 'trigger', 'payload': {'videoUrl': 'https://www.w3schools.com/html/mov_bbb.mp4'}, 'error': {'name': 'Error', 'message': 'ffmpeg exited with code 254: Error opening output file /home/user/ffmpeg-task/.trigger/output/audio.wav.\nError opening output files: No such file or directory\n', 'stackTrace': 'Error: ffmpeg exited with code 254: Error opening output file /home/user/ffmpeg-task/.trigger/output/audio.wav.\nError opening output files: No such file or directory\n\n    at ChildProcess.<anonymous> (file:///home/user/ffmpeg-task/node_modules/fluent-ffmpeg/lib/processor.js:180:22)\n    at ChildProcess.emit (node:events:508:28)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:294:12)'}, 'attemptCount': 1, 'attempts': [], 'relatedRuns': {'children': []}}
+
+tests/test_final_state.py:89: Failed
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1702
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260425.1
+
+start_trigger_dev process startup detected
+___________________________ test_output_file_exists ____________________________
+
+    def test_output_file_exists():
+        output_file = os.path.join(PROJECT_DIR, "output/audio.wav")
+>       assert os.path.isfile(output_file), f"Output file {output_file} was not created."
+E       AssertionError: Output file /home/user/ffmpeg-task/output/audio.wav was not created.
+E       assert False
+E        +  where False = <function isfile at 0x7fa1a4830220>('/home/user/ffmpeg-task/output/audio.wav')
+E        +    where <function isfile at 0x7fa1a4830220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:97: AssertionError
+___________________________ test_output_file_format ____________________________
+
+    def test_output_file_format():
+        output_file = os.path.join(PROJECT_DIR, "output/audio.wav")
+        # Use ffprobe to check format
+        result = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", "stream=channels,sample_rate", "-of", "json", output_file],
+            capture_output=True,
+            text=True
+        )
+>       assert result.returncode == 0, f"ffprobe failed: {result.stderr}"
+E       AssertionError: ffprobe failed: /home/user/ffmpeg-task/output/audio.wav: No such file or directory
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['ffprobe', '-v', 'error', '-show_entries', 'stream=channels,sample_rate', '-of', 'json', '/home....wav'], returncode=1, stdout='{\n\n}\n', stderr='/home/user/ffmpeg-task/output/audio.wav: No such file or directory\n').returncode
+
+tests/test_final_state.py:108: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_trigger_config_contains_ffmpeg
+FAILED tests/test_final_state.py::test_ffmpeg_task_execution - Failed: Run fa...
+FAILED tests/test_final_state.py::test_output_file_exists - AssertionError: O...
+FAILED tests/test_final_state.py::test_output_file_format - AssertionError: f...
+========================= 3 failed, 1 passed in 56.71s =========================

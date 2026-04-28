@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777143710.8989105,
+            "stop": 1777143750.3939114
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_batch_processing_results",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 39.47986728199976,
+                "start": 1777143710.9039726,
+                "stop": 1777143750.3935478,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_batch_processing_results(start_trigger_dev):\n        # Trigger the task\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}, stderr: {result.stderr}\"\n        run_id = run_id_match.group(1)\n    \n        # Check run result logic\n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n        # Poll for up to 2 minutes (24 * 5s)\n        for _ in range(24):\n            run_result = subprocess.run(\n              [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n              capture_output=True,\n              text=True\n            )\n            assert run_result.returncode == 0, f\"Retrieve run result failed with code {run_result.returncode}\"\n            run_result_json = json.loads(run_result.stdout)\n            assert \"status\" in run_result_json, f\"Run status is missing in {run_result_json}\"\n            run_status = run_result_json[\"status\"]\n    \n            if run_status == \"COMPLETED\":\n                assert \"output\" in run_result_json, f\"Run output is missing in {run_result_json}\"\n                output = run_result_json[\"output\"]\n                # Expected: 1^2 + 2^2 + 3^2 + 4^2 + 5^2 = 1 + 4 + 9 + 16 + 25 = 55\n>               assert output == 55, f\"The aggregated sum is not correct, expected 55, got: {output}\"\nE               AssertionError: The aggregated sum is not correct, expected 55, got: {'sum': 55}\nE               assert {'sum': 55} == 55\n\ntests/test_final_state.py:86: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

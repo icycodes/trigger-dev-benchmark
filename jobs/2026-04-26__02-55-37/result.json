@@ -1,0 +1,59 @@
+{
+    "id": "9c2ffdf1-87c2-4c50-9fb5-9b827f2adcf6",
+    "started_at": "2026-04-26T02:55:37.143332",
+    "finished_at": "2026-04-26T05:39:26.566964",
+    "n_total_trials": 18,
+    "stats": {
+        "n_trials": 18,
+        "n_errors": 4,
+        "evals": {
+            "pochi__gemini-3.1-pro__tasks": {
+                "n_trials": 17,
+                "n_errors": 4,
+                "metrics": [
+                    {
+                        "mean": 0.3888888888888889
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "ffmpeg_video_processing_extensio__3ukZrSa",
+                            "batch_processing_with_results_ag__rrFmw5k",
+                            "resilient_webhook_idempotency__n38dz3u",
+                            "scheduled_sync__AhEGSL8",
+                            "human_approval_workflow__8f9EXXb",
+                            "ai_agent_human_in_the_loop_appro__zMy8pY5",
+                            "concurrency_limited_queue__ktRnQfw"
+                        ],
+                        "0.0": [
+                            "realtime_task_streaming_dashboar__VaW3wTb",
+                            "custom_retry_and_logging__cSe89Fj",
+                            "ai_workflow_cancellation_handler__nnBXTy4",
+                            "background_workflow_with_human_w__XkwDrvW",
+                            "human_in_the_loop_error_correcti__ASg3JsZ",
+                            "puppeteer_screenshot_task__MSZro9z",
+                            "python_extension_data_processing__fGAZgX3",
+                            "multi_tenant_concurrency_control__8ZxofZB",
+                            "ai_agent_with_tool_and_streaming__eSQh3nF",
+                            "multi_stage_ai_pipeline_orchestr__tgA4zvA"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "ai_workflow_cancellation_handler__nnBXTy4",
+                        "multi_tenant_concurrency_control__8ZxofZB"
+                    ],
+                    "VerifierTimeoutError": [
+                        "subscription_onboarding_with_wai__ZEhAh5D"
+                    ],
+                    "NonZeroAgentExitCodeError": [
+                        "multi_stage_ai_pipeline_orchestr__tgA4zvA"
+                    ]
+                }
+            }
+        }
+    }
+}

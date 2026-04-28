@@ -1,0 +1,47 @@
+{
+    "id": "1cc23602-ca7b-43ed-8da6-0b7701c5b012",
+    "started_at": "2026-04-26T02:54:42.490774",
+    "finished_at": "2026-04-26T04:25:52.875096",
+    "n_total_trials": 18,
+    "stats": {
+        "n_trials": 18,
+        "n_errors": 0,
+        "evals": {
+            "pochi__gpt-5.2-codex__tasks": {
+                "n_trials": 18,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.0
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "ffmpeg_video_processing_extensio__op6gYS9",
+                            "batch_processing_with_results_ag__sVmG8gC",
+                            "realtime_task_streaming_dashboar__6W7CZji",
+                            "resilient_webhook_idempotency__DwRWB55",
+                            "custom_retry_and_logging__uEqEMna",
+                            "ai_workflow_cancellation_handler__goqHe9L",
+                            "background_workflow_with_human_w__9sKDmJZ",
+                            "scheduled_sync__PC84aH5",
+                            "human_in_the_loop_error_correcti__URkKohG",
+                            "subscription_onboarding_with_wai__Aet5TxE",
+                            "human_approval_workflow__vphmjct",
+                            "puppeteer_screenshot_task__7XMX2aj",
+                            "python_extension_data_processing__X8LB9aU",
+                            "ai_agent_human_in_the_loop_appro__yXaamEf",
+                            "multi_tenant_concurrency_control__LWjoPVq",
+                            "concurrency_limited_queue__3mF8A53",
+                            "ai_agent_with_tool_and_streaming__GksfxtV",
+                            "multi_stage_ai_pipeline_orchestr__atrtnGL"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            }
+        }
+    }
+}

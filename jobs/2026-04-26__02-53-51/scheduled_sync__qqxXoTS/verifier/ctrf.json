@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777147611.1144285,
+            "stop": 1777147629.1968684
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_scheduled_sync_execution",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 18.06978103700203,
+                "start": 1777147611.1193833,
+                "stop": 1777147629.1966417,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_scheduled_sync_execution(start_trigger_dev):\n        # Trigger the task manually\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n        assert result.returncode == 0, f\"npm run run-task failed: {result.stderr}\"\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n>       assert run_id_match, f\"Run ID not found in the trigger result: {result.stdout}\"\nE       AssertionError: Run ID not found in the trigger result: \nE         > trigger-sync@1.0.0 run-task\nE         > ts-node src/test-run.ts\nE         \nE         ======================================================================\nE         Trigger.dev Scheduled Data Sync Task - Test Information\nE         ======================================================================\nE         \nE         TASK DETAILS\nE         ----------------------------------------------------------------------\nE         Task ID:        scheduled-sync-scheduled_sync__qqxXoTS\nE         Task Name:      Scheduled Data Sync\nE         Schedule:       Every minute (* * * * *)\nE         Status:         Deployed and Active\nE         Version:        20260425.1\nE         \nE         TASK FUNCTIONALITY\nE         ----------------------------------------------------------------------\nE         The task performs the following operations:\nE           1. Fetches todos from https://jsonplaceholder.typicode.com/todos\nE           2. Logs the number of items processed\nE           3. Returns success status with item count and timestamp\nE         \nE         TESTING THE TASK\nE         ----------------------------------------------------------------------\nE         Since this is a scheduled task, it runs automatically every minute.\nE         \nE         To manually trigger the task for testing:\nE           1. Visit the Trigger.dev dashboard:\nE              https://cloud.trigger.dev/projects/v3/proj_qmjtfxoknmfupeecpjod/test\nE           2. Select the task: scheduled-sync-scheduled_sync__qqxXoTS\nE           3. Click 'Trigger' to run the task immediately\nE         \nE         MONITORING\nE         ----------------------------------------------------------------------\nE         View Deployment:\nE           https://cloud.trigger.dev/projects/v3/proj_qmjtfxoknmfupeecpjod/deployments/ih22onuc\nE         \nE         View Task Runs:\nE           https://cloud.trigger.dev/projects/v3/proj_qmjtfxoknmfupeecpjod/runs\nE         \nE         EXPECTED OUTPUT\nE         ----------------------------------------------------------------------\nE         When the task runs, you should see:\nE           - Log entry: 'Fetched 200 todos from the external API'\nE           - Task output with:\nE             * success: true\nE             * itemsProcessed: 200\nE             * timestamp: <ISO timestamp>\nE         \nE         ======================================================================\nE         Task is successfully deployed and will run according to schedule!\nE         ======================================================================\nE         \nE       assert None\n\ntests/test_final_state.py:57: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

@@ -1,0 +1,116 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 8ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 2 items
+
+tests/test_final_state.py FF                                             [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_ai_agent_task_execution _________________________
+
+start_trigger_dev = None
+
+    def test_ai_agent_task_execution(start_trigger_dev):
+        # Trigger the task
+        result = subprocess.run(
+          ["npm", "run", "run-task"],
+          cwd=PROJECT_DIR,
+          capture_output=True,
+          text=True
+        )
+    
+        assert result.returncode == 0, f"Trigger script failed with code {result.returncode}, stderr: {result.stderr}"
+    
+        # Find run id in result.stdout
+        run_id_match = re.search(r"Run ID: ([a-zA-Z0-9_]+)", result.stdout)
+        assert run_id_match, f"Run ID not found in the trigger result, stdout: {result.stdout}"
+        run_id = run_id_match.group(1)
+    
+        # Verify that the output contains some streamed chunks (non-empty)
+        # The trigger script is expected to print chunks as they arrive.
+        assert len(result.stdout.strip()) > 50, f"Streamed output seems too short or missing, stdout: {result.stdout}"
+    
+        # Check run result logic via API
+        trigger_secret_key = os.environ.get("TRIGGER_SECRET_KEY")
+        for _ in range(20): # AI tasks can take a while
+            run_result = subprocess.run(
+              ["curl", "-s", "-H", f"Authorization: Bearer {trigger_secret_key}", f"https://api.trigger.dev/api/v3/runs/{run_id}"],
+              capture_output=True,
+              text=True
+            )
+            assert run_result.returncode == 0, f"Retrieve run result failed with code {run_result.returncode}"
+    
+            try:
+                run_result_json = json.loads(run_result.stdout)
+            except json.JSONDecodeError:
+                assert False, f"Failed to parse run result JSON: {run_result.stdout}"
+    
+            assert "status" in run_result_json, f"Run status is missing in {run_result_json}"
+            run_status = run_result_json["status"]
+    
+            if run_status == "COMPLETED":
+                # Verify that the output is non-empty and contains expected info
+>               assert "output" in run_result_json, f"Run output is missing in {run_result_json}"
+E               AssertionError: Run output is missing in {'id': 'run_cmoetaroq6v890on1yy8vqf7z', 'taskIdentifier': 'agentTask-ai_agent_with_tool_and_streaming__BhNUS9u', 'version': '20260425.18', 'status': 'COMPLETED', 'createdAt': '2026-04-25T20:48:43.954Z', 'startedAt': '2026-04-25T20:48:47.789Z', 'updatedAt': '2026-04-25T20:49:29.191Z', 'finishedAt': '2026-04-25T20:49:29.184Z', 'ttl': '10m', 'costInCents': 0, 'baseCostInCents': 0.0025, 'durationMs': 37762, 'isTest': False, 'depth': 0, 'tags': [], 'isQueued': False, 'isExecuting': False, 'isCompleted': True, 'isFailed': False, 'isSuccess': True, 'isCancelled': False, 'isWaiting': False, 'triggerFunction': 'trigger', 'payload': {'city': 'Paris'}, 'attemptCount': 1, 'attempts': [], 'relatedRuns': {'children': []}}
+E               assert 'output' in {'attemptCount': 1, 'attempts': [], 'baseCostInCents': 0.0025, 'costInCents': 0, ...}
+
+tests/test_final_state.py:94: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1788
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260425.18
+
+start_trigger_dev process startup detected
+___________________________ test_weather_tool_called ___________________________
+
+start_trigger_dev = None
+
+    def test_weather_tool_called(start_trigger_dev):
+        # This test checks if the weather tool was actually called by inspecting the run events/logs
+        # We can use the run_id from the previous test or just rely on the overall task success
+        # For now, we assume if the task completed and produced output, it worked.
+        # A more robust check would be to list runs of the weather task.
+    
+        trial_id_path = "/logs/trial_id"
+        with open(trial_id_path, "r") as f:
+            trial_id = f.read().strip()
+    
+        weather_task_id = f"weatherTask-{trial_id}"
+        trigger_secret_key = os.environ.get("TRIGGER_SECRET_KEY")
+    
+        # List runs for the weather task
+        list_runs_result = subprocess.run(
+            ["curl", "-s", "-H", f"Authorization: Bearer {trigger_secret_key}", f"https://api.trigger.dev/api/v1/runs?filter%5BtaskIdentifier%5D={weather_task_id}"],
+            capture_output=True,
+            text=True
+        )
+        assert list_runs_result.returncode == 0
+        runs_json = json.loads(list_runs_result.stdout)
+    
+        # Verify at least one run of the weather task exists and was successful
+>       assert len(runs_json.get("data", [])) > 0, f"No runs found for weather task {weather_task_id}"
+E       AssertionError: No runs found for weather task weatherTask-ai_agent_with_tool_and_streaming__BhNUS9u
+E       assert 0 > 0
+E        +  where 0 = len([])
+E        +    where [] = <built-in method get of dict object at 0x7f550f9e8180>('data', [])
+E        +      where <built-in method get of dict object at 0x7f550f9e8180> = {'data': [], 'pagination': {}}.get
+
+tests/test_final_state.py:130: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_final_state.py::test_ai_agent_task_execution - AssertionErr...
+FAILED tests/test_final_state.py::test_weather_tool_called - AssertionError: ...
+========================= 2 failed in 78.81s (0:01:18) =========================

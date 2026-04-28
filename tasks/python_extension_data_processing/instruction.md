@@ -1,0 +1,69 @@
+# Python Extension Data Processing with Trigger.dev
+
+## Background
+Trigger.dev allows developers to execute Python scripts within their TypeScript tasks using the `pythonExtension`. This enables the use of Python's rich data science ecosystem (like NumPy, Pandas, or Scikit-learn) alongside the reliability and scalability of Trigger.dev's background jobs.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/python-task`.
+- Configure `trigger.config.ts` to include the `pythonExtension` with `numpy` installed via a `requirements.txt` file.
+- Create a Python script `scripts/process.py` that:
+    1. Accepts a list of numbers as command-line arguments.
+    2. Calculates the average of these numbers using `numpy`.
+    3. Prints the result in a specific format: `Average: <value>`.
+- Create a Trigger.dev task named `python-process-${trial_id}` that:
+    1. Receives an array of numbers in its payload.
+    2. Executes the `scripts/process.py` script using `python.runScript`.
+    3. Parses the output and returns the average value.
+- Provide an npm script `npm run run-task` that triggers the task with the payload `[10, 20, 30, 40, 50]` and prints the `Run ID: <run_id>`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest @trigger.dev/python@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node ts-node
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF` and include the `pythonExtension`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+    import { pythonExtension } from "@trigger.dev/python/extension";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      build: {
+        extensions: [
+          pythonExtension({
+            requirementsFile: "./requirements.txt",
+            scripts: ["./scripts/**/*.py"],
+          }),
+        ],
+      },
+    });
+    ```
+4. **Check Project Configuration**: Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check the `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create `requirements.txt` with `numpy`.
+3. Create `scripts/process.py` to calculate the average using `numpy.mean()`.
+4. Create `src/trigger/python-task.ts` and define the task. Suffix the task ID with `${trial_id}`.
+5. Use `python.runScript("./scripts/process.py", payload.map(String))` to execute the script.
+6. Implement `npm run run-task` in `package.json` to trigger the task and print `Run ID: <run_id>`.
+
+## Constraints
+- Project path: /home/user/python-task
+- Start task: `npm run run-task`
+- Must use `pythonExtension` and `python.runScript`.
+- Must suffix task ID with `trial_id`.
+
+## Integrations
+- Trigger.dev

@@ -1,0 +1,120 @@
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo puppeteer_screenshot_task__PZwjwuE > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model anthropic/claude-4-6-sonnet --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Trigger.dev Puppeteer Screenshot Task
+
+## Background
+Trigger.dev is a powerful platform for running long-running background jobs. One common use case is automating browser tasks like taking screenshots of web pages. By using the Puppeteer build extension, you can run a full headless browser within your Trigger.dev tasks.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/screenshot-service`.
+- Configure the project to use the Puppeteer build extension.
+- Implement a task that takes a URL as input, uses Puppeteer to navigate to that URL, and takes a full-page screenshot.
+- The task should save the screenshot to `/home/user/screenshot-service/screenshots/${url_slug}.png`.
+- The task should return the path to the saved screenshot.
+- Add an `npm run run-task` command to trigger the task with a sample URL (e.g., `https://example.com`) and print the `run_id`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest puppeteer
+    npm add -D @trigger.dev/build@latest typescript @types/node
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF` and include the Puppeteer extension.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+    import { puppeteer } from "@trigger.dev/build/extensions/puppeteer";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      build: {
+        extensions: [puppeteer()],
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`;
+2. Create the task in `src/trigger/screenshot.ts`. Suffix the task ID with the `trial_id` (e.g., `id: "puppeteer-screenshot-${trial_id}"`);
+3. Use `puppeteer.launch()` with the following options:
+   ```javascript
+   executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || "/usr/bin/google-chrome-stable",
+   args: ["--no-sandbox", "--disable-setuid-sandbox"]
+   ```
+4. Implement the screenshot logic: navigate to the URL, take a full-page screenshot, and save it to the `screenshots` directory;
+5. Ensure the `screenshots` directory exists before saving;
+6. Add a script `trigger.ts` to trigger the task using `tasks.trigger` and print `Run ID: ${run.id}`;
+7. Add `"run-task": "npx ts-node trigger.ts"` to `package.json` scripts.
+
+## Constraints
+- Project path: `/home/user/screenshot-service`
+- Start task: `npm run run-task`
+- The task ID must be `puppeteer-screenshot-${trial_id}`.
+- Screenshots must be saved in `/home/user/screenshot-service/screenshots/`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured

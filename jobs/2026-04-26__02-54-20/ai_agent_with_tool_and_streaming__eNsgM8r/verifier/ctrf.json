@@ -1,0 +1,41 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 2,
+            "passed": 1,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777152535.1124046,
+            "stop": 1777152856.7826738
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_ai_agent_task_execution",
+                "status": "passed",
+                "duration": 320.9883042029978,
+                "start": 1777152535.1185248,
+                "stop": 1777152856.1076193,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_weather_tool_called",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.6553398349969939,
+                "start": 1777152856.1085384,
+                "stop": 1777152856.7825134,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_weather_tool_called(start_trigger_dev):\n        # This test checks if the weather tool was actually called by inspecting the run events/logs\n        # We can use the run_id from the previous test or just rely on the overall task success\n        # For now, we assume if the task completed and produced output, it worked.\n        # A more robust check would be to list runs of the weather task.\n    \n        trial_id_path = \"/logs/trial_id\"\n        with open(trial_id_path, \"r\") as f:\n            trial_id = f.read().strip()\n    \n        weather_task_id = f\"weatherTask-{trial_id}\"\n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n    \n        # List runs for the weather task\n        list_runs_result = subprocess.run(\n            [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v1/runs?filter%5BtaskIdentifier%5D={weather_task_id}\"],\n            capture_output=True,\n            text=True\n        )\n        assert list_runs_result.returncode == 0\n        runs_json = json.loads(list_runs_result.stdout)\n    \n        # Verify at least one run of the weather task exists and was successful\n>       assert len(runs_json.get(\"data\", [])) > 0, f\"No runs found for weather task {weather_task_id}\"\nE       AssertionError: No runs found for weather task weatherTask-ai_agent_with_tool_and_streaming__eNsgM8r\nE       assert 0 > 0\nE        +  where 0 = len([])\nE        +    where [] = <built-in method get of dict object at 0x7eff4b96bdc0>('data', [])\nE        +      where <built-in method get of dict object at 0x7eff4b96bdc0> = {'data': [], 'pagination': {}}.get\n\ntests/test_final_state.py:130: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

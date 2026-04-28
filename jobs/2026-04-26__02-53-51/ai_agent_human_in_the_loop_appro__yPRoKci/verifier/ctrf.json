@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777150203.2314782,
+            "stop": 1777150234.2770646
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_ai_approval_workflow",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 31.03153803999885,
+                "start": 1777150203.2365634,
+                "stop": 1777150234.2766888,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_ai_approval_workflow(start_trigger_dev):\n        # 1. Trigger the task\n        trigger_result = subprocess.run(\n            [\"npm\", \"run\", \"trigger-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n>       assert trigger_result.returncode == 0, f\"Triggering task failed: {trigger_result.stderr}\"\nE       AssertionError: Triggering task failed: /home/user/ai-approval-task/node_modules/ts-node/src/index.ts:859\nE             return new TSError(diagnosticText, diagnosticCodes, diagnostics);\nE                    ^\nE         TSError: \u2a2f Unable to compile TypeScript:\nE         src/trigger-task.ts(1,10): error TS2305: Module '\"@trigger.dev/sdk\"' has no exported member 'client'.\nE         \nE             at createTSError (/home/user/ai-approval-task/node_modules/ts-node/src/index.ts:859:12)\nE             at reportTSError (/home/user/ai-approval-task/node_modules/ts-node/src/index.ts:863:19)\nE             at getOutput (/home/user/ai-approval-task/node_modules/ts-node/src/index.ts:1077:36)\nE             at Object.compile (/home/user/ai-approval-task/node_modules/ts-node/src/index.ts:1433:41)\nE             at Module.m._compile (/home/user/ai-approval-task/node_modules/ts-node/src/index.ts:1617:30)\nE             at node:internal/modules/cjs/loader:1943:10\nE             at Object.require.extensions.<computed> [as .ts] (/home/user/ai-approval-task/node_modules/ts-node/src/index.ts:1621:12)\nE             at Module.load (node:internal/modules/cjs/loader:1533:32)\nE             at Module._load (node:internal/modules/cjs/loader:1335:12)\nE             at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {\nE           diagnosticCodes: [ 2305 ]\nE         }\nE         \nE       assert 1 == 0\nE        +  where 1 = CompletedProcess(args=['npm', 'run', 'trigger-task'], returncode=1, stdout='\\n> ai-approval-task@1.0.0 trigger-task\\n>.../loader:1335:12)\\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {\\n  diagnosticCodes: [ 2305 ]\\n}\\n').returncode\n\ntests/test_final_state.py:43: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

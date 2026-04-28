@@ -1,0 +1,50 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 3,
+            "passed": 2,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777150923.9389665,
+            "stop": 1777150957.089053
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_python_extension_task",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 33.09979596399717,
+                "start": 1777150923.944772,
+                "stop": 1777150957.0554664,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_python_extension_task(start_trigger_dev):\n        # Trigger the task\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n>       assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}, stderr: {result.stderr}\"\nE       AssertionError: Run ID not found in the trigger result, stdout: \nE         > python-task@1.0.0 run-task\nE         > ts-node run.ts\nE         \nE         , stderr: \nE       assert None\n\ntests/test_final_state.py:67: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_requirements_file_exists",
+                "status": "passed",
+                "duration": 0.00019380699814064428,
+                "start": 1777150957.0556133,
+                "stop": 1777150957.0558853,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_python_script_exists",
+                "status": "passed",
+                "duration": 0.03270999699816457,
+                "start": 1777150957.0559802,
+                "stop": 1777150957.0887494,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

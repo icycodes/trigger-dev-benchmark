@@ -1,0 +1,24 @@
+{
+  "name": "trigger-sync",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "run-task": "ts-node src/test-run.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.4.4"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.4.4",
+    "@types/node": "^25.6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

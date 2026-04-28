@@ -1,0 +1,27 @@
+{
+  "name": "ffmpeg-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run-task": "ts-node run-task.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.4.4",
+    "fluent-ffmpeg": "^2.1.3",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.4.4",
+    "@types/fluent-ffmpeg": "^2.1.28",
+    "@types/node": "^25.6.0",
+    "@types/node-fetch": "^2.6.13",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

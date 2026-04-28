@@ -1,0 +1,51 @@
+{
+    "id": "1d92ec2d-6b18-4a05-a917-984e8a5864f3",
+    "started_at": "2026-04-26T02:53:51.528781",
+    "finished_at": "2026-04-26T05:31:47.609536",
+    "n_total_trials": 18,
+    "stats": {
+        "n_trials": 18,
+        "n_errors": 1,
+        "evals": {
+            "pochi__glm-4.7__tasks": {
+                "n_trials": 18,
+                "n_errors": 1,
+                "metrics": [
+                    {
+                        "mean": 0.0
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "ffmpeg_video_processing_extensio__4L6qy8U",
+                            "batch_processing_with_results_ag__hRKqwjH",
+                            "realtime_task_streaming_dashboar__DUnywdo",
+                            "resilient_webhook_idempotency__DeKv5wH",
+                            "custom_retry_and_logging__pg8gKDP",
+                            "ai_workflow_cancellation_handler__88RkZKH",
+                            "background_workflow_with_human_w__TiRcr6U",
+                            "scheduled_sync__qqxXoTS",
+                            "human_in_the_loop_error_correcti__hSmEM5k",
+                            "subscription_onboarding_with_wai__FJ64LJJ",
+                            "human_approval_workflow__qYnAe9f",
+                            "puppeteer_screenshot_task__ag8UHAt",
+                            "python_extension_data_processing__LNvd5dG",
+                            "ai_agent_human_in_the_loop_appro__yPRoKci",
+                            "multi_tenant_concurrency_control__QkkBc3M",
+                            "concurrency_limited_queue__WnMbgyE",
+                            "ai_agent_with_tool_and_streaming__ZbC7ga3",
+                            "multi_stage_ai_pipeline_orchestr__ejsY77L"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "ai_agent_with_tool_and_streaming__ZbC7ga3"
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777150308.93617,
+            "stop": 1777150340.114439
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_human_approval_workflow",
+                "status": "passed",
+                "duration": 31.172411329996976,
+                "start": 1777150308.9409983,
+                "stop": 1777150340.1141531,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

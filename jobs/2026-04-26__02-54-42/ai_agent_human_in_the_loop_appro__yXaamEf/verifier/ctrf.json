@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777147400.7310472,
+            "stop": 1777147418.0823112
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_ai_approval_workflow",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 17.33807769300074,
+                "start": 1777147400.7359674,
+                "stop": 1777147418.0810065,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_ai_approval_workflow(start_trigger_dev):\n        # 1. Trigger the task\n        trigger_result = subprocess.run(\n            [\"npm\", \"run\", \"trigger-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n        assert trigger_result.returncode == 0, f\"Triggering task failed: {trigger_result.stderr}\"\n    \n        # Extract Run ID and Token\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", trigger_result.stdout)\n        token_match = re.search(r\"Token: ([a-zA-Z0-9_]+)\", trigger_result.stdout)\n    \n>       assert run_id_match, f\"Run ID not found in output: {trigger_result.stdout}\"\nE       AssertionError: Run ID not found in output: \nE         > ai-approval-task@1.0.0 trigger-task\nE         > ts-node ./scripts/trigger-task.ts\nE         \nE         \nE       assert None\n\ntests/test_final_state.py:49: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

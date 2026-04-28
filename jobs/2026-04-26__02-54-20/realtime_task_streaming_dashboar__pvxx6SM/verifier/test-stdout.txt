@@ -1,0 +1,164 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py F                                              [100%]
+
+=================================== FAILURES ===================================
+___________________________ test_realtime_dashboard ____________________________
+
+self = <pochi_verifier.verifier.PochiVerifier object at 0x7f2a580e92b0>
+stdout = '- Initializing MCP connections...\nYou\nYou are a software tester assigned to verify a test case using the agent brow...at \'Task Completed!\' was displayed along with the final result (Run ID: run_cmoepx4ab61sx0ooaxi1y65dp)."\n}   \n  \n'
+stderr = '\x1b[37m2026-04-25 19:13:09.727\x1b[39m\x1b[0m\x1b[0m\t\x1b[32m\x1b[1mDEBUG\x1b[22m\x1b[39m\x1b[0m\x1b[0m\t\x1b[37m$b...[0m\t\x1b[37m\x1b[39m\x1b[0m\x1b[0m\x1b[1m\x1b[37m\tPochi\x1b[39m\x1b[22m\x1b[0m\x1b[0m\tProcess exiting with code 0\n'
+
+    def _parse_result(self, stdout: str, stderr: str) -> VerificationResult:
+        """Parses the stdout from pochi to extract the verification result."""
+        # Find the JSON object that follows the `Task Completed` marker (with possible whitespace)
+        match = re.search(r"Task Completed.*?(\{.*)", stdout, re.DOTALL)
+        if not match:
+            raise PochiOutputError("Cannot extract the JSON from the output message.")
+        json_str = match.group(1)
+        # Extract the full JSON object, accounting for nested/escaped braces
+        brace_count = 0
+        in_string = False
+        escape = False
+        for i, c in enumerate(json_str):
+            if escape:
+                escape = False
+                continue
+            if c == '\\':
+                escape = True
+                continue
+            if c == '"':
+                in_string = not in_string
+            if not in_string:
+                if c == '{':
+                    brace_count += 1
+                elif c == '}':
+                    brace_count -= 1
+                    if brace_count == 0:
+                        json_str = json_str[:i+1]
+                        break
+        try:
+>           parsed_json = json.loads(json_str)
+                          ^^^^^^^^^^^^^^^^^^^^
+
+root/.cache/uv/archive-v0/3Korj0i7XDFr4G3STYTi3/lib/python3.12/site-packages/pochi_verifier/verifier.py:189: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+usr/lib/python3.12/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+usr/lib/python3.12/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.decoder.JSONDecoder object at 0x7f2a584cd580>
+s = '{ "status": "pass" | "fail", "reason": "A detailed explanation describing why the test passed or failed." }'
+idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+>           obj, end = self.scan_once(s, idx)
+                       ^^^^^^^^^^^^^^^^^^^^^^
+E           json.decoder.JSONDecodeError: Expecting ',' delimiter: line 1 column 20 (char 19)
+
+usr/lib/python3.12/json/decoder.py:353: JSONDecodeError
+
+The above exception was the direct cause of the following exception:
+
+start_trigger_dev = None, start_app = None
+browser_verifier = <pochi_verifier.verifier.PochiVerifier object at 0x7f2a580e92b0>
+
+    def test_realtime_dashboard(start_trigger_dev, start_app, browser_verifier):
+        reason = "The application should have a dashboard that triggers a task and displays real-time progress using Trigger.dev React hooks."
+        truth = "Navigate to http://localhost:3000. Verify that a 'Start Task' button is visible. Click the button and verify that a progress indicator appears. Wait for the progress to complete and verify that 'Task Completed!' is displayed along with the final result."
+    
+>       result = browser_verifier.verify(
+            reason=reason,
+            truth=truth,
+            use_browser_agent=True,
+            trajectory_dir="/logs/verifier/pochi/test_realtime_dashboard"
+        )
+
+tests/test_final_state.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+root/.cache/uv/archive-v0/3Korj0i7XDFr4G3STYTi3/lib/python3.12/site-packages/pochi_verifier/verifier.py:149: in verify
+    return self._parse_result(proc.stdout, proc.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pochi_verifier.verifier.PochiVerifier object at 0x7f2a580e92b0>
+stdout = '- Initializing MCP connections...\nYou\nYou are a software tester assigned to verify a test case using the agent brow...at \'Task Completed!\' was displayed along with the final result (Run ID: run_cmoepx4ab61sx0ooaxi1y65dp)."\n}   \n  \n'
+stderr = '\x1b[37m2026-04-25 19:13:09.727\x1b[39m\x1b[0m\x1b[0m\t\x1b[32m\x1b[1mDEBUG\x1b[22m\x1b[39m\x1b[0m\x1b[0m\t\x1b[37m$b...[0m\t\x1b[37m\x1b[39m\x1b[0m\x1b[0m\x1b[1m\x1b[37m\tPochi\x1b[39m\x1b[22m\x1b[0m\x1b[0m\tProcess exiting with code 0\n'
+
+    def _parse_result(self, stdout: str, stderr: str) -> VerificationResult:
+        """Parses the stdout from pochi to extract the verification result."""
+        # Find the JSON object that follows the `Task Completed` marker (with possible whitespace)
+        match = re.search(r"Task Completed.*?(\{.*)", stdout, re.DOTALL)
+        if not match:
+            raise PochiOutputError("Cannot extract the JSON from the output message.")
+        json_str = match.group(1)
+        # Extract the full JSON object, accounting for nested/escaped braces
+        brace_count = 0
+        in_string = False
+        escape = False
+        for i, c in enumerate(json_str):
+            if escape:
+                escape = False
+                continue
+            if c == '\\':
+                escape = True
+                continue
+            if c == '"':
+                in_string = not in_string
+            if not in_string:
+                if c == '{':
+                    brace_count += 1
+                elif c == '}':
+                    brace_count -= 1
+                    if brace_count == 0:
+                        json_str = json_str[:i+1]
+                        break
+        try:
+            parsed_json = json.loads(json_str)
+        except json.JSONDecodeError as e:
+>           raise PochiOutputError(f"Failed to parse JSON from pochi output: {e}") from e
+E           pochi_verifier.verifier.PochiOutputError: Failed to parse JSON from pochi output: Expecting ',' delimiter: line 1 column 20 (char 19)
+
+root/.cache/uv/archive-v0/3Korj0i7XDFr4G3STYTi3/lib/python3.12/site-packages/pochi_verifier/verifier.py:191: PochiOutputError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1663
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260425.3
+
+start_trigger_dev process startup detected
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev
+process 'start_app' started pid=1803
+start_app process startup detected
+=========================== short test summary info ============================
+FAILED tests/test_final_state.py::test_realtime_dashboard - pochi_verifier.ve...
+======================== 1 failed in 135.65s (0:02:15) =========================

@@ -1,0 +1,75 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 5ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py F                                              [100%]
+
+=================================== FAILURES ===================================
+___________________________ test_pipeline_execution ____________________________
+
+start_trigger_dev = None
+
+    def test_pipeline_execution(start_trigger_dev):
+        # 1. Trigger the task
+        result = subprocess.run(
+            ["npm", "run", "run-task"],
+            cwd=PROJECT_DIR,
+            capture_output=True,
+            text=True
+        )
+>       assert result.returncode == 0, f"Failed to trigger task: {result.stderr}"
+E       AssertionError: Failed to trigger task: AuthenticationError [TriggerApiError]: Invalid API Key
+E             at ApiError.generate (/home/user/ai-pipeline/node_modules/@trigger.dev/core/dist/commonjs/v3/apiClient/errors.js:55:20)
+E             at _doZodFetchWithRetries (/home/user/ai-pipeline/node_modules/@trigger.dev/core/dist/commonjs/v3/apiClient/core.js:136:44)
+E             at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+E             at async /home/user/ai-pipeline/node_modules/@trigger.dev/core/dist/commonjs/v3/apiClient/core.js:112:24
+E             at async params.options.tracer.startActiveSpan.attributes (/home/user/ai-pipeline/node_modules/@trigger.dev/core/dist/commonjs/v3/apiClient/core.js:98:16)
+E             at async /home/user/ai-pipeline/node_modules/@trigger.dev/core/dist/commonjs/v3/tracer.js:82:24
+E             at async traceZodFetch (/home/user/ai-pipeline/node_modules/@trigger.dev/core/dist/commonjs/v3/apiClient/core.js:97:12) {
+E           status: 401,
+E           headers: {
+E             'access-control-expose-headers': 'x-trigger-jwt,x-trigger-jwt-claims',
+E             connection: 'keep-alive',
+E             'content-type': 'application/json; charset=utf-8',
+E             date: 'Sat, 25 Apr 2026 21:44:45 GMT',
+E             'strict-transport-security': 'max-age=3153600000',
+E             'transfer-encoding': 'chunked',
+E             'x-ratelimit-limit': '1500',
+E             'x-ratelimit-remaining': '1492',
+E             'x-ratelimit-reset': '1777153486177',
+E             'x-robots-tag': 'noindex, nofollow'
+E           },
+E           error: 'Invalid API Key',
+E           code: undefined,
+E           param: undefined,
+E           type: undefined
+E         }
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['npm', 'run', 'run-task'], returncode=1, stdout='\n> ai-pipeline@1.0.0 run-task\n> TRIGGER_SECR...oindex, nofollow'\n  },\n  error: 'Invalid API Key',\n  code: undefined,\n  param: undefined,\n  type: undefined\n}\n").returncode
+
+tests/test_final_state.py:51: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1728
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260425.18
+
+start_trigger_dev process startup detected
+=========================== short test summary info ============================
+FAILED tests/test_final_state.py::test_pipeline_execution - AssertionError: F...
+============================== 1 failed in 12.08s ==============================

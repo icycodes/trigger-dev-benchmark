@@ -1,0 +1,112 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py F                                              [100%]
+
+=================================== FAILURES ===================================
+________________________ test_multi_tenant_concurrency _________________________
+
+start_trigger_dev = None
+
+    def test_multi_tenant_concurrency(start_trigger_dev):
+        # Trigger the tasks
+        result = subprocess.run(
+            ["npm", "run", "run-task"],
+            cwd=PROJECT_DIR,
+            capture_output=True,
+            text=True
+        )
+        assert result.returncode == 0, f"Triggering tasks failed: {result.stderr}"
+    
+        # Find run ids in result.stdout
+        # Expected format: Run IDs: <id_A1>, <id_A2>, <id_B1>, <id_B2>
+        match = re.search(r"Run IDs: ([a-zA-Z0-9_]+), ([a-zA-Z0-9_]+), ([a-zA-Z0-9_]+), ([a-zA-Z0-9_]+)", result.stdout)
+        assert match, f"Run IDs not found in expected format. stdout: {result.stdout}"
+    
+        run_ids = {
+            "A1": match.group(1),
+            "A2": match.group(2),
+            "B1": match.group(3),
+            "B2": match.group(4)
+        }
+    
+        trigger_secret_key = os.environ.get("TRIGGER_SECRET_KEY")
+        run_details = {}
+    
+        # Wait for all runs to complete
+        max_retries = 30 # 30 * 5s = 150s
+        completed_runs = set()
+    
+        for i in range(max_retries):
+            for key, run_id in run_ids.items():
+                if key in completed_runs:
+                    continue
+    
+                res = subprocess.run(
+                    ["curl", "-s", "-H", f"Authorization: Bearer {trigger_secret_key}", f"https://api.trigger.dev/api/v3/runs/{run_id}"],
+                    capture_output=True,
+                    text=True
+                )
+                if res.returncode != 0:
+                    continue
+    
+                data = json.loads(res.stdout)
+                if data.get("status") == "COMPLETED":
+                    run_details[key] = data
+                    completed_runs.add(key)
+    
+            if len(completed_runs) == 4:
+                break
+            time.sleep(5)
+        else:
+            assert False, f"Not all runs completed in time. Completed: {completed_runs}"
+    
+        # Verify Sequential Execution for User A (A2 starts after A1 finishes)
+        a1_end = parse_date(run_details["A1"]["finishedAt"])
+        a2_start = parse_date(run_details["A2"]["startedAt"])
+>       assert a2_start >= a1_end, f"User A runs were not sequential. A1 ended at {a1_end}, A2 started at {a2_start}"
+E       AssertionError: User A runs were not sequential. A1 ended at 2026-04-25 20:10:03.402000+00:00, A2 started at 2026-04-25 20:09:51.499000+00:00
+E       assert datetime.datetime(2026, 4, 25, 20, 9, 51, 499000, tzinfo=datetime.timezone.utc) >= datetime.datetime(2026, 4, 25, 20, 10, 3, 402000, tzinfo=datetime.timezone.utc)
+
+tests/test_final_state.py:107: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1537
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+[?25l│
+
+◇  No new notifications
+
+[?25hKey: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+│
+
+■  Error: Queue "multi-tenant-queue-multi_tenant_concurrency_control__LWjoPVq" is defined twice, with different settings.
+
+│          - concurrencyLimit: 10 vs undefined
+
+│         Keeping the first definition:
+
+│          - concurrencyLimit: 10
+
+│  
+
+○ Local worker ready [node] -> 20260425.10
+
+start_trigger_dev process startup detected
+=========================== short test summary info ============================
+FAILED tests/test_final_state.py::test_multi_tenant_concurrency - AssertionEr...
+============================== 1 failed in 35.94s ==============================

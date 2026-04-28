@@ -1,0 +1,84 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 2 items
+
+tests/test_final_state.py F.                                             [100%]
+
+=================================== FAILURES ===================================
+________________________ test_puppeteer_screenshot_task ________________________
+
+start_trigger_dev = None
+
+    def test_puppeteer_screenshot_task(start_trigger_dev):
+        # Trigger the task
+        result = subprocess.run(
+          ["npm", "run", "run-task"],
+          cwd=PROJECT_DIR,
+          capture_output=True,
+          text=True
+        )
+    
+        # Find run id in result.stdout
+        run_id_match = re.search(r"Run ID: ([a-zA-Z0-9_]+)", result.stdout)
+>       assert run_id_match, f"Run ID not found in the trigger result, stdout: {result.stdout}, stderr: {result.stderr}"
+E       AssertionError: Run ID not found in the trigger result, stdout: 
+E         > screenshot-service@1.0.0 run-task
+E         > npx ts-node trigger.ts
+E         
+E         , stderr: /home/user/screenshot-service/node_modules/ts-node/src/index.ts:859
+E             return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+E                    ^
+E         TSError: ⨯ Unable to compile TypeScript:
+E         trigger.ts(7,35): error TS2345: Argument of type 'Task<`puppeteer-screenshot-${string}`, any, unknown>' is not assignable to parameter of type 'string'.
+E         
+E             at createTSError (/home/user/screenshot-service/node_modules/ts-node/src/index.ts:859:12)
+E             at reportTSError (/home/user/screenshot-service/node_modules/ts-node/src/index.ts:863:19)
+E             at getOutput (/home/user/screenshot-service/node_modules/ts-node/src/index.ts:1077:36)
+E             at Object.compile (/home/user/screenshot-service/node_modules/ts-node/src/index.ts:1433:41)
+E             at Module.m._compile (/home/user/screenshot-service/node_modules/ts-node/src/index.ts:1617:30)
+E             at node:internal/modules/cjs/loader:1943:10
+E             at Object.require.extensions.<computed> [as .ts] (/home/user/screenshot-service/node_modules/ts-node/src/index.ts:1621:12)
+E             at Module.load (node:internal/modules/cjs/loader:1533:32)
+E             at Module._load (node:internal/modules/cjs/loader:1335:12)
+E             at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+E           diagnosticCodes: [ 2345 ]
+E         }
+E         
+E       assert None
+
+tests/test_final_state.py:67: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=811
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+[?25l│
+
+◒  Checking for notifications[999D[J◐  Checking for notifications
+[999D[J◓  Checking for notifications
+[999D[J◑  Checking for notifications
+[999D[J◒  Checking for notifications
+[999D[J◐  Checking for notifications[999D[J◓  Checking for notifications
+[999D[J◇  No new notifications
+
+[?25hKey: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260425.8
+
+start_trigger_dev process startup detected
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_trigger_config_contains_puppeteer
+FAILED tests/test_final_state.py::test_puppeteer_screenshot_task - AssertionE...
+========================= 1 failed, 1 passed in 16.48s =========================

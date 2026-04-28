@@ -1,0 +1,129 @@
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo realtime_task_streaming_dashboar__6W7CZji > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model openai/gpt-5.2-codex --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Real-time Task Streaming Dashboard with Trigger.dev
+
+## Background
+Trigger.dev allows you to build long-running background tasks that can communicate their progress back to your application. In this task, you will build a Next.js dashboard that triggers a background task and displays its real-time progress using Trigger.dev's React hooks.
+
+## Requirements
+- Create a Next.js application in `/home/user/realtime-dashboard`.
+- Set up Trigger.dev in the project (see the Setup Guide below).
+- Implement a Trigger.dev task named `realtime-progress-task` (suffixed with `trial_id`) that:
+    - Runs for approximately 10 seconds.
+    - Updates its progress metadata every second (from 0% to 100%).
+- Create a frontend page at `/` that:
+    - Displays a "Start Task" button.
+    - Uses the `@trigger.dev/react-hooks` hook `useRealtimeRun` to track the task's progress.
+    - Displays a progress bar or text showing the current percentage.
+    - Displays a "Task Completed!" message once the task finishes.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest @trigger.dev/react-hooks@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Initialize a Next.js project in `/home/user/realtime-dashboard` using `npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*"`.
+3. Install `@trigger.dev/sdk` and `@trigger.dev/react-hooks`.
+4. Create a Trigger.dev task in `src/trigger/progress.ts`. The task ID must be `realtime-progress-task-${trial_id}`. Use `metadata.set("progress", { percentage: i * 10 })` in a loop to update progress.
+5. Implement the frontend in `src/app/page.tsx`. Use `useRealtimeRun` to monitor the run. You will need to trigger the task from a Server Action or API route and pass the `runId` and `publicAccessToken` to the client component.
+6. To trigger the task and get a token from a Server Action:
+   ```ts
+   const handle = await progressTask.trigger(payload);
+   // handle.id and handle.publicAccessToken are available
+   ```
+
+## Constraints
+- Project path: /home/user/realtime-dashboard
+- Start command: `npm run dev`
+- Port: 3000
+- Task ID suffix: Must use `trial_id` from `/logs/trial_id`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured

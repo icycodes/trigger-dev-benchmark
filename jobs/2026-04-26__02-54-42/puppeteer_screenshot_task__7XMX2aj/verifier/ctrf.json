@@ -1,0 +1,41 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 2,
+            "passed": 1,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777146896.8074076,
+            "stop": 1777146913.2920973
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_puppeteer_screenshot_task",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 16.438963019001676,
+                "start": 1777146896.8133287,
+                "stop": 1777146913.2632234,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_puppeteer_screenshot_task(start_trigger_dev):\n        # Trigger the task\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n>       assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}, stderr: {result.stderr}\"\nE       AssertionError: Run ID not found in the trigger result, stdout: \nE         > screenshot-service@1.0.0 run-task\nE         > npx ts-node trigger.ts\nE         \nE         , stderr: /home/user/screenshot-service/node_modules/ts-node/src/index.ts:859\nE             return new TSError(diagnosticText, diagnosticCodes, diagnostics);\nE                    ^\nE         TSError: \u2a2f Unable to compile TypeScript:\nE         trigger.ts(7,35): error TS2345: Argument of type 'Task<`puppeteer-screenshot-${string}`, any, unknown>' is not assignable to parameter of type 'string'.\nE         \nE             at createTSError (/home/user/screenshot-service/node_modules/ts-node/src/index.ts:859:12)\nE             at reportTSError (/home/user/screenshot-service/node_modules/ts-node/src/index.ts:863:19)\nE             at getOutput (/home/user/screenshot-service/node_modules/ts-node/src/index.ts:1077:36)\nE             at Object.compile (/home/user/screenshot-service/node_modules/ts-node/src/index.ts:1433:41)\nE             at Module.m._compile (/home/user/screenshot-service/node_modules/ts-node/src/index.ts:1617:30)\nE             at node:internal/modules/cjs/loader:1943:10\nE             at Object.require.extensions.<computed> [as .ts] (/home/user/screenshot-service/node_modules/ts-node/src/index.ts:1621:12)\nE             at Module.load (node:internal/modules/cjs/loader:1533:32)\nE             at Module._load (node:internal/modules/cjs/loader:1335:12)\nE             at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {\nE           diagnosticCodes: [ 2345 ]\nE         }\nE         \nE       assert None\n\ntests/test_final_state.py:67: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_trigger_config_contains_puppeteer",
+                "status": "passed",
+                "duration": 0.028424483001799672,
+                "start": 1777146913.2633755,
+                "stop": 1777146913.291874,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

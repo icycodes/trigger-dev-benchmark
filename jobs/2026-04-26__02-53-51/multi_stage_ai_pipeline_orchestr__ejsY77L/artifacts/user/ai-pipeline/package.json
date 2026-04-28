@@ -1,0 +1,20 @@
+{
+  "name": "ai-pipeline",
+  "version": "1.0.0",
+  "description": "Multi-stage AI pipeline with Trigger.dev orchestration",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "run-task": "node src/run-task.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@trigger.dev/sdk": "^3.3.0"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^3.3.0",
+    "typescript": "^5.0.0"
+  }
+}

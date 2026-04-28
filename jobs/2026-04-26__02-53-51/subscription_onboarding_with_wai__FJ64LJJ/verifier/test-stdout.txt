@@ -1,0 +1,117 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 3ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py E                                              [100%]
+
+==================================== ERRORS ====================================
+__________________ ERROR at setup of test_onboarding_workflow __________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7f8e009b6d50>
+
+    @pytest.fixture(scope="session")
+    def start_trigger_dev(xprocess):
+        """
+        Starts the `npx trigger.dev@latest dev` service using xprocess.
+        """
+    
+        # Create the Trigger.dev config file before executing the first `npx trigger.dev` command
+        cmd = 'mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami'
+        subprocess.run(
+            cmd,
+            shell=True,
+            check=False,
+            text=True,
+            capture_output=True,
+            executable="/bin/bash"
+        )
+        # Kill process if it's already running
+        subprocess.run(["pkill", "-f", "npx trigger.dev"], check=False)
+    
+        class Starter(ProcessStarter):
+            name = "start_trigger_dev"
+            args = ["npx", "trigger.dev@latest", "dev", "--skip-update-check", "--skip-telemetry"]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            # Trigger.dev prints the message "Local worker ready" when initialization is done.
+            pattern = "Local worker ready"
+            max_read_lines = 1000
+            timeout = 180
+            terminate_on_interrupt = True
+    
+>       xprocess.ensure(Starter.name, Starter)
+
+tests/test_final_state.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+root/.cache/uv/archive-v0/A7DFnmZCVY6qT8qFUWuns/lib/python3.12/site-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/A7DFnmZCVY6qT8qFUWuns/lib/python3.12/site-packages/xprocess/xprocess.py:411: in wait
+    pattern_ok = self.wait_pattern(log_file)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/A7DFnmZCVY6qT8qFUWuns/lib/python3.12/site-packages/xprocess/xprocess.py:424: in wait_pattern
+    has_match = any(re.search(self.pattern, line) for line in lines)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/A7DFnmZCVY6qT8qFUWuns/lib/python3.12/site-packages/xprocess/xprocess.py:424: in <genexpr>
+    has_match = any(re.search(self.pattern, line) for line in lines)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+root/.cache/uv/archive-v0/A7DFnmZCVY6qT8qFUWuns/lib/python3.12/site-packages/xprocess/xprocess.py:429: in <genexpr>
+    non_empty_lines = (x for x in lines if x.strip())
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_trigger_dev.<locals>.Starter object at 0x7f8e008d79b0>
+log_file = <_io.TextIOWrapper name='/tests/.pytest_cache/d/.xprocess/start_trigger_dev/xprocess.log' mode='r' encoding='utf-8'>
+
+    def get_lines(self, log_file):
+        """Read and yield one line at a time from log_file. Will raise
+        TimeoutError if pattern is not matched before self.timeout
+        seconds."""
+        while True:
+            line = log_file.readline()
+            if not line:
+                time.sleep(0.1)
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided start pattern {} could not be matched \
+                    within the specified time interval of {} seconds".format(
+                        self.pattern, self.timeout
+                    )
+                )
+E               TimeoutError: The provided start pattern Local worker ready could not be matched                     within the specified time interval of 180 seconds
+
+root/.cache/uv/archive-v0/A7DFnmZCVY6qT8qFUWuns/lib/python3.12/site-packages/xprocess/xprocess.py:446: TimeoutError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1337
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+[?25l│
+
+◒  Checking for notifications
+[999D[J◐  Checking for notifications
+[999D[J◓  Checking for notifications
+[999D[J◑  Checking for notifications[999D[J◒  Checking for notifications
+[999D[J◐  Checking for notifications
+[999D[J◓  Checking for notifications
+[999D[J◇  No new notifications
+
+[?25hKey: Version | Task | Run
+
+------------------------------------------------------
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mProject not found: prj_01J8Z5S2KQ7V6X4R8W9Y0P3L5M7N9Q2R4. Ensure you are using the correct project ref and CLI profile (use --profile). Currently using the "default" profile, which points to https://api.trigger.dev[0m
+
+=========================== short test summary info ============================
+ERROR tests/test_final_state.py::test_onboarding_workflow - TimeoutError: The...
+========================= 1 error in 187.15s (0:03:07) =========================

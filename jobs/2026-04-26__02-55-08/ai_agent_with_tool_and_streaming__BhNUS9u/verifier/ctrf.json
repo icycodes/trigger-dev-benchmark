@@ -1,0 +1,44 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 2,
+            "passed": 0,
+            "failed": 2,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777150108.784429,
+            "stop": 1777150187.598538
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_ai_agent_task_execution",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 78.16107158200248,
+                "start": 1777150108.790964,
+                "stop": 1777150186.9631014,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_ai_agent_task_execution(start_trigger_dev):\n        # Trigger the task\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n    \n        assert result.returncode == 0, f\"Trigger script failed with code {result.returncode}, stderr: {result.stderr}\"\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}\"\n        run_id = run_id_match.group(1)\n    \n        # Verify that the output contains some streamed chunks (non-empty)\n        # The trigger script is expected to print chunks as they arrive.\n        assert len(result.stdout.strip()) > 50, f\"Streamed output seems too short or missing, stdout: {result.stdout}\"\n    \n        # Check run result logic via API\n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n        for _ in range(20): # AI tasks can take a while\n            run_result = subprocess.run(\n              [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n              capture_output=True,\n              text=True\n            )\n            assert run_result.returncode == 0, f\"Retrieve run result failed with code {run_result.returncode}\"\n    \n            try:\n                run_result_json = json.loads(run_result.stdout)\n            except json.JSONDecodeError:\n                assert False, f\"Failed to parse run result JSON: {run_result.stdout}\"\n    \n            assert \"status\" in run_result_json, f\"Run status is missing in {run_result_json}\"\n            run_status = run_result_json[\"status\"]\n    \n            if run_status == \"COMPLETED\":\n                # Verify that the output is non-empty and contains expected info\n>               assert \"output\" in run_result_json, f\"Run output is missing in {run_result_json}\"\nE               AssertionError: Run output is missing in {'id': 'run_cmoetaroq6v890on1yy8vqf7z', 'taskIdentifier': 'agentTask-ai_agent_with_tool_and_streaming__BhNUS9u', 'version': '20260425.18', 'status': 'COMPLETED', 'createdAt': '2026-04-25T20:48:43.954Z', 'startedAt': '2026-04-25T20:48:47.789Z', 'updatedAt': '2026-04-25T20:49:29.191Z', 'finishedAt': '2026-04-25T20:49:29.184Z', 'ttl': '10m', 'costInCents': 0, 'baseCostInCents': 0.0025, 'durationMs': 37762, 'isTest': False, 'depth': 0, 'tags': [], 'isQueued': False, 'isExecuting': False, 'isCompleted': True, 'isFailed': False, 'isSuccess': True, 'isCancelled': False, 'isWaiting': False, 'triggerFunction': 'trigger', 'payload': {'city': 'Paris'}, 'attemptCount': 1, 'attempts': [], 'relatedRuns': {'children': []}}\nE               assert 'output' in {'attemptCount': 1, 'attempts': [], 'baseCostInCents': 0.0025, 'costInCents': 0, ...}\n\ntests/test_final_state.py:94: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_weather_tool_called",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 0.6279967960035719,
+                "start": 1777150186.963256,
+                "stop": 1777150187.598382,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_weather_tool_called(start_trigger_dev):\n        # This test checks if the weather tool was actually called by inspecting the run events/logs\n        # We can use the run_id from the previous test or just rely on the overall task success\n        # For now, we assume if the task completed and produced output, it worked.\n        # A more robust check would be to list runs of the weather task.\n    \n        trial_id_path = \"/logs/trial_id\"\n        with open(trial_id_path, \"r\") as f:\n            trial_id = f.read().strip()\n    \n        weather_task_id = f\"weatherTask-{trial_id}\"\n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n    \n        # List runs for the weather task\n        list_runs_result = subprocess.run(\n            [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v1/runs?filter%5BtaskIdentifier%5D={weather_task_id}\"],\n            capture_output=True,\n            text=True\n        )\n        assert list_runs_result.returncode == 0\n        runs_json = json.loads(list_runs_result.stdout)\n    \n        # Verify at least one run of the weather task exists and was successful\n>       assert len(runs_json.get(\"data\", [])) > 0, f\"No runs found for weather task {weather_task_id}\"\nE       AssertionError: No runs found for weather task weatherTask-ai_agent_with_tool_and_streaming__BhNUS9u\nE       assert 0 > 0\nE        +  where 0 = len([])\nE        +    where [] = <built-in method get of dict object at 0x7f550f9e8180>('data', [])\nE        +      where <built-in method get of dict object at 0x7f550f9e8180> = {'data': [], 'pagination': {}}.get\n\ntests/test_final_state.py:130: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

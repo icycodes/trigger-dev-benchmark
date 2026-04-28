@@ -1,0 +1,24 @@
+{
+  "name": "python-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\\\" && exit 1",
+    "run-task": "tsc --skipLibCheck --esModuleInterop --module commonjs --target es2020 --moduleResolution node --outDir dist src/run-task.ts && node dist/run-task.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@trigger.dev/python": "^4.4.4",
+    "@trigger.dev/sdk": "^4.4.4"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.4.4",
+    "@types/node": "^25.6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,72 @@
+# AI Agent with Tool and Streaming
+
+## Background
+Trigger.dev v4 provides powerful primitives for building AI agents. You can convert Trigger.dev tasks into tools for the Vercel AI SDK using `ai.tool`, and you can stream data back to clients using `streams.pipe`. This combination allows for building complex, long-running AI workflows with real-time feedback.
+
+## Requirements
+- Create a Trigger.dev task that acts as a weather tool. It should take a `city` as input and return a dummy weather string.
+- Create a main Trigger.dev task that uses the Vercel AI SDK and the weather tool to generate a clothing recommendation based on the weather in a given city.
+- The main task should stream the AI response token by token using Trigger.dev's `streams.pipe` mechanism.
+- Use `trial_id` from `/logs/trial_id` to suffix all Trigger.dev task IDs and to isolate resources.
+- Implement a script to trigger the main task and print the run ID and the streamed parts.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest ai @ai-sdk/openai zod
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. In `src/trigger/weather.ts`, define a `schemaTask` named `weatherTask-${trial_id}` that takes a `city: z.string()` and returns `{ weather: "Sunny and 25°C" }` (you can make it more dynamic if you want, but a dummy response is fine).
+3. In `src/trigger/agent.ts`, define a `schemaTask` named `agentTask-${trial_id}` that:
+    - Uses `ai.tool(weatherTask)` to create a tool.
+    - Uses `streamText` from `ai` with `openai('gpt-4o')` and the weather tool.
+    - Uses `streams.define({ id: "ai-output" })` to define a stream.
+    - Pipes the `textStream` from `streamText` to the defined stream using `.pipe()`.
+    - Awaits `waitUntilComplete()` from the pipe result.
+4. Create a trigger script `trigger.ts` that:
+    - Triggers `agentTask-${trial_id}` with a city (e.g., "Paris").
+    - Subscribes to the `ai-output` stream using `streams.read(run.id, "ai-output")`.
+    - Prints each chunk as it arrives.
+    - Prints "Run ID: ${run.id}" at the end.
+5. Add an `npm run run-task` command in `package.json` that runs the trigger script using `npx tsx trigger.ts`.
+
+## Constraints
+- Project path: /home/user/ai-agent-task
+- Start task: `npm run run-task`
+- Use `trial_id` for task ID isolation.
+- Use `@trigger.dev/sdk` for all Trigger.dev imports.
+
+## Integrations
+- Trigger.dev
+- OpenAI
