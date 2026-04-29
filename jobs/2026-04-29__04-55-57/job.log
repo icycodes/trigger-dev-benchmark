@@ -1,0 +1,1234 @@
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo ffmpeg_video_processing_extensio__nZVU6Vp > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Video Processing with FFmpeg Extension
+
+## Background
+Trigger.dev allows you to use build extensions to install system-level dependencies like FFmpeg in your serverless environment. This task involves setting up a Trigger.dev project with the FFmpeg extension and creating a task that processes a video file.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/ffmpeg-task`.
+- Configure the `ffmpeg` build extension in `trigger.config.ts`.
+- Implement a Trigger.dev task named `ffmpeg-extract-audio-${trial_id}` (where `${trial_id}` is read from `/logs/trial_id`) that:
+    - Accepts a `videoUrl` in its payload.
+    - Downloads the video.
+    - Uses `fluent-ffmpeg` to extract the audio and convert it to WAV format (mono, 44.1kHz).
+    - Saves the resulting audio file to `/home/user/ffmpeg-task/output/audio.wav`.
+- Create an `npm run run-task` command that triggers the task with a sample video URL and prints the Run ID.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    npm add fluent-ffmpeg node-fetch
+    npm add -D @types/fluent-ffmpeg @types/node-fetch
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF` and add the `ffmpeg` extension.
+    ```ts
+    import { ffmpeg } from "@trigger.dev/build/extensions/core";
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      build: {
+        extensions: [ffmpeg()],
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create the directory `/home/user/ffmpeg-task/output` and ensure it is writable.
+3. Define the task in `src/trigger/ffmpeg-task.ts`. Use `fluent-ffmpeg` and `node-fetch` to process the video stream.
+4. Ensure you use the `ffmpeg` extension in `trigger.config.ts` as shown in the setup guide.
+5. Implement the `npm run run-task` script in `package.json` to trigger the task using `helloWorld.trigger()` (or equivalent for your task) and log `Run ID: <id>`.
+
+## Constraints
+- Project path: /home/user/ffmpeg-task
+- Log file: /home/user/ffmpeg-task/output/audio.wav
+- Start task: `npm run run-task`
+- Use `trial_id` for the task ID suffix.
+- Do not use external storage like S3/R2; save files locally to the `output` directory.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo batch_processing_with_results_ag__bDWQeW8 > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Batch Processing with Results Aggregation in Trigger.dev
+
+## Background
+Trigger.dev is a background job platform that allows for durable execution of workflows. A common pattern is to process a large number of items by triggering child tasks and then aggregating their results. This task involves implementing a parent task that triggers multiple child tasks in parallel and waits for all of them to complete before returning a summary.
+
+## Requirements
+- Implement a child task `process-item` that simulates processing an item (e.g., squaring a number) with a small delay.
+- Implement a parent task `batch-process` that takes an array of numbers, triggers the `process-item` task for each number using `batchTriggerAndWait`, and returns the sum of all processed results.
+- Use `trial_id` from `/logs/trial_id` to suffix task IDs to avoid collisions.
+- Ensure the project is correctly configured using `trigger.config.ts`.
+- Provide an entry point to trigger the `batch-process` task and log the `run_id`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Initialize a Node.js project in `/home/user/batch-task`.
+2. Read `trial_id` from `/logs/trial_id`.
+3. Create `src/trigger/tasks.ts` and define:
+    - `processItemTask`: A task that takes a number, waits for 1 second, and returns the square of the number. Suffix ID with `trial_id`.
+    - `batchProcessTask`: A task that takes an array of numbers, uses `batchTriggerAndWait` to run `processItemTask` for each, and returns the sum of the results. Suffix ID with `trial_id`.
+4. Add an `npm run run-task` script in `package.json` that triggers `batchProcessTask` with the input `[1, 2, 3, 4, 5]` and prints `Run ID: <run_id>`.
+
+## Constraints
+- Project path: /home/user/batch-task
+- Start task: `npm run run-task`
+- Must use `batchTriggerAndWait` for parallel processing.
+- Must suffix task IDs with `trial_id`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo resilient_webhook_idempotency__PFaoXBZ > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Resilient Webhook Handler with Idempotency
+
+## Background
+In distributed systems, webhooks can be delivered multiple times. Trigger.dev provides idempotency keys to ensure that a task is only executed once for a given unique identifier, even if triggered multiple times. This is critical for operations like payments or data synchronization.
+
+## Requirements
+- Implement a Trigger.dev task that simulates processing a webhook (e.g., a payment notification).
+- The task must use an **idempotency key** provided in the payload to prevent duplicate processing.
+- If the task is triggered multiple times with the same idempotency key, it should return the result of the first successful execution without running the logic again.
+- The task should include a simulated delay (e.g., 2 seconds) to represent work.
+- Implement a script to trigger this task twice in quick succession with the same idempotency key and verify that only one run is actually executed (or that both return the same successful result from the first run).
+- Suffix the task ID with the `trial_id` from `/logs/trial_id` to avoid collisions.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node
+    npx tsc --init
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create a task in `src/trigger/webhook.ts` with ID `webhook-handler-${trial_id}`.
+3. The task should accept a payload with `idempotencyKey` and `amount`.
+4. Use the `idempotencyKey` in the `trigger` call or define it within the task logic if using Trigger.dev's built-in idempotency features (Note: In v3/v4, idempotency is often handled at the trigger level via the `idempotencyKey` option).
+5. The task should return `{ success: true, processedAt: new Date().toISOString(), amount: payload.amount }`.
+6. Add a script `trigger-webhook.ts` that uses the Trigger.dev SDK to trigger the task twice with the same `idempotencyKey`.
+7. Add an `npm run run-task` command in `package.json` that runs the `trigger-webhook.ts` script and prints the Run IDs in format: `Run ID 1:: <run_id_1>, Run ID 2: <run_id_2>`
+
+## Constraints
+- Project path: /home/user/webhook-task
+- Start task: `npm run run-task`
+- Task ID suffix: `${trial_id}`
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo scheduled_sync__UkFBjqw > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Trigger.dev Scheduled Data Sync
+
+## Background
+Trigger.dev is a background job platform for TypeScript. One common use case is running periodic tasks (cron jobs) to synchronize data between external APIs and internal systems.
+
+## Requirements
+- Create a Trigger.dev task that performs a data synchronization.
+- The task should be triggered on a schedule (e.g., every minute for this exercise).
+- The task should fetch data from a mock external API (you can use a JSON placeholder or a simple mock function).
+- The task should log the number of items processed.
+- The task ID must be suffixed with the `trial_id` read from `/logs/trial_id`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create a task in `src/trigger/sync.ts` using the `schedules.task` (or `task` with a schedule trigger).
+3. Use `https://jsonplaceholder.typicode.com/todos` as the mock API to fetch data.
+4. Log the count of todos fetched.
+5. Ensure the task ID is `scheduled-sync-${trial_id}`.
+6. Add an `npm run run-task` command in `package.json` that triggers the task immediately for testing, and prints the Run ID in format `Run ID: <run_id>`.
+
+## Constraints
+- Project path: /home/user/trigger-sync
+- Start task: `npm run run-task`
+- Task ID: `scheduled-sync-${trial_id}`
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo subscription_onboarding_with_wai__RvCMqeR > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Durable Subscription Onboarding with Waitpoints
+
+## Background
+In many SaaS applications, user onboarding involves steps that require human interaction, such as email verification or manual approval. Trigger.dev's **Waitpoints** allow you to pause a workflow indefinitely without consuming compute resources, and resume it once an external event (like a link click) occurs.
+
+## Requirements
+- Build a Next.js web application that handles user sign-up and onboarding.
+- When a user signs up, trigger a Trigger.dev task named `onboarding-workflow-${trial_id}`.
+- The task should:
+    1. Set the run metadata to `{"status": "Waiting for verification"}`.
+    2. Create a waitpoint token using `wait.createToken`.
+    3. Pause execution using `wait.forToken` and wait for the token to be completed.
+    4. Once completed, set the run metadata to `{"status": "Active"}`.
+- The web app should:
+    1. Provide a sign-up form (email input).
+    2. Display the current status of the onboarding process by polling the Trigger.dev run status/metadata.
+    3. Display a "Simulate Email Verification" link which, when clicked, completes the waitpoint token (you can do this via a server action or a simple API route in the web app that calls the Trigger.dev API).
+- Use `trial_id` from `/logs/trial_id` to suffix the Trigger.dev task ID and isolate resources.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create a Next.js project in `/home/user/onboarding-app`.
+3. Implement the `onboarding-workflow-${trial_id}` task in `src/trigger/onboarding.ts`.
+    - Use `runs.metadata.update` to set the status.
+    - Use `wait.createToken({ timeout: "1h" })` to get a token.
+    - Use `await wait.forToken(token)` to pause.
+4. In the web app UI (`app/page.tsx`):
+    - Show a form to start the onboarding.
+    - Once started, show the Run ID and the current status (fetch from `https://api.trigger.dev/api/v3/runs/${runId}`).
+    - If the status is "Waiting for verification", show a button/link that sends a POST request to `/api/verify?token=${tokenId}`.
+5. Implement `app/api/verify/route.ts` to complete the token using `wait.completeToken(tokenId, { data: { verified: true } })` or by calling the Trigger.dev API directly.
+
+## Constraints
+- Project path: /home/user/onboarding-app
+- Start command: `npm run dev` (Ensure it runs on port 3000)
+- Port: 3000
+- Use `trial_id` for task ID isolation.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo human_approval_workflow__iwvYZuE > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Human Approval Workflow with Trigger.dev Waitpoints
+
+## Background
+Trigger.dev allows pausing a run until an external event occurs using **Waitpoints**. This is useful for human-in-the-loop approvals, where a workflow should only proceed after a manual check.
+
+## Requirements
+Implement a deployment approval workflow in a Trigger.dev task.
+- The task should be named `deploy-approval-${trial_id}`.
+- It should accept a payload with a `version` (string).
+- It should create a waitpoint token using `wait.createToken()` with a timeout of 1 hour.
+- It should write the waitpoint token URL to `/home/user/approval-workflow/approval_url.txt`.
+- It should wait for the token using `wait.forToken()`.
+- The token completion payload will be an object: `{ approved: boolean }`.
+- If `approved` is true, the task should return `{ status: "deployed", version: payload.version }`.
+- If `approved` is false, it should return `{ status: "rejected", version: payload.version }`.
+- If the waitpoint times out (result not ok), it should throw an error or return a failure status.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk/build";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create a Trigger.dev task in `src/trigger/approval.ts`.
+3. Use `wait.createToken` and `wait.forToken` from `@trigger.dev/sdk`.
+4. Use `fs.writeFileSync` to write the token URL to `/home/user/approval-workflow/approval_url.txt`.
+5. Add an `npm run run-task` command in `package.json` that triggers the task with a version payload (e.g., `v1.0.0`) and prints the Run ID in the format `Run ID: ${run_id}`.
+
+## Constraints
+- Project path: `/home/user/approval-workflow`
+- Task ID: `deploy-approval-${trial_id}`
+- Suffix all task IDs with the `trial_id` found in `/logs/trial_id`.
+- Use `@trigger.dev/sdk` for imports.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo puppeteer_screenshot_task__9BLXpnW > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Trigger.dev Puppeteer Screenshot Task
+
+## Background
+Trigger.dev is a powerful platform for running long-running background jobs. One common use case is automating browser tasks like taking screenshots of web pages. By using the Puppeteer build extension, you can run a full headless browser within your Trigger.dev tasks.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/screenshot-service`.
+- Configure the project to use the Puppeteer build extension.
+- Implement a task that takes a URL as input, uses Puppeteer to navigate to that URL, and takes a full-page screenshot.
+- The task should save the screenshot to `/home/user/screenshot-service/screenshots/${url_slug}.png`.
+- The task should return the path to the saved screenshot.
+- Add an `npm run run-task` command to trigger the task with a sample URL (e.g., `https://example.com`) and print the `run_id`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest puppeteer
+    npm add -D @trigger.dev/build@latest typescript @types/node
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF` and include the Puppeteer extension.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+    import { puppeteer } from "@trigger.dev/build/extensions/puppeteer";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      build: {
+        extensions: [puppeteer()],
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`;
+2. Create the task in `src/trigger/screenshot.ts`. Suffix the task ID with the `trial_id` (e.g., `id: "puppeteer-screenshot-${trial_id}"`);
+3. Use `puppeteer.launch()` with the following options:
+   ```javascript
+   executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || "/usr/bin/google-chrome-stable",
+   args: ["--no-sandbox", "--disable-setuid-sandbox"]
+   ```
+4. Implement the screenshot logic: navigate to the URL, take a full-page screenshot, and save it to the `screenshots` directory;
+5. Ensure the `screenshots` directory exists before saving;
+6. Add a script `trigger.ts` to trigger the task using `tasks.trigger` and print `Run ID: ${run.id}`;
+7. Add `"run-task": "npx ts-node trigger.ts"` to `package.json` scripts.
+
+## Constraints
+- Project path: `/home/user/screenshot-service`
+- Start task: `npm run run-task`
+- The task ID must be `puppeteer-screenshot-${trial_id}`.
+- Screenshots must be saved in `/home/user/screenshot-service/screenshots/`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo python_extension_data_processing__8EuGDoG > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Python Extension Data Processing with Trigger.dev
+
+## Background
+Trigger.dev allows developers to execute Python scripts within their TypeScript tasks using the `pythonExtension`. This enables the use of Python's rich data science ecosystem (like NumPy, Pandas, or Scikit-learn) alongside the reliability and scalability of Trigger.dev's background jobs.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/python-task`.
+- Configure `trigger.config.ts` to include the `pythonExtension` with `numpy` installed via a `requirements.txt` file.
+  **Note**: The `requirementsFile` option is only available in production mode. In development mode, you can install the required packages manually using the pip command.
+- Create a Python script `scripts/process.py` that:
+    1. Accepts a list of numbers as command-line arguments.
+    2. Calculates the average of these numbers using `numpy`.
+    3. Prints the result in a specific format: `Average: <value>`.
+- Create a Trigger.dev task named `python-process-${trial_id}` that:
+    1. Receives an array of numbers in its payload.
+    2. Executes the `scripts/process.py` script using `python.runScript`.
+    3. Parses the output and returns the average value.
+- Provide an npm script `npm run run-task` that triggers the task with the payload `[10, 20, 30, 40, 50]` and prints the `Run ID: <run_id>`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm init -y
+    npm add @trigger.dev/sdk@latest @trigger.dev/python@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node ts-node
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF` and include the `pythonExtension`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+    import { pythonExtension } from "@trigger.dev/python/extension";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      build: {
+        extensions: [
+          pythonExtension({
+            requirementsFile: "./requirements.txt",
+            scripts: ["./scripts/**/*.py"],
+          }),
+        ],
+      },
+    });
+    ```
+4. **Check Project Configuration**: Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check the `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. Create `requirements.txt` with `numpy`.
+3. Create `scripts/process.py` to calculate the average using `numpy.mean()`.
+4. Create `src/trigger/python-task.ts` and define the task. Suffix the task ID with `${trial_id}`.
+5. Use `python.runScript("./scripts/process.py", payload.map(String))` to execute the script.
+6. Implement `npm run run-task` in `package.json` to trigger the task and print `Run ID: <run_id>`.
+
+## Constraints
+- Project path: /home/user/python-task
+- Start task: `npm run run-task`
+- Must use `pythonExtension` and `python.runScript`.
+- Must suffix task ID with `trial_id`.
+
+## Integrations
+- Trigger.dev
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo multi_tenant_concurrency_control__uxzzSwW > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Multi-tenant Concurrency Control with Trigger.dev
+
+## Background
+Trigger.dev allows you to control the concurrency of your tasks not just globally, but also per-tenant (e.g., per user or per organization). This is essential for SaaS applications where you want to ensure that one user's heavy workload doesn't block other users, while still limiting the resources consumed by any single user.
+
+## Requirements
+- Initialize a Trigger.dev project in `/home/user/multi-tenant-task`.
+- Define a Trigger.dev **Queue** with the ID `multi-tenant-queue-${trial_id}` and a global `concurrencyLimit` of 10.
+- Implement a task named `multi-tenant-task-${trial_id}` that:
+    - Uses the defined queue.
+    - Uses a `concurrencyKey` based on the `userId` in the payload to limit concurrency to **1 per user**.
+    - Accepts a payload with `userId` (string) and `jobId` (string).
+    - Simulates work by sleeping for 5 seconds.
+    - Returns the `userId`, `jobId`, and the `startedAt` / `finishedAt` timestamps from the task context.
+- Suffix all IDs (Queue ID and Task ID) with the `trial_id` read from `/logs/trial_id`.
+- Add an `npm run run-task` command in `package.json` that triggers 4 task instances in parallel:
+    - 2 instances for `user_A` (jobId: `A1`, `A2`)
+    - 2 instances for `user_B` (jobId: `B1`, `B2`)
+- The script should print the 4 resulting Run IDs in the format `Run IDs: <id_A1>, <id_A2>, <id_B1>, <id_B2>`.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest typescript @types/node
+    npx tsc --init
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF!,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. In `src/trigger/multi_tenant.ts`, define the `Queue` with `concurrencyLimit: 10`.
+3. Define the `task` and use the `queue` property. Use the `concurrencyKey` option in the task definition to return `payload.userId`.
+4. Use `await new Promise(resolve => setTimeout(resolve, 5000))` for the sleep.
+5. Implement a script `scripts/trigger.ts` that uses the Trigger.dev SDK to trigger the 4 tasks (A1, A2, B1, B2) and logs the Run IDs.
+
+## Constraints
+- Project path: /home/user/multi-tenant-task
+- Start task: `npm run run-task`
+- Task ID suffix: `${trial_id}`
+- User Concurrency: 1 per user
+- Total Concurrency: 10
+
+## Integrations
+- Trigger.dev
+
+EOF
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Exception AgentTimeoutError is in exclude_exceptions, not retrying
+Not retrying trial because the exception is not in include_exceptions or the maximum number of retries has been reached
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; if command -v pochi >/dev/null 2>&1; then installed_version="$(pochi --version | tr -d '\r')"; printf "Found pochi version: %s\n" "$installed_version"; printf "__POCHI_INSTALLED_VERSION__=%s\n" "$installed_version"; else echo "Pochi is not installed"; echo "__POCHI_INSTALLED_VERSION__="; fi
+Command outputs captured
+Running command: set -euo pipefail; export PATH="$HOME/.pochi/bin:$PATH"; pochi --version; mkdir -p /logs/agent/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo ai_agent_with_tool_and_streaming__4XzRy55 > /logs/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/ANTHROPIC_API_KEY/${ANTHROPIC_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.5": {
+          "name": "kimi-K2.5"
+        },
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "qwen3-coder-480b"
+        }
+      }
+    },
+    "anthropic": {
+      "kind": "openai",
+      "baseURL": "https://api.anthropic.com/v1",
+      "apiKey": "ANTHROPIC_API_KEY",
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: export PATH="$HOME/.pochi/bin:$PATH"; pochi --model google/gemini-3.1-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# AI Agent with Tool and Streaming
+
+## Background
+Trigger.dev v4 provides powerful primitives for building AI agents. You can convert Trigger.dev tasks into tools for the Vercel AI SDK using `ai.tool`, and you can stream data back to clients using `streams.pipe`. This combination allows for building complex, long-running AI workflows with real-time feedback.
+
+## Requirements
+- Create a Trigger.dev task that acts as a weather tool. It should take a `city` as input and return a dummy weather string.
+- Create a main Trigger.dev task that uses the Vercel AI SDK and the weather tool to generate a clothing recommendation based on the weather in a given city.
+- The main task should stream the AI response token by token using Trigger.dev's `streams.pipe` mechanism.
+- Use `trial_id` from `/logs/trial_id` to suffix all Trigger.dev task IDs and to isolate resources.
+- Implement a script to trigger the main task and print the `Run ID: <run_id>` and the streamed parts.
+
+## Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest ai @ai-sdk/openai zod
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+## Implementation Guide
+1. Read `trial_id` from `/logs/trial_id`.
+2. In `src/trigger/weather.ts`, define a `schemaTask` named `weatherTask-${trial_id}` that takes a `city: z.string()` and returns `{ weather: "Sunny and 25°C" }` (you can make it more dynamic if you want, but a dummy response is fine).
+3. In `src/trigger/agent.ts`, define a `schemaTask` named `agentTask-${trial_id}` that:
+    - Uses `ai.tool(weatherTask)` to create a tool.
+    - Uses `streamText` from `ai` with `openai('gpt-4o')` and the weather tool.
+    - Uses `streams.define({ id: "ai-output" })` to define a stream.
+    - Pipes the `textStream` from `streamText` to the defined stream using `.pipe()`.
+    - Awaits `waitUntilComplete()` from the pipe result.
+4. Create a trigger script `trigger.ts` that:
+    - Triggers `agentTask-${trial_id}` with a city (e.g., "Paris").
+    - Subscribes to the `ai-output` stream using `streams.read(run.id, "ai-output")`.
+    - Prints each chunk as it arrives.
+    - Prints "Run ID: ${run.id}" at the end.
+5. Add an `npm run run-task` command in `package.json` that runs the trigger script using `npx tsx trigger.ts`.
+
+## Constraints
+- Project path: /home/user/ai-agent-task
+- Start task: `npm run run-task`
+- Use `trial_id` for task ID isolation.
+- Use `@trigger.dev/sdk` for all Trigger.dev imports.
+
+## Integrations
+- Trigger.dev
+- OpenAI
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+The verifier.env contains an API key (often the case for LLM-based verifiers). You will incur costs associated with the API calls.

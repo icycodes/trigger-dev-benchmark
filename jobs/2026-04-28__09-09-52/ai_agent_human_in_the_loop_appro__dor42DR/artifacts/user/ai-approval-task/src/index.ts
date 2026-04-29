@@ -1,0 +1,1 @@
+export { aiContentGeneratorTask } from "./trigger/ai-generator";

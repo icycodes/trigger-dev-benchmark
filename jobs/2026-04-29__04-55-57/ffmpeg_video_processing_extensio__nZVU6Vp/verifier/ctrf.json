@@ -1,0 +1,56 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 4,
+            "passed": 4,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777410047.5552714,
+            "stop": 1777410098.1002471
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_ffmpeg_task_execution",
+                "status": "passed",
+                "duration": 50.472474953000074,
+                "start": 1777410047.5618174,
+                "stop": 1777410098.0352745,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_output_file_exists",
+                "status": "passed",
+                "duration": 0.0005609510000113005,
+                "start": 1777410098.0358078,
+                "stop": 1777410098.0365806,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_output_file_format",
+                "status": "passed",
+                "duration": 0.03307889699999578,
+                "start": 1777410098.0368116,
+                "stop": 1777410098.0700855,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_trigger_config_contains_ffmpeg",
+                "status": "passed",
+                "duration": 0.029186205999963022,
+                "start": 1777410098.0702806,
+                "stop": 1777410098.0995708,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

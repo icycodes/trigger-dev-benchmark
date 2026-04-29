@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777415382.7301137,
+            "stop": 1777415604.170969
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_ai_approval_workflow",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 221.41441432400006,
+                "start": 1777415382.7347655,
+                "stop": 1777415604.1707091,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_ai_approval_workflow(start_trigger_dev):\n        # 1. Trigger the task\n        trigger_result = subprocess.run(\n            [\"npm\", \"run\", \"trigger-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n>       assert trigger_result.returncode == 0, f\"Triggering task failed: {trigger_result.stderr}\"\nE       AssertionError: Triggering task failed: Failed to retrieve waitpoint token. The task may not have reached the approval step yet.\nE         \nE       assert 1 == 0\nE        +  where 1 = CompletedProcess(args=['npm', 'run', 'trigger-task'], returncode=1, stdout='\\n> ai-approval-task@1.0.0 trigger-task\\n>...ING_VERSION...\\n', stderr='Failed to retrieve waitpoint token. The task may not have reached the approval step yet.\\n').returncode\n\ntests/test_final_state.py:43: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "multi-tenant-task",
+  "version": "1.0.0",
+  "description": "Multi-tenant concurrency control with Trigger.dev",
+  "main": "index.js",
+  "scripts": {
+    "run-task": "tsx scripts/trigger.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@trigger.dev/sdk": "^3.3.0"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^3.3.0",
+    "typescript": "^5.6.3",
+    "@types/node": "^22.8.6",
+    "tsx": "^4.19.2"
+  }
+}

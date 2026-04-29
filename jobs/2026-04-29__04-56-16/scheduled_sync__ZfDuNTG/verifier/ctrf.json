@@ -1,0 +1,29 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777410596.8879933,
+            "stop": 1777410637.6154044
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_scheduled_sync_execution",
+                "status": "passed",
+                "duration": 40.72087696999995,
+                "start": 1777410596.8933592,
+                "stop": 1777410637.6149542,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

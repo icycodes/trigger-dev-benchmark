@@ -1,0 +1,54 @@
+{
+    "id": "9d2c164f-b861-4052-ad0a-c5542e0dfe46",
+    "started_at": "2026-04-28T09:09:52.755340",
+    "finished_at": "2026-04-28T11:52:16.547904",
+    "n_total_trials": 15,
+    "stats": {
+        "n_trials": 15,
+        "n_errors": 7,
+        "evals": {
+            "pochi__glm-4.7__tasks": {
+                "n_trials": 15,
+                "n_errors": 7,
+                "metrics": [
+                    {
+                        "mean": 0.0
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "ffmpeg_video_processing_extensio__V2Txh4u",
+                            "batch_processing_with_results_ag__QULJ5fC",
+                            "realtime_task_streaming_dashboar__nyCjviv",
+                            "resilient_webhook_idempotency__UkFuTrU",
+                            "scheduled_sync__b9AvH7i",
+                            "human_in_the_loop_error_correcti__b3dSyhB",
+                            "subscription_onboarding_with_wai__GqMLCHU",
+                            "human_approval_workflow__MXu7S86",
+                            "puppeteer_screenshot_task__KyRVzxb",
+                            "python_extension_data_processing__CQy8KDv",
+                            "ai_agent_human_in_the_loop_appro__dor42DR",
+                            "multi_tenant_concurrency_control__PaijuUZ",
+                            "concurrency_limited_queue__AJX3fb5",
+                            "ai_agent_with_tool_and_streaming__YygBqUA",
+                            "multi_stage_ai_pipeline_orchestr__okj6f2Q"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "batch_processing_with_results_ag__QULJ5fC",
+                        "realtime_task_streaming_dashboar__nyCjviv",
+                        "resilient_webhook_idempotency__UkFuTrU",
+                        "scheduled_sync__b9AvH7i",
+                        "human_in_the_loop_error_correcti__b3dSyhB",
+                        "subscription_onboarding_with_wai__GqMLCHU",
+                        "multi_tenant_concurrency_control__PaijuUZ"
+                    ]
+                }
+            }
+        }
+    }
+}

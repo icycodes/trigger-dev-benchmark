@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777342882.6800616,
+            "stop": 1777342913.9271739
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_concurrency_limit",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 31.229741948000083,
+                "start": 1777342882.684872,
+                "stop": 1777342913.9269338,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_concurrency_limit(start_trigger_dev):\n        # Trigger the tasks\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n    \n        # Find run ids in result.stdout\n        # Format: Run IDs: <id1>, <id2>, <id3>\n        match = re.search(r\"Run IDs: ([a-zA-Z0-9_]+), ([a-zA-Z0-9_]+), ([a-zA-Z0-9_]+)\", result.stdout)\n>       assert match, f\"Run IDs not found in the trigger result, stdout: {result.stdout}\"\nE       AssertionError: Run IDs not found in the trigger result, stdout: \nE         > concurrency-task@1.0.0 run-task\nE         > npx ts-node scripts/trigger.ts\nE         \nE         \nE       assert None\n\ntests/test_final_state.py:67: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

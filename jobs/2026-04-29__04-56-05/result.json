@@ -1,0 +1,44 @@
+{
+    "id": "273502c5-aea9-4c4e-ac7b-c1ac1b52c2c9",
+    "started_at": "2026-04-29T04:56:05.438421",
+    "finished_at": "2026-04-29T06:03:07.166837",
+    "n_total_trials": 10,
+    "stats": {
+        "n_trials": 10,
+        "n_errors": 1,
+        "evals": {
+            "pochi__gemini-3-flash__tasks": {
+                "n_trials": 9,
+                "n_errors": 1,
+                "metrics": [
+                    {
+                        "mean": 0.3
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "ffmpeg_video_processing_extensio__3fuR3XB",
+                            "resilient_webhook_idempotency__tySjqkp",
+                            "human_approval_workflow__bxvdRFL",
+                            "python_extension_data_processing__z4UUddb",
+                            "multi_tenant_concurrency_control__a7ZVU4G",
+                            "ai_agent_with_tool_and_streaming__8zP85sX"
+                        ],
+                        "1.0": [
+                            "batch_processing_with_results_ag__GGhd6kt",
+                            "scheduled_sync__4tnyAmV",
+                            "puppeteer_screenshot_task__qTTnTXu"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "VerifierTimeoutError": [
+                        "subscription_onboarding_with_wai__fS9ZT7K"
+                    ]
+                }
+            }
+        }
+    }
+}

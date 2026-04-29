@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777411790.032333,
+            "stop": 1777411916.619089
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_human_in_the_loop_error_correction",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 126.57252605300073,
+                "start": 1777411790.0382278,
+                "stop": 1777411916.6188226,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_human_in_the_loop_error_correction(start_trigger_dev):\n        # 1. Start Pipeline\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-pipeline\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n        assert result.returncode == 0, f\"run-pipeline failed: {result.stderr}\"\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}\"\n        run_id = run_id_match.group(1)\n    \n        # 2. Verify Waitpoint Token File\n        # Wait for the token file to be created (max 30 seconds)\n        for _ in range(12):\n            if os.path.exists(TOKEN_FILE):\n                break\n            time.sleep(5)\n        else:\n            pytest.fail(f\"Waitpoint token file {TOKEN_FILE} was not created.\")\n    \n        with open(TOKEN_FILE, \"r\") as f:\n            token = f.read().strip()\n        assert token, \"Waitpoint token is empty.\"\n    \n        # 3. Check Run Status (should be WAITING or EXECUTING)\n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n        run_result = subprocess.run(\n            [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n            capture_output=True,\n            text=True\n        )\n        assert run_result.returncode == 0\n        run_data = json.loads(run_result.stdout)\n        # status could be EXECUTING while it's paused on wait.forToken\n        assert run_data[\"status\"] in [\"EXECUTING\", \"WAITING\", \"PENDING_VERSION\", \"QUEUED\"], f\"Unexpected run status: {run_data['status']}\"\n    \n        # 4. Complete Waitpoint\n        complete_result = subprocess.run(\n            [\"npm\", \"run\", \"complete-waitpoint\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n        assert complete_result.returncode == 0, f\"complete-waitpoint failed: {complete_result.stderr}\"\n    \n        # 5. Verify Final Completion and Result\n        for _ in range(15):\n            run_result = subprocess.run(\n                [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n                capture_output=True,\n                text=True\n            )\n            assert run_result.returncode == 0\n            run_data = json.loads(run_result.stdout)\n    \n            if run_data[\"status\"] == \"COMPLETED\":\n                assert \"output\" in run_data, \"Run output is missing.\"\n                assert run_data[\"output\"] == {\"result\": \"Processed: fixed data\"}, f\"Unexpected output: {run_data['output']}\"\n                break\n            elif run_data[\"status\"] in [\"FAILED\", \"CRASHED\", \"CANCELED\", \"EXPIRED\", \"TIMED_OUT\", \"SYSTEM_FAILURE\"]:\n                pytest.fail(f\"Run failed with status: {run_data['status']}\")\n    \n            time.sleep(5)\n        else:\n>           pytest.fail(\"Run did not complete after waitpoint completion.\")\nE           Failed: Run did not complete after waitpoint completion.\n\ntests/test_final_state.py:115: Failed",
+                "message": "The test failed in the call phase"
+            }
+        ]
+    }
+}

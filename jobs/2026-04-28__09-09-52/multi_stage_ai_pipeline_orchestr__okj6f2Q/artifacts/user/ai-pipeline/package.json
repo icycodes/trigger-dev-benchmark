@@ -1,0 +1,21 @@
+{
+  "name": "ai-pipeline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run-task": "node -e \"const { execSync } = require('child_process'); const output = execSync('npx trigger.dev@latest tasks trigger research-pipeline-multi_stage_ai_pipeline_orchestr__okj6f2Q --json --payload \\\"{\\\\\"topic\\\\\":\\\\\"Artificial Intelligence\\\\\",\\\\\"languages\\\\\":[\\\\\"Spanish\\\\\",\\\\\"French\\\\\",\\\\\"German\\\\\"]}\\\"', { encoding: 'utf-8' }); const result = JSON.parse(output); console.log('Run ID:', result.id);\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.4.4"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.4.4",
+    "typescript": "^5.9.3"
+  }
+}

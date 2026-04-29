@@ -1,0 +1,20 @@
+{
+  "name": "ai-pipeline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run-task": "npx trigger.dev@latest trigger research-pipeline-multi_stage_ai_pipeline_orchestr__PDwGYgj --payload '{\"topic\":\"Artificial Intelligence\",\"languages\":[\"Spanish\",\"French\",\"German\"]}' | sed 's/^/Run ID: /'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@trigger.dev/sdk": "latest"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "latest"
+  }
+}

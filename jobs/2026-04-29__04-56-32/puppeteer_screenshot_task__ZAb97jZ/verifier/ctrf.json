@@ -1,0 +1,38 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 2,
+            "passed": 2,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777414437.4578896,
+            "stop": 1777414467.1271288
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_puppeteer_screenshot_task",
+                "status": "passed",
+                "duration": 29.61708368699965,
+                "start": 1777414437.4638534,
+                "stop": 1777414467.082066,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_trigger_config_contains_puppeteer",
+                "status": "passed",
+                "duration": 0.0436991010010388,
+                "start": 1777414467.082776,
+                "stop": 1777414467.1268024,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777410833.8623824,
+            "stop": 1777410853.1636426
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_human_in_the_loop_error_correction",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 19.288151206000066,
+                "start": 1777410833.8679285,
+                "stop": 1777410853.1628547,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_human_in_the_loop_error_correction(start_trigger_dev):\n        # 1. Start Pipeline\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-pipeline\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n>       assert result.returncode == 0, f\"run-pipeline failed: {result.stderr}\"\nE       AssertionError: run-pipeline failed: sh: 1: resilient-pipeline-: not found\nE         sh: 1: Bad substitution\nE         [eval]:1\nE         (async () => { const { tasks } = require('@trigger.dev/sdk/v3'); const { readFileSync } = require('node:fs'); const trialId = readFileSync('/logs/trial_id', 'utf8').trim(); const handle = await tasks.trigger(, { input: 'initial data' }); console.log(); })().catch((error) => { console.error(error); process.exit(1); });\nE                                                                                                                                                                                                                         ^\nE         Expression expected\nE         \nE         SyntaxError: Unexpected token ','\nE             at makeContextifyScript (node:internal/vm:194:14)\nE             at compileScript (node:internal/process/execution:388:10)\nE             at evalTypeScript (node:internal/process/execution:260:22)\nE             at node:internal/main/eval_string:71:3\nE         \nE         Node.js v24.14.1\nE         \nE       assert 1 == 0\nE        +  where 1 = CompletedProcess(args=['npm', 'run', 'run-pipeline'], returncode=1, stdout='\\n> resilient-pipeline@1.0.0 run-pipeline\\...TypeScript (node:internal/process/execution:260:22)\\n    at node:internal/main/eval_string:71:3\\n\\nNode.js v24.14.1\\n\").returncode\n\ntests/test_final_state.py:55: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

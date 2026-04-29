@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777346596.9799676,
+            "stop": 1777346613.8831065
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_pipeline_execution",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 16.88917047400173,
+                "start": 1777346596.9866736,
+                "stop": 1777346613.8829277,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_pipeline_execution(start_trigger_dev):\n        # 1. Trigger the task\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n        assert result.returncode == 0, f\"Failed to trigger task: {result.stderr}\"\n    \n        # 2. Extract Run ID\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n>       assert run_id_match, f\"Run ID not found in output: {result.stdout}\"\nE       AssertionError: Run ID not found in output: \nE         > ai-pipeline@1.0.0 run-task\nE         > ts-node src/trigger.ts\nE         \nE         \nE       assert None\n\ntests/test_final_state.py:55: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

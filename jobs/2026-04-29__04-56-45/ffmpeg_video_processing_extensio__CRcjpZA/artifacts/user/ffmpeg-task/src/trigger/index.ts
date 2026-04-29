@@ -1,0 +1,1 @@
+export { ffmpegExtractAudio } from "./ffmpeg-task";
