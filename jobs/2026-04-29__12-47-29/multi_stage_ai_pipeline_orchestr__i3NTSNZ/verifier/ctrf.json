@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777444414.5323625,
+            "stop": 1777444472.482996
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_pipeline_execution",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 57.921929927004385,
+                "start": 1777444414.5389817,
+                "stop": 1777444472.4827676,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_pipeline_execution(start_trigger_dev):\n        # 1. Trigger the task\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n        assert result.returncode == 0, f\"Failed to trigger task: {result.stderr}\"\n    \n        # 2. Extract Run ID\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in output: {result.stdout}\"\n        run_id = run_id_match.group(1)\n    \n        # 3. Poll API for completion\n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n        headers = {\"Authorization\": f\"Bearer {trigger_secret_key}\"}\n    \n        max_attempts = 30\n        for i in range(max_attempts):\n            api_result = subprocess.run(\n                [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n                capture_output=True,\n                text=True\n            )\n            assert api_result.returncode == 0, \"API call failed\"\n            run_data = json.loads(api_result.stdout)\n            status = run_data.get(\"status\")\n    \n            if status == \"COMPLETED\":\n                output = run_data.get(\"output\")\n                assert output is not None, \"Output is missing\"\n>               assert \"originalSummary\" in output, \"originalSummary missing in output\"\nE               AssertionError: originalSummary missing in output\nE               assert 'originalSummary' in {'summary': 'This is a 100-word summary about Artificial Intelligence. It covers the main points and provides a compre...mary about Artificial Intelligence. It covers the main points and provides a comprehensive overview of the subject.'}]}\n\ntests/test_final_state.py:76: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

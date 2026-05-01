@@ -1,0 +1,30 @@
+{
+  "name": "ffmpeg-task",
+  "version": "1.0.0",
+  "description": "Video processing with FFmpeg extension using Trigger.dev",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "run-task": "tsx src/run-task.ts",
+    "build": "tsc"
+  },
+  "keywords": [
+    "ffmpeg",
+    "trigger.dev",
+    "video-processing"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.4.4",
+    "fluent-ffmpeg": "^2.1.3",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.4.4",
+    "@types/fluent-ffmpeg": "^2.1.28",
+    "@types/node-fetch": "^2.6.13",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

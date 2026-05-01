@@ -1,0 +1,59 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 4,
+            "passed": 3,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777438229.645611,
+            "stop": 1777438382.6594896
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_ffmpeg_task_execution",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 152.93389618799483,
+                "start": 1777438229.6519725,
+                "stop": 1777438382.6065733,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_ffmpeg_task_execution(start_trigger_dev):\n        # Trigger the task\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in the trigger result. stdout: {result.stdout}, stderr: {result.stderr}\"\n        run_id = run_id_match.group(1)\n    \n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n    \n        # Poll for completion\n        completed = False\n        for _ in range(24): # 2 minutes total (24 * 5s)\n            run_result = subprocess.run(\n              [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n              capture_output=True,\n              text=True\n            )\n            assert run_result.returncode == 0, f\"Retrieve run result failed with code {run_result.returncode}\"\n    \n            try:\n                run_result_json = json.loads(run_result.stdout)\n            except json.JSONDecodeError:\n                pytest.fail(f\"Failed to parse API response: {run_result.stdout}\")\n    \n            assert \"status\" in run_result_json, f\"Run status is missing in {run_result_json}\"\n            run_status = run_result_json[\"status\"]\n    \n            if run_status == \"COMPLETED\":\n                completed = True\n                break\n            elif run_status in [\"FAILED\", \"CRASHED\", \"CANCELED\", \"EXPIRED\", \"TIMED_OUT\", \"SYSTEM_FAILURE\"]:\n                pytest.fail(f\"Run failed with status: {run_status}. Response: {run_result_json}\")\n            else:\n                time.sleep(5)\n    \n>       assert completed, \"Run did not complete within the timeout period.\"\nE       AssertionError: Run did not complete within the timeout period.\nE       assert False\n\ntests/test_final_state.py:93: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_output_file_exists",
+                "status": "passed",
+                "duration": 0.00024571600079070777,
+                "start": 1777438382.6068015,
+                "stop": 1777438382.607154,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_output_file_format",
+                "status": "passed",
+                "duration": 0.02612562400463503,
+                "start": 1777438382.6072657,
+                "stop": 1777438382.633534,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_trigger_config_contains_ffmpeg",
+                "status": "passed",
+                "duration": 0.02530097199633019,
+                "start": 1777438382.6336625,
+                "stop": 1777438382.6590254,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

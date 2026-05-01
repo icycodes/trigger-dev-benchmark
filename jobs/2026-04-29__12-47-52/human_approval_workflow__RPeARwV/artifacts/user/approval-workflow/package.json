@@ -1,0 +1,20 @@
+{
+  "name": "approval-workflow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run-task": "node -e \"const { trigger } = require('@trigger.dev/sdk'); trigger.send('deploy-approval-human_approval_workflow__RPeARwV', { version: 'v1.0.0' }).then(run => console.log('Run ID:', run.id)).catch(err => console.error('Error:', err));\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.4.4"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.4.4"
+  }
+}

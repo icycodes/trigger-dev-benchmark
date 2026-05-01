@@ -1,0 +1,29 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777440153.4621177,
+            "stop": 1777440206.3074899
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_human_in_the_loop_error_correction",
+                "status": "passed",
+                "duration": 52.83825882900055,
+                "start": 1777440153.467735,
+                "stop": 1777440206.3072042,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

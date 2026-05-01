@@ -1,0 +1,12 @@
+import { ffmpeg } from "@trigger.dev/build/extensions/core";
+import { defineConfig } from "@trigger.dev/sdk/v3";
+
+export default defineConfig({
+  project: process.env.TRIGGER_PROJECT_REF!,
+  dirs: ["./src/trigger"],
+  build: {
+    extensions: [ffmpeg()],
+  },
+  // @ts-ignore
+  maxDuration: 300,
+});

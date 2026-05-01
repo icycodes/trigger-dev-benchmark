@@ -1,0 +1,15 @@
+{
+  "name": "approval-workflow",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "run-task": "node ./scripts/run-task.js"
+  },
+  "dependencies": {
+    "@trigger.dev/sdk": "latest"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "latest"
+  }
+}

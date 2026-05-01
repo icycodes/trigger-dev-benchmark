@@ -1,0 +1,29 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777439642.0709252,
+            "stop": 1777439670.6061995
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_webhook_idempotency",
+                "status": "passed",
+                "duration": 28.527815548000945,
+                "start": 1777439642.0769818,
+                "stop": 1777439670.6058667,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

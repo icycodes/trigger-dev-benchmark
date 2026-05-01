@@ -1,0 +1,41 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 2,
+            "passed": 1,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777442094.445795,
+            "stop": 1777442108.9026325
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_puppeteer_screenshot_task",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 14.416684236002766,
+                "start": 1777442094.4524698,
+                "stop": 1777442108.8765442,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_puppeteer_screenshot_task(start_trigger_dev):\n        # Trigger the task\n        result = subprocess.run(\n          [\"npm\", \"run\", \"run-task\"],\n          cwd=PROJECT_DIR,\n          capture_output=True,\n          text=True\n        )\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n>       assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}, stderr: {result.stderr}\"\nE       AssertionError: Run ID not found in the trigger result, stdout: \nE         > screenshot-service@1.0.0 run-task\nE         > npx ts-node trigger.ts\nE         \nE         , stderr: \nE       assert None\n\ntests/test_final_state.py:67: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_trigger_config_contains_puppeteer",
+                "status": "passed",
+                "duration": 0.02569674200276495,
+                "start": 1777442108.8766959,
+                "stop": 1777442108.902465,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,23 @@
+{
+  "author": "",
+  "dependencies": {
+    "import-in-the-middle": "1.11.0"
+  },
+  "description": "",
+  "devDependencies": {
+  },
+  "keywords": [
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "ai-agent-task",
+  "peerDependencies": {
+  },
+  "scripts": {
+  },
+  "trustedDependencies": [
+    "import-in-the-middle"
+  ],
+  "type": "module",
+  "version": "1.0.0"
+}
