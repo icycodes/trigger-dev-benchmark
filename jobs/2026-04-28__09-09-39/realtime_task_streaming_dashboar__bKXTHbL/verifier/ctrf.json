@@ -1,0 +1,29 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777339548.1849172,
+            "stop": 1777339762.931146
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_realtime_dashboard",
+                "status": "passed",
+                "duration": 214.74043801699918,
+                "start": 1777339548.1899714,
+                "stop": 1777339762.9307013,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

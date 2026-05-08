@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777343655.6578834,
+            "stop": 1777343686.6721728
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_multi_tenant_concurrency",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 31.00083915399955,
+                "start": 1777343655.6634276,
+                "stop": 1777343686.6719136,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_multi_tenant_concurrency(start_trigger_dev):\n        # Trigger the tasks\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n>       assert result.returncode == 0, f\"Triggering tasks failed: {result.stderr}\"\nE       AssertionError: Triggering tasks failed: \nE         node:internal/modules/run_main:107\nE             triggerUncaughtException(\nE             ^\nE         Error: Transform failed with 1 error:\nE         /home/user/multi-tenant-task/scripts/trigger.ts:15:19: ERROR: Top-level await is currently not supported with the \"cjs\" output format\nE             at failureErrorWithLog (/home/user/multi-tenant-task/node_modules/esbuild/lib/main.js:1748:15)\nE             at /home/user/multi-tenant-task/node_modules/esbuild/lib/main.js:1017:50\nE             at responseCallbacks.<computed> (/home/user/multi-tenant-task/node_modules/esbuild/lib/main.js:884:9)\nE             at handleIncomingPacket (/home/user/multi-tenant-task/node_modules/esbuild/lib/main.js:939:12)\nE             at Socket.readFromStdout (/home/user/multi-tenant-task/node_modules/esbuild/lib/main.js:862:7)\nE             at Socket.emit (node:events:508:28)\nE             at addChunk (node:internal/streams/readable:563:12)\nE             at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)\nE             at Readable.push (node:internal/streams/readable:394:5)\nE             at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) {\nE           name: 'TransformError'\nE         }\nE         \nE         Node.js v24.14.1\nE         \nE       assert 1 == 0\nE        +  where 1 = CompletedProcess(args=['npm', 'run', 'run-task'], returncode=1, stdout='\\n> multi-tenant-task@1.0.0 run-task\\n> tsx sc...t Pipe.onStreamRead (node:internal/stream_base_commons:189:23) {\\n  name: \\'TransformError\\'\\n}\\n\\nNode.js v24.14.1\\n').returncode\n\ntests/test_final_state.py:59: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

@@ -1,0 +1,46 @@
+{
+    "id": "4c80b823-26a4-4f0d-a0ad-a8541fc6f82d",
+    "started_at": "2026-04-29T04:56:45.635493",
+    "finished_at": "2026-04-29T06:28:48.032454",
+    "n_total_trials": 11,
+    "stats": {
+        "n_trials": 11,
+        "n_errors": 1,
+        "evals": {
+            "pochi__glm-4.7__tasks": {
+                "n_trials": 11,
+                "n_errors": 1,
+                "metrics": [
+                    {
+                        "mean": 0.09090909090909091
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "ffmpeg_video_processing_extensio__CRcjpZA",
+                            "batch_processing_with_results_ag__PqBXTTc",
+                            "realtime_task_streaming_dashboar__PKo5Zn2",
+                            "scheduled_sync__XZ6Pex2",
+                            "human_in_the_loop_error_correcti__WrPBiaG",
+                            "subscription_onboarding_with_wai__tQ2jnh5",
+                            "human_approval_workflow__6xhrXEJ",
+                            "puppeteer_screenshot_task__CpV8wbs",
+                            "python_extension_data_processing__TTRvbTT",
+                            "ai_agent_with_tool_and_streaming__YQNayN2"
+                        ],
+                        "1.0": [
+                            "resilient_webhook_idempotency__7QZcEou"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "ai_agent_with_tool_and_streaming__YQNayN2"
+                    ]
+                }
+            }
+        }
+    }
+}

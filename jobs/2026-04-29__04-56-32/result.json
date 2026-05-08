@@ -1,0 +1,49 @@
+{
+    "id": "0d35234d-1f62-4749-b188-378fd02abb81",
+    "started_at": "2026-04-29T04:56:32.680936",
+    "finished_at": "2026-04-29T06:49:13.820839",
+    "n_total_trials": 11,
+    "stats": {
+        "n_trials": 11,
+        "n_errors": 3,
+        "evals": {
+            "pochi__claude-4-6-sonnet__tasks": {
+                "n_trials": 10,
+                "n_errors": 3,
+                "metrics": [
+                    {
+                        "mean": 0.36363636363636365
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "ffmpeg_video_processing_extensio__SDnE5Cz",
+                            "human_in_the_loop_error_correcti__q5phg68",
+                            "human_approval_workflow__e3YUxvs",
+                            "python_extension_data_processing__g6QuiKd",
+                            "ai_agent_human_in_the_loop_appro__PBWV5Hz",
+                            "ai_agent_with_tool_and_streaming__JuvQuEc"
+                        ],
+                        "1.0": [
+                            "batch_processing_with_results_ag__Qb8v2x5",
+                            "resilient_webhook_idempotency__2KjRTjz",
+                            "scheduled_sync__YrLdi9i",
+                            "puppeteer_screenshot_task__ZAb97jZ"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "VerifierTimeoutError": [
+                        "subscription_onboarding_with_wai__VY7XruE"
+                    ],
+                    "AgentTimeoutError": [
+                        "ai_agent_human_in_the_loop_appro__PBWV5Hz",
+                        "ai_agent_with_tool_and_streaming__JuvQuEc"
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,69 @@
+Downloading pygments (1.2MiB)
+ Downloading pygments
+Installed 9 packages in 7ms
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.3.5
+collected 1 item
+
+tests/test_final_state.py F                                              [100%]
+
+=================================== FAILURES ===================================
+________________________ test_multi_tenant_concurrency _________________________
+
+start_trigger_dev = None
+
+    def test_multi_tenant_concurrency(start_trigger_dev):
+        # Trigger the tasks
+        result = subprocess.run(
+            ["npm", "run", "run-task"],
+            cwd=PROJECT_DIR,
+            capture_output=True,
+            text=True
+        )
+>       assert result.returncode == 0, f"Triggering tasks failed: {result.stderr}"
+E       AssertionError: Triggering tasks failed: 
+E         node:internal/modules/run_main:107
+E             triggerUncaughtException(
+E             ^
+E         Error: Transform failed with 1 error:
+E         /home/user/multi-tenant-task/scripts/trigger.ts:15:19: ERROR: Top-level await is currently not supported with the "cjs" output format
+E             at failureErrorWithLog (/home/user/multi-tenant-task/node_modules/esbuild/lib/main.js:1748:15)
+E             at /home/user/multi-tenant-task/node_modules/esbuild/lib/main.js:1017:50
+E             at responseCallbacks.<computed> (/home/user/multi-tenant-task/node_modules/esbuild/lib/main.js:884:9)
+E             at handleIncomingPacket (/home/user/multi-tenant-task/node_modules/esbuild/lib/main.js:939:12)
+E             at Socket.readFromStdout (/home/user/multi-tenant-task/node_modules/esbuild/lib/main.js:862:7)
+E             at Socket.emit (node:events:508:28)
+E             at addChunk (node:internal/streams/readable:563:12)
+E             at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+E             at Readable.push (node:internal/streams/readable:394:5)
+E             at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) {
+E           name: 'TransformError'
+E         }
+E         
+E         Node.js v24.14.1
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['npm', 'run', 'run-task'], returncode=1, stdout='\n> multi-tenant-task@1.0.0 run-task\n> tsx sc...t Pipe.onStreamRead (node:internal/stream_base_commons:189:23) {\n  name: \'TransformError\'\n}\n\nNode.js v24.14.1\n').returncode
+
+tests/test_final_state.py:59: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_trigger_dev$ npx trigger.dev@latest dev --skip-update-check --skip-telemetry
+process 'start_trigger_dev' started pid=1339
+Trigger.dev (4.4.4)
+
+------------------------------------------------------
+
+Key: Version | Task | Run
+
+------------------------------------------------------
+
+○ Building local worker…
+
+○ Local worker ready [node] -> 20260428.7
+
+start_trigger_dev process startup detected
+=========================== short test summary info ============================
+FAILED tests/test_final_state.py::test_multi_tenant_concurrency - AssertionEr...
+============================== 1 failed in 31.01s ==============================

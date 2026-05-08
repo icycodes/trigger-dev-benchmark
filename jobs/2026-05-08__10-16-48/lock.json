@@ -1,0 +1,103 @@
+{
+    "schema_version": 1,
+    "created_at": "2026-05-08T02:16:48.864401Z",
+    "harbor": {
+        "version": "0.6.6",
+        "is_editable": false
+    },
+    "invocation": [
+        "/mnt/E/Icy/data/run-harbor-1/.venv/bin/harbor",
+        "run",
+        "--model",
+        "google/gemini-3.1-pro",
+        "--agent-import-path",
+        "agents.pochi:Pochi",
+        "--env",
+        "docker",
+        "--path",
+        "/mnt/E/Icy/data/run-harbor-1/local_scripts/../tasks",
+        "--jobs-dir",
+        "/mnt/E/Icy/data/run-harbor-1/local_scripts/../jobs",
+        "--n-attempts",
+        "1",
+        "--max-retries",
+        "0",
+        "--n-concurrent",
+        "1",
+        "--artifact",
+        "/home/user",
+        "--yes"
+    ],
+    "n_concurrent_trials": 1,
+    "retry": {
+        "max_retries": 0,
+        "exclude_exceptions": [
+            "VerifierOutputParseError",
+            "RewardFileNotFoundError",
+            "VerifierTimeoutError",
+            "AgentTimeoutError",
+            "RewardFileEmptyError"
+        ],
+        "wait_multiplier": 1.0,
+        "min_wait_sec": 1.0,
+        "max_wait_sec": 60.0
+    },
+    "trials": [
+        {
+            "task": {
+                "name": "resilient_webhook_idempotency",
+                "type": "local",
+                "digest": "sha256:1b58c6ce6be03275a134553c275fef0b2d9bd060a83a9b7346f784255785d74f",
+                "source": "tasks",
+                "path": "/mnt/E/Icy/data/run-harbor-1/local_scripts/../tasks/resilient_webhook_idempotency"
+            },
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "import_path": "agents.pochi:Pochi",
+                "model_name": "google/gemini-3.1-pro",
+                "kwargs": {},
+                "env": {}
+            },
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "suppress_override_warnings": false,
+                "env": {},
+                "kwargs": {}
+            },
+            "verifier": {
+                "env": {},
+                "disable": false
+            }
+        },
+        {
+            "task": {
+                "name": "puppeteer_screenshot_task",
+                "type": "local",
+                "digest": "sha256:26810c5a32ec5e56bb8ac08e8b00fe1358cac82784532cecc5cd2de4627c3dd9",
+                "source": "tasks",
+                "path": "/mnt/E/Icy/data/run-harbor-1/local_scripts/../tasks/puppeteer_screenshot_task"
+            },
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "import_path": "agents.pochi:Pochi",
+                "model_name": "google/gemini-3.1-pro",
+                "kwargs": {},
+                "env": {}
+            },
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "suppress_override_warnings": false,
+                "env": {},
+                "kwargs": {}
+            },
+            "verifier": {
+                "env": {},
+                "disable": false
+            }
+        }
+    ]
+}

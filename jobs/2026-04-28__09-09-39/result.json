@@ -1,0 +1,51 @@
+{
+    "id": "609f5d76-d2a5-4920-92eb-d31e0c95b612",
+    "started_at": "2026-04-28T09:09:39.698234",
+    "finished_at": "2026-04-28T10:43:10.500543",
+    "n_total_trials": 15,
+    "stats": {
+        "n_trials": 15,
+        "n_errors": 2,
+        "evals": {
+            "pochi__gemini-3-flash__tasks": {
+                "n_trials": 15,
+                "n_errors": 2,
+                "metrics": [
+                    {
+                        "mean": 0.2
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "ffmpeg_video_processing_extensio__UqYVPPd",
+                            "batch_processing_with_results_ag__pVcyzva",
+                            "resilient_webhook_idempotency__yCxajBW",
+                            "scheduled_sync__xs48x3N",
+                            "human_in_the_loop_error_correcti__5y9GkWe",
+                            "subscription_onboarding_with_wai__Pk4t3Ve",
+                            "human_approval_workflow__Yc9fxYc",
+                            "python_extension_data_processing__pyhrRia",
+                            "ai_agent_human_in_the_loop_appro__9xYkdNi",
+                            "multi_tenant_concurrency_control__BHumsGJ",
+                            "concurrency_limited_queue__xVonVbT",
+                            "ai_agent_with_tool_and_streaming__gYP8Anp"
+                        ],
+                        "1.0": [
+                            "realtime_task_streaming_dashboar__bKXTHbL",
+                            "puppeteer_screenshot_task__3Ydi2XW",
+                            "multi_stage_ai_pipeline_orchestr__BZ6oey6"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "multi_tenant_concurrency_control__BHumsGJ",
+                        "ai_agent_with_tool_and_streaming__gYP8Anp"
+                    ]
+                }
+            }
+        }
+    }
+}

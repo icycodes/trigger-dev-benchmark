@@ -1,0 +1,18 @@
+[37m2026-04-28 03:11:32.617[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:1[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	pochi v0.6.8
+[37m2026-04-28 03:11:33.123[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:519633[39m[0m[0m[1m[37m	loadAgents[39m[22m[0m[0m	Loaded 6 custom agents (6 valid, 0 invalid)
+[37m2026-04-28 03:11:33.124[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:519634[39m[0m[0m[1m[37m	loadSkills[39m[22m[0m[0m	Loaded 2 skills (2 valid, 0 invalid)
+[37m2026-04-28 03:11:33.155[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:444677[39m[0m[0m[1m[37m	PochiVendor[39m[22m[0m[0m	JWT is expiring or missing, fetching a new one
+[37m2026-04-28 03:11:35.308[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:416517[39m[0m[0m[1m[37m	MCPHub[39m[22m[0m[0m	MCP servers configuration changed via signal:
+[37m2026-04-28 03:11:35.308[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:416629[39m[0m[0m[1m[37m	MCPHub[39m[22m[0m[0m	Build MCPHub Status
+[37m2026-04-28 03:11:35.541[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Starting task runner...
+[37m2026-04-28 03:11:35.567[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:507614[39m[0m[0m[1m[37m	generateTaskTitle[39m[22m[0m[0m	Generating task title, old: null, new: # Multi-tenant Concurrency Control with Trigger.dev
+[37m2026-04-28 03:12:01.471[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:474589[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/logs/trial_id" resolvedPath="/logs/trial_id" isVirtual=false cacheExists=true shouldCache=true startLine=undefined endLine=undefined
+[37m2026-04-28 03:12:01.472[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:474589[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-04-28 03:12:01.473[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:518725[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/logs/trial_id" mtime=1777345892102 contentLen=42
+[37m2026-04-28 03:12:06.330[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m[39m[0m[0m[1m[37m	generateTaskTitle[39m[22m[0m[0m	Generating task title, old: # Multi-tenant Concurrency Control with Trigger.dev, new: Create a multi-tenant Trigger.dev project with user-based concurrency control
+[37m2026-04-28 03:21:17.375[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:463047[39m[0m[0m[1m[37m	listFiles[39m[22m[0m[0m	handling listFile with dirPath /home/user/multi-tenant-task and recursive [33mtrue[39m
+[37m2026-04-28 03:21:17.426[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m$bunfs/root/pochi:462925[39m[0m[0m[1m[37m	ignoreWalk[39m[22m[0m[0m	MaxScanItems (10000) reached or exceeded. Halting traversal.
+[37m2026-04-28 03:22:01.257[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Task runner finished successfully.
+[37m2026-04-28 03:22:01.258[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Shutting down...
+[37m2026-04-28 03:22:01.265[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Shutdown completed. Process will exit.
+[37m2026-04-28 03:22:01.266[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Process exiting with code 0

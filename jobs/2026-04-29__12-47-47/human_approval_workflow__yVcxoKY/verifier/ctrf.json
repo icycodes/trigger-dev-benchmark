@@ -1,0 +1,32 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777441493.9875786,
+            "stop": 1777441587.9071584
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_human_approval_workflow",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 93.89100377499926,
+                "start": 1777441493.9927154,
+                "stop": 1777441587.9065542,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_trigger_dev = None\n\n    def test_human_approval_workflow(start_trigger_dev):\n        # Clean up the approval_url.txt\n        approval_url_path = os.path.join(PROJECT_DIR, \"approval_url.txt\")\n        if os.path.exists(approval_url_path):\n            os.remove(approval_url_path)\n    \n        # 1. Trigger the task\n        result = subprocess.run(\n            [\"npm\", \"run\", \"run-task\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True\n        )\n        assert result.returncode == 0, f\"npm run run-task failed: {result.stderr}\"\n    \n        # Find run id in result.stdout\n        run_id_match = re.search(r\"Run ID: ([a-zA-Z0-9_]+)\", result.stdout)\n        assert run_id_match, f\"Run ID not found in the trigger result, stdout: {result.stdout}\"\n        run_id = run_id_match.group(1)\n    \n        # 2. Wait for approval_url.txt\n        for _ in range(30):\n            if os.path.exists(approval_url_path):\n                break\n            time.sleep(2)\n        else:\n            pytest.fail(\"approval_url.txt was not created in time\")\n    \n        with open(approval_url_path, \"r\") as f:\n            approval_url = f.read().strip()\n    \n        # 3. Complete the waitpoint\n        # The URL from wait.createToken().url can be POSTed to directly\n        complete_result = subprocess.run(\n            [\"curl\", \"-X\", \"POST\", \"-H\", \"Content-Type: application/json\", \"-d\", '{\"approved\": true}', approval_url],\n            capture_output=True,\n            text=True\n        )\n        assert complete_result.returncode == 0, f\"Failed to complete waitpoint: {complete_result.stderr}\"\n    \n        # 4. Verify run output\n        trigger_secret_key = os.environ.get(\"TRIGGER_SECRET_KEY\")\n        for _ in range(12):\n            run_result = subprocess.run(\n                [\"curl\", \"-s\", \"-H\", f\"Authorization: Bearer {trigger_secret_key}\", f\"https://api.trigger.dev/api/v3/runs/{run_id}\"],\n                capture_output=True,\n                text=True\n            )\n            assert run_result.returncode == 0, f\"Retrieve run result failed: {run_result.stderr}\"\n            run_result_json = json.loads(run_result.stdout)\n            run_status = run_result_json.get(\"status\")\n    \n            if run_status == \"COMPLETED\":\n                output = run_result_json.get(\"output\")\n                assert output == {\"status\": \"deployed\", \"version\": \"v1.0.0\"}, f\"Unexpected output: {output}\"\n                break\n            elif run_status in [\"FAILED\", \"CRASHED\", \"CANCELED\", \"EXPIRED\", \"TIMED_OUT\", \"SYSTEM_FAILURE\"]:\n                pytest.fail(f\"Run failed with status: {run_status}\")\n            else:\n                time.sleep(5)\n        else:\n>           pytest.fail(\"Run did not complete after polling\")\nE           Failed: Run did not complete after polling\n\ntests/test_final_state.py:110: Failed",
+                "message": "The test failed in the call phase"
+            }
+        ]
+    }
+}
