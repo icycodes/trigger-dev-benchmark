@@ -1,0 +1,66 @@
+# Multi-Stage AI Pipeline Orchestration with Trigger.dev
+
+## Background
+Trigger.dev is a durable execution platform for TypeScript. One of its most powerful features is orchestration, which allows a parent task to trigger child tasks and wait for their results without consuming compute resources while waiting.
+
+## Requirements
+Implement a multi-stage AI pipeline that processes a research topic:
+1.  **Parent Task (`research-pipeline`)**: Receives a `topic` and a list of `languages`.
+2.  **Stage 1 (Sequential)**: Triggers a `generate-summary` task to create a 100-word summary of the topic.
+3.  **Stage 2 (Parallel)**: Using `batchTriggerAndWait`, triggers multiple `translate-summary` tasks (one for each language provided) to translate the summary generated in Stage 1.
+4.  **Stage 3 (Aggregation)**: Aggregates all translations and the original summary into a final report object.
+
+## Implementation Guide
+
+### Trigger.dev Project Setup Guide
+
+**Note**: For more information, refer to the official [Trigger.dev manual setup documentation](https://trigger.dev/docs/manual-setup).
+
+1.  **Configure CLI Credentials**: Before using the Trigger.dev CLI, create the configuration file with the provided credentials:
+    ```bash
+    mkdir -p ~/.config/trigger && printf "%s" "$TRIGGER_CREDENTIAL_CONFIG_JSON" > ~/.config/trigger/config.json && chmod 600 ~/.config/trigger/config.json && npx trigger.dev@latest whoami
+    ```
+2.  **Initialize Project and Install Dependencies**: Set up a Node.js project and install the necessary Trigger.dev packages.
+    ```bash
+    npm add @trigger.dev/sdk@latest
+    npm add -D @trigger.dev/build@latest
+    ```
+3.  **Create Project Configuration**: Create `trigger.config.ts` with the project ref from `TRIGGER_PROJECT_REF`.
+    ```ts
+    import { defineConfig } from "@trigger.dev/sdk";
+
+    export default defineConfig({
+      project: process.env.TRIGGER_PROJECT_REF,
+      dirs: ["./src/trigger"],
+      maxDuration: 3600,
+      retries: {
+        enabledInDev: true,
+        default: {
+          maxAttempts: 2,
+          minTimeoutInMs: 1000,
+          maxTimeoutInMs: 10000,
+          factor: 2,
+          randomize: true,
+        },
+      },
+    });
+    ```
+4. **Check Project Configuration** Use `npx tsc --skipLibCheck --noEmit trigger.config.ts` to type-check `trigger.config.ts` file.
+
+### Task Implementation
+1.  Read `trial_id` from `/logs/trial_id`.
+2.  Define three tasks in `src/trigger/pipeline.ts`:
+    -   `generate-summary-${trial_id}`: Mock a summary generation (returns a string).
+    -   `translate-summary-${trial_id}`: Mock a translation (receives `text` and `language`, returns `{ language, translation }`).
+    -   `research-pipeline-${trial_id}`: The orchestrator task using `triggerAndWait` and `batchTriggerAndWait`.
+3.  **Important**: Do NOT use `Promise.all` for `triggerAndWait` or `batchTriggerAndWait`. Use the built-in orchestration methods.
+4.  Ensure all tasks are named exports.
+5.  Add an `npm run run-task` command in `package.json` that triggers `research-pipeline-${trial_id}` with payload `{"topic": "Artificial Intelligence", "languages": ["Spanish", "French", "German"]}` and prints `Run ID: ${run_id}`.
+
+## Constraints
+- Project path: /home/user/ai-pipeline
+- Start task: `npm run run-task`
+- Use `trial_id` as suffix for all task IDs.
+
+## Integrations
+- Trigger.dev

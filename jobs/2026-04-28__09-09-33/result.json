@@ -1,0 +1,52 @@
+{
+    "id": "1315d90b-db5b-4ecd-98e4-9d9402e52021",
+    "started_at": "2026-04-28T09:09:33.630207",
+    "finished_at": "2026-04-28T11:23:45.976261",
+    "n_total_trials": 15,
+    "stats": {
+        "n_trials": 15,
+        "n_errors": 2,
+        "evals": {
+            "pochi__gemini-3.1-pro__tasks": {
+                "n_trials": 14,
+                "n_errors": 2,
+                "metrics": [
+                    {
+                        "mean": 0.4666666666666667
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "ffmpeg_video_processing_extensio__QTVx5W5",
+                            "human_approval_workflow__TYucqRE",
+                            "puppeteer_screenshot_task__kyDzMy5",
+                            "python_extension_data_processing__68Xzs7N",
+                            "multi_tenant_concurrency_control__9rxyfdx",
+                            "ai_agent_with_tool_and_streaming__VNyLjEW",
+                            "multi_stage_ai_pipeline_orchestr__rkYwWsg"
+                        ],
+                        "1.0": [
+                            "batch_processing_with_results_ag__vHAPAaU",
+                            "realtime_task_streaming_dashboar__hSTSQ4x",
+                            "resilient_webhook_idempotency__AVKND9d",
+                            "scheduled_sync__qaDoUYR",
+                            "human_in_the_loop_error_correcti__vZLjTmj",
+                            "ai_agent_human_in_the_loop_appro__zz9RVyN",
+                            "concurrency_limited_queue__e6dS4jQ"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "VerifierTimeoutError": [
+                        "subscription_onboarding_with_wai__DTNbqya"
+                    ],
+                    "AgentTimeoutError": [
+                        "multi_tenant_concurrency_control__9rxyfdx"
+                    ]
+                }
+            }
+        }
+    }
+}

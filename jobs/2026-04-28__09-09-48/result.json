@@ -1,0 +1,53 @@
+{
+    "id": "cab7371b-761e-423a-8c66-18e92004ed2c",
+    "started_at": "2026-04-28T09:09:48.186171",
+    "finished_at": "2026-04-28T11:22:57.027259",
+    "n_total_trials": 15,
+    "stats": {
+        "n_trials": 15,
+        "n_errors": 4,
+        "evals": {
+            "pochi__claude-4-6-sonnet__tasks": {
+                "n_trials": 15,
+                "n_errors": 4,
+                "metrics": [
+                    {
+                        "mean": 0.3333333333333333
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "ffmpeg_video_processing_extensio__ZGzavNH",
+                            "batch_processing_with_results_ag__5jZ9fZG",
+                            "resilient_webhook_idempotency__AfGEgZ2",
+                            "human_approval_workflow__mWDNDwC",
+                            "puppeteer_screenshot_task__qrw4kUq",
+                            "python_extension_data_processing__g2CndEv",
+                            "ai_agent_human_in_the_loop_appro__5gfukhL",
+                            "multi_tenant_concurrency_control__XxPGJhQ",
+                            "ai_agent_with_tool_and_streaming__eWhe5HA",
+                            "multi_stage_ai_pipeline_orchestr__ta4GBHq"
+                        ],
+                        "1.0": [
+                            "realtime_task_streaming_dashboar__CK9UJDm",
+                            "scheduled_sync__ASHDpR9",
+                            "human_in_the_loop_error_correcti__GfPKKuL",
+                            "subscription_onboarding_with_wai__PUFYiiE",
+                            "concurrency_limited_queue__KRoUryi"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "subscription_onboarding_with_wai__PUFYiiE",
+                        "ai_agent_human_in_the_loop_appro__5gfukhL",
+                        "ai_agent_with_tool_and_streaming__eWhe5HA",
+                        "multi_stage_ai_pipeline_orchestr__ta4GBHq"
+                    ]
+                }
+            }
+        }
+    }
+}

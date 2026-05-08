@@ -1,0 +1,29 @@
+{
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "8.4.1"
+        },
+        "summary": {
+            "tests": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1777443660.4112542,
+            "stop": 1777443726.9346836
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_concurrency_limit",
+                "status": "passed",
+                "duration": 66.51757000199723,
+                "start": 1777443660.415871,
+                "stop": 1777443726.9344826,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

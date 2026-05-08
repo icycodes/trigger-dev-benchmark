@@ -1,0 +1,53 @@
+{
+    "id": "c655ebfa-8f4a-4bc9-a7f3-858ab76a121b",
+    "started_at": "2026-04-28T09:09:44.191919",
+    "finished_at": "2026-04-28T10:54:10.995502",
+    "n_total_trials": 15,
+    "stats": {
+        "n_trials": 15,
+        "n_errors": 3,
+        "evals": {
+            "pochi__gpt-5.2-codex__tasks": {
+                "n_trials": 14,
+                "n_errors": 3,
+                "metrics": [
+                    {
+                        "mean": 0.06666666666666667
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "ffmpeg_video_processing_extensio__eQuBXRF",
+                            "batch_processing_with_results_ag__F66uSGm",
+                            "realtime_task_streaming_dashboar__m64PLzm",
+                            "resilient_webhook_idempotency__Pk4Bgps",
+                            "scheduled_sync__skZPNjd",
+                            "human_in_the_loop_error_correcti__Wpi6KHH",
+                            "human_approval_workflow__Hv3kgd9",
+                            "puppeteer_screenshot_task__2o7AUL4",
+                            "python_extension_data_processing__pwVcSag",
+                            "multi_tenant_concurrency_control__Pk2VhBV",
+                            "concurrency_limited_queue__q3P32jp",
+                            "ai_agent_with_tool_and_streaming__DBhJT4m",
+                            "multi_stage_ai_pipeline_orchestr__PDwGYgj"
+                        ],
+                        "1.0": [
+                            "ai_agent_human_in_the_loop_appro__5zEoTqK"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "NonZeroAgentExitCodeError": [
+                        "human_in_the_loop_error_correcti__Wpi6KHH",
+                        "puppeteer_screenshot_task__2o7AUL4"
+                    ],
+                    "VerifierTimeoutError": [
+                        "subscription_onboarding_with_wai__rRA4Pj4"
+                    ]
+                }
+            }
+        }
+    }
+}

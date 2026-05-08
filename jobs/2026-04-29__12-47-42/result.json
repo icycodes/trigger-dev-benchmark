@@ -1,0 +1,41 @@
+{
+    "id": "cf15ba18-7bad-416e-af80-11ac9742a0dc",
+    "started_at": "2026-04-29T12:47:42.201932",
+    "finished_at": "2026-04-29T13:34:31.835411",
+    "n_total_trials": 10,
+    "stats": {
+        "n_trials": 10,
+        "n_errors": 0,
+        "evals": {
+            "pochi__gpt-5.2-codex__tasks": {
+                "n_trials": 10,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.2
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "ffmpeg_video_processing_extensio__6ZPUhcS",
+                            "batch_processing_with_results_ag__r6Qo2ps",
+                            "resilient_webhook_idempotency__3K5mL4o",
+                            "subscription_onboarding_with_wai__TWUQfsQ",
+                            "human_approval_workflow__tSN96Yo",
+                            "puppeteer_screenshot_task__7t8p8yx",
+                            "python_extension_data_processing__eFuBZWR",
+                            "ai_agent_with_tool_and_streaming__y28vu4z"
+                        ],
+                        "1.0": [
+                            "scheduled_sync__c4p3FCa",
+                            "human_in_the_loop_error_correcti__QJH2SKh"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            }
+        }
+    }
+}
